@@ -12,7 +12,6 @@ class Cweb_setting extends CI_Controller {
         $this->load->library('auth');
         $this->load->library('lweb_setting');
         $this->load->library('session');
-        $this->load->library('ciqrcode');
         $this->load->model('Web_settings');
         $this->auth->check_admin_auth();
         $this->template->current_menu = 'web_setting';
@@ -100,67 +99,7 @@ class Cweb_setting extends CI_Controller {
             echo json_encode($response);
         }
     }
-   public function send_mail_cronjob() {
-    $CI = &get_instance();
-    $this->load->library('email');
-    $get_emails = $CI->Web_settings->get_email_scheduled();
- 
-    $todaysql = $CI->Web_settings->getDataForTodayEmailSchedule();
-         foreach ($get_emails as $email_data) {
-        $subject = "Reminder: " . $email_data->title . " Update";
-        $message = $email_data->title." Update for Invoice Number ".$email_data->invoice_no.": Expected Date : " . $email_data->start;
-    if (!empty($todaysql) && isset($todaysql[0]->email) && isset($todaysql[0]->company_name)) {
-        $to = $todaysql[0]->email;
-        $name = $todaysql[0]->company_name;
-        $mail_set = $CI->Web_settings->getemailConfig();
-         $stm_user = $mail_set[0]->smtp_user;
-        $stm_pass = $mail_set[0]->smtp_pass;
-        $domain_name = $mail_set[0]->smtp_host;
-        $protocol = $mail_set[0]->protocol;
-        $EMAIL_ADDRESS = $mail_set[0]->smtp_user;
-        $DOMAIN = substr(strrchr($EMAIL_ADDRESS, "@"), 1);
-        if(strtolower($DOMAIN) === 'gmail.com'){
-            $config = array(
-              'protocol' => $protocol,
-              'smtp_host' => $domain_name,
-              'smtp_user' => $stm_user,
-              'smtp_pass' => $stm_pass,
-              'smtp_port' => 465,
-              'smtp_timeout' => 30,
-              'charset' => 'utf-8',
-              'newline' => '\r\n',
-              'mailtype' => 'html',
-            );
-        }else{
-            $config = array(
-              'protocol' => $protocol,
-              'smtp_host' => 'ssl://' . $domain_name,
-              'smtp_user' => $stm_user,
-              'smtp_pass' => $stm_pass,
-              'smtp_port' => 465,
-              'smtp_timeout' => 30,
-              'charset' => 'utf-8',
-              'newline' => '\r\n',
-              'mailtype' => 'html',
-              'validate' => true,
-            );
-        }
-
-            $this->email->initialize($config);
-            $this->email->from($to);
-            $this->email->to($to);
-            $this->email->subject($subject);
-            $this->email->message($message);
-
-            if ($this->email->send()) {
-                echo "Email sent successfully";
-            }  else {
-                echo $this->email->print_debugger();
-            }
-    }
-}
-
-}
+   
 
     public function download_email()
     {
@@ -300,7 +239,38 @@ class Cweb_setting extends CI_Controller {
        // echo $this->db->last_query(); die();
        redirect(base_url('Cweb_setting/calender_view'));
     }
-    
+
+    // Application Bell Notification
+
+    public function showBellNotification()
+    {
+        $CI = & get_instance();
+        $CI->auth->check_admin_auth();
+        $get_notif = $CI->Web_settings->show_all_bell_notification();
+        echo json_encode($get_notif);
+        exit;
+    }
+
+    // Update Bell Notification
+
+    public function updateBellNotification()
+    {
+        $schedule_id = $this->input->post('schedule_id');
+        $user_id = $this->input->post('user_id');
+
+        $response = [];
+
+        $result = $this->Web_settings->update_notification_status($schedule_id, $user_id);
+
+        if ($result) {
+            $response = ['status' => 1, 'message' => 'Success'];
+        } else {
+            $response = ['status' => 0, 'message' => 'Failed'];
+        }
+
+        echo json_encode($response);
+        exit;
+    }
    
     // sendAlerts Sale
     public function sendAlerts()
@@ -2675,6 +2645,177 @@ $userId = $this->session->userdata('user_id');
         $content = $this->load->view('web_setting/logs', $data, true);
         $this->template->full_admin_html_view($content);
     }
+
+    // Notification View Page 
+    public function notifications()
+    {   
+        $id      = isset($_GET['id']) ? $_GET['id'] : null;
+
+        $userId    = decodeBase64UrlParameter($id);
+
+        $company_information = $this->db->select('company_name, email') ->where('company_id', $userId) ->get('company_information')->result_array();
+
+        $data = array(
+           'title' => 'Reminder Notification',
+           'email' => $company_information
+        );
+
+        $content = $this->load->view('web_setting/notifications', $data, true);
+        $this->template->full_admin_html_view($content);
+    }
+
+    // Reminder List data
+    
+    public function reminderLists()
+    {
+        $encodedId      = isset($_GET['id']) ? $_GET['id'] : null;
+        $encodedAdmin   = isset($_GET['admin_id']) ? $_GET['admin_id'] : null;
+        $decodeAdmin    = decodeBase64UrlParameter($encodedAdmin);
+        $decodedId      = decodeBase64UrlParameter($encodedId);
+        $limit          = $this->input->post('length');
+        $start          = $this->input->post('start');
+        $search         = $this->input->post('search')['value'];
+        $orderField     = $this->input->post("columns")[$this->input->post("order")[0]["column"]]["data"];
+        $orderDirection = $this->input->post("order")[0]["dir"];
+        $totalItems     = $this->Web_settings->getTotalNotificationListdata($limit, $start, $search, $decodedId, $orderDirection);
+        $items          = $this->Web_settings->getPaginatedNotification($limit, $start, $orderField, $orderDirection, $search, $decodedId);
+        $data           = [];
+        $i              = $start + 1;
+        foreach ($items as $item) {
+            $status = ($item['schedule_status'] == '1') ? "<span class='badge badge-success'>Scheduled</span>" : "<span class='badge badge-secondary'>Not Scheduled</span>";
+            $row     = [
+                "id"            => $i,
+                "source"        => $item['source'],
+                "end"           => $item['end'],
+                "schedule_status" => $status,
+                "create_date" => date('m-d-Y', strtotime($item['create_date'])),
+                "action" => "<a href='" . base_url('Cweb_setting/calender_view?id=' . $encodedId . '&admin_id=' . $encodedAdmin) . "' class='btnclr btn btn-success btn-sm' target = '_blank' title='Redirect Calendar'> <i class='fa fa-external-link'></i> </a>",
+            ];
+            $data[] = $row;
+            $i++;
+        }
+        $response = [
+            "draw"            => $this->input->post('draw'),
+            "recordsTotal"    => $totalItems,
+            "recordsFiltered" => $totalItems,
+            "data"            => $data,
+        ];
+        echo json_encode($response);
+    }
+
+    
+    // Insert Reminders
+    public function insertreminder()
+    {
+        $user_id = decodeBase64UrlParameter($this->input->post('user_id'));
+        $admin_id = decodeBase64UrlParameter($this->input->post('admin_id'));
+        
+        $response = [];
+
+        $data = array(
+            'title' => 'Quarter',
+            'description' => 'Quarter',
+            'unique_id' => $admin_id,
+            'start' => $this->input->post('select_date'),
+            'end' => $this->input->post('select_date'),
+            'schedule_status' => 1,
+            'source' => $this->input->post('select_source'),
+            'email_id' => $this->input->post('select_email'),
+            'bell_notification' => 1,
+            'created_by' => $user_id,
+        );
+        
+        $insertData = $this->db->insert('schedule_list', $data);
+
+        if($insertData){
+            // $this->send_mail_cronjob($data['start']);
+            $response = ['status' => 1, 'msg' => 'Reminder Setup Successfully.'];
+        }else{
+            $response = ['status' => 0, 'msg' => 'Reminder Setup Failed !!!.'];
+        }
+
+        echo json_encode($response);
+        exit();
+
+    }
+
+    // Send Email 
+    // public function send_mail_cronjob($startdate) 
+    // {  
+
+    //     if(date('Y-m-d') == $startdate){
+
+    //         $CI = &get_instance();
+    //         $this->load->library('email');
+
+    //         $get_emails = $CI->Web_settings->get_email_scheduled();
+    //         $todaysql = $CI->Web_settings->getDataForTodayEmailSchedule();
+            
+    //         $emailStatus = [];  
+             
+
+
+    //         foreach ($get_emails as $email_data) {
+    //             $subject = "Reminder: " . $email_data->title . " Update";
+    //             $message = $email_data->title . " : Expected Date : " . $email_data->start;
+                
+    //             if (!empty($todaysql) && isset($todaysql[0]->email) && isset($todaysql[0]->company_name)) {
+    //                 $to = $todaysql[0]->email;
+    //                 $name = $todaysql[0]->company_name;
+    //                 $mail_set = $CI->Web_settings->getemailConfig();
+    //                 $stm_user = $mail_set[0]->smtp_user;
+    //                 $stm_pass = $mail_set[0]->smtp_pass;
+    //                 $domain_name = $mail_set[0]->smtp_host;
+    //                 $protocol = $mail_set[0]->protocol;
+    //                 $EMAIL_ADDRESS = $mail_set[0]->smtp_user;
+    //                 $DOMAIN = substr(strrchr($EMAIL_ADDRESS, "@"), 1);
+
+    //                 if(strtolower($DOMAIN) === 'gmail.com'){
+    //                     $config = array(
+    //                         'protocol' => $protocol,
+    //                         'smtp_host' => $domain_name,
+    //                         'smtp_user' => $stm_user,
+    //                         'smtp_pass' => $stm_pass,
+    //                         'smtp_port' => 465,
+    //                         'smtp_timeout' => 30,
+    //                         'charset' => 'utf-8',
+    //                         'newline' => '\r\n',
+    //                         'mailtype' => 'html',
+    //                     );
+    //                 } else {
+    //                     $config = array(
+    //                         'protocol' => $protocol,
+    //                         'smtp_host' => 'ssl://' . $domain_name,
+    //                         'smtp_user' => $stm_user,
+    //                         'smtp_pass' => $stm_pass,
+    //                         'smtp_port' => 465,
+    //                         'smtp_timeout' => 30,
+    //                         'charset' => 'utf-8',
+    //                         'newline' => '\r\n',
+    //                         'mailtype' => 'html',
+    //                         'validate' => true,
+    //                     );
+    //                 }
+
+    //                 $this->email->initialize($config);
+    //                 $this->email->from($to);
+    //                 $this->email->to($to);
+    //                 $this->email->subject($subject);
+    //                 $this->email->message($message);
+
+    //                 if ($this->email->send()) {
+    //                     $emailStatus[] = ['email' => $to, 'status' => 'success'];
+    //                 } else {
+    //                     $emailStatus[] = ['email' => $to, 'status' => 'failure', 'error' => $this->email->print_debugger()];
+    //                 }
+    //             }
+    //         }
+
+    //         return json_encode(['status' => '1', 'message' => 'Reminder Setup Successfully. Emails Sent.', 'email_status' => $emailStatus]);
+    //     }else{
+    //         return json_encode(['status' => '0', 'message' => '']);
+    //     }
+    // }
 
 
 }

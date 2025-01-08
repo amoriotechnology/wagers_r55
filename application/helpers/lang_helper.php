@@ -77,13 +77,20 @@ function decrypt($data, $key) {
     return openssl_decrypt($encrypted, $method, $key, 0, $iv);
 }
 }
+
 if (!function_exists('decodeBase64UrlParameter')) {
     function decodeBase64UrlParameter($urlParam) {
-        $text = hex2bin($urlParam);
-       // echo $text;
-       return decrypt($text,COMPANY_ENCRYPT_KEY);
+        if (ctype_xdigit($urlParam) && strlen($urlParam) % 2 === 0) {
+            $text = hex2bin($urlParam);
+            return decrypt($text, COMPANY_ENCRYPT_KEY);
+        } else {
+            log_message('error', 'Invalid hexadecimal string passed to decodeBase64UrlParameter: ' . $urlParam);
+            return false; 
+        }
     }
 }
+
+
 if (!function_exists('encodeBase64UrlParameter')) {
     function encodeBase64UrlParameter($urlParam) {
         $encres = encrypt($urlParam, COMPANY_ENCRYPT_KEY);

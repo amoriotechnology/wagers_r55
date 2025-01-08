@@ -23,26 +23,18 @@ class Users extends CI_Model {
             $this->db->from('user_login');
          
             $this->db->where('user_id', $user_id);
-              $this->db->where('status', '1');
+            $this->db->where('status', '1');
 
-          /*  $this->db->select('a.*,b.*');
-            $this->db->from('user_login a');
-            $this->db->join('users b', 'b.user_id = a.user_id');
-            $this->db->where('a.user_id', $user_id);*/
             $query = $this->db->get();
-           // echo $this->db->last_query();
             if ($query->num_rows() > 0) {
-
                 return $query->result_array();
-       //  die();
             }else{
                 $this->db->select('*');
                 $this->db->from('users');
              
                 $this->db->where('user_id', $user_id);
                 $query = $this->db->get();
-              //  echo $this->db->last_query();
-              //  die();
+
                 return $query->result_array();
 
             }

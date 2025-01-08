@@ -51,12 +51,68 @@ class Userm extends CI_Model {
     }
 
     # ===  ===  ===  ===  = User List ===  ===  ===  ===  = #
-    public function user_list() {
-        $uid = $_SESSION[ 'user_id' ];
-        $sql = 'SELECT * FROM `user_login` WHERE `cid`='.$uid;
-        $query = $this->db->query( $sql );
-        return $query->result_array();
+    public function user_list() 
+    {
+        $uid = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
+        if (!$uid) {
+            log_message('error', 'User ID is not set in session.');
+            return [];
+        }
+
+        $query = $this->db->where('cid', $uid)->get('user_login');
+
+        if ($query === false) {
+            log_message('error', 'Database query failed: ' . $this->db->last_query());
+            return [];
+        }
+        return $query->result_array();
+    }
+
+
+    // Get Company List Data
+    public function getPaginatedUsers($limit, $offset, $orderField, $orderDirection, $search, $user_id)
+    {   
+        $this->db->distinct();
+        $this->db->select('*');
+        $this->db->from('user_login');
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like("username", $search);
+            $this->db->or_like("email_id", $search);
+            $this->db->or_like("user_type", $search);
+            $this->db->or_like("status", $search);
+            $this->db->group_end();
+        }
+        $this->db->where('cid', $user_id);
+        $this->db->limit($limit, $offset);
+        $this->db->order_by('id', $orderDirection);
+        $query = $this->db->get();
+        if ($query === false) {
+            return [];
+        }
+        return $query->result_array();
+    }
+
+    // Get Total Employee List Data
+    public function getTotalUserListdata($limit, $offset, $search, $user_id, $orderDirection)
+    {   
+        $this->db->distinct();
+        $this->db->select('*');
+        $this->db->from('user_login');
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like("username", $search);
+            $this->db->or_like("email_id", $search);
+            $this->db->or_like("user_type", $search);
+            $this->db->or_like("status", $search);
+            $this->db->group_end();
+        }
+        $this->db->where('cid', $user_id);
+        $this->db->order_by('id', $orderDirection);
+        $count = $this->db->count_all_results();
+
+        return $count; 
     }
 
     # ===  ===  ===  ===  == User search list ===  ===  ===  ===  == #
@@ -110,21 +166,13 @@ class Userm extends CI_Model {
     }
     # ===  ===  ===  ===  == User edit data ===  ===  ===  ===  === #
 
-    public function retrieve_user_editdata( $user_id ) {
+    public function retrieve_user_editdata($user_id) 
+    {
 
-        return  $sql = 'SELECT 
-       l.user_id,
-       u.first_name,
-       u.last_name,
-       l.email,
-       u.gender,
-       u.date_of_birth,
-       u.phone,
-       l.username,
-       l.password
-        FROM `users` u 
-        join user_login l
-        on l.user_id=u.id where u.id='.$user_id;
+        $this->db->select("u.*, ul.*");
+        $this->db->from('users u');
+        $this->db->join('user_login ul', 'ul.unique_id = u.unique_id');
+        $this->db->where('u.unique_id', $user_id);   
 
         $query = $this->db->get();
         if ( $query->num_rows() > 0 ) {
@@ -169,6 +217,18 @@ class Userm extends CI_Model {
     }
 
     # ===  ===  ===  == Delete user item ===  ===  == #
+
+    public function deleteUser($user_id) {
+
+        $this->db->where('unique_id', $user_id );
+        $this->db->delete('users' );
+
+        $this->db->where('unique_id', $user_id );
+        $this->db->delete('user_login' );
+
+        return true;
+    }
+
     public function delete_user( $user_id ) {
         $this->db->where( 'unique_id', $user_id );
         $this->db->delete( 'users' );

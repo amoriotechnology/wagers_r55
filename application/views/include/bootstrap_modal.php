@@ -1085,8 +1085,106 @@ if(in_array(BOOTSTRAP_MODALS['add_states'],$bootstrap_modals)){ ?>
       </div>
    </div>
 </div>
+
+<?php } if(in_array(BOOTSTRAP_MODALS['reminders'], $bootstrap_modals)) { ?>
+
+<!------ Add Reminders -->  
+<div class="modal fade" id="reminders" role="dialog">
+   <div class="modal-dialog" role="document" style="width: 800px !important;">
+      <!-- <div class="modal-dialog" role="document"> -->
+    <form id="notificationForm" method="post" style="text-align: left !important;">
+        <div class="modal-content">
+            <div class="modal-header btnclr"  style="text-align:center;" >
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h4 class="modal-title">Setup Reminder</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" id="tableAlerts">
+                   <thead style="text-align:center;">
+                        <tr>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Source</th>
+                        </tr>
+                   </thead>
+                   <tbody>
+                        <tr>
+                           <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
+                            
+                            <td><span id="bold"><?php echo display('NEW SALE') ?></span> - ETD</td>
+                            <td>
+                                <input type="date" class="form-control" name="select_date">
+                                <input type="hidden" name="user_id" value="<?php echo $_GET['id']; ?>">
+                                <input type="hidden" name="admin_id" value="<?php echo $_GET['admin_id']; ?>">
+                               <!--  <select class="when form-control" name="select_date[]" style="width: -webkit-fill-available;" >
+                                    <option value=""><?php echo display('Select Preferred Date') ?></option>
+                                </select> -->
+                            </td>
+                            <td>
+                                <select class="where form-control" name="select_source" id="select_source" onchange="selectSource()" style="width: -webkit-fill-available;">
+                                    <option value="">Select Preferred Source</option>
+                                    <option value="EMAIL">EMAIL</option>
+                                    <option value="WAGERS">WAGERS</option>
+                                    <option value="CALENDER">CALENDER</option>
+                                </select>
+
+                                <br>
+                                <select class="form-control" name="select_email" style="width: -webkit-fill-available; display: none;" id="select_email" >
+                                    <option value="">Select Email</option>
+                                    <?php foreach ($email as $value) { ?>
+                                    <option value="<?php echo $value['email']; ?>"><?php echo $value['email']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                        </tr>
+                   </tbody>
+                </table>
+             </div>
+             <div class="modal-footer">
+                <a href="#" class="btn btnclr" data-dismiss="modal"><?php echo display('Close') ?> </a>
+                <button type="submit" class="btn btnclr disableButton">Submit</button>
+             </div>
+            </div>
+        </form>
+      <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+</div>
+
 <?php } ?>
 
+<!-- Show Reminder Modal -->
+<div class="modal fade" id="showremindermodal" role="dialog">
+   <div class="modal-dialog" role="document" style="width: 800px !important;">
+      <!-- <div class="modal-dialog" role="document"> -->
+    <form id="notificationForm" method="post" style="text-align: left !important;">
+        <div class="modal-content">
+            <div class="modal-header btnclr"  style="text-align:center;" >
+                <a href="#" class="close closeUpdate" data-dismiss="modal">&times;</a>
+                <h4 class="modal-title">Notification</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" id="tableNotificationAlerts">
+                   <thead style="text-align:center;">
+                        <tr>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Source</th>
+                        </tr>
+                   </thead>
+                   <tbody>
+                   </tbody>
+                </table>
+             </div>
+             <div class="modal-footer">
+                <a href="#" class="btn btnclr closeUpdate" data-dismiss="modal"><?php echo display('Close') ?> </a>
+             </div>
+            </div>
+        </form>
+      <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+</div>
 
 <script>
 
@@ -1864,5 +1962,158 @@ document.addEventListener('change', function (event) {
         window.location.href = selectedId ? baseLink + selectedId : baseLink;
     }
 });
+
+
+// Select Notification Source
+function selectSource()
+{
+    var source = $('#select_source').val();
+
+    if (source === 'EMAIL') {
+        $('#select_email').show(); 
+    } else {
+        $('#select_email').hide(); 
+    }
+}
+
+// Insert Reminder 
+// Insert Daily Break
+$("#notificationForm").validate({
+    rules: {
+        select_date: "required",
+        select_source: "required",
+        select_email: "required",
+    },
+    messages: {
+        select_date: "Date is required",
+        select_source: "Source is required",
+        select_email: "Email is required",
+    },
+    errorPlacement: function(error, element) {
+        if (element.hasClass("select2-hidden-accessible")) {
+            error.insertAfter(element.next('span.select2')); 
+        } else {
+            error.insertAfter(element);
+        }
+    },
+    submitHandler: function(form) {
+        var csrfName = '<?php echo $this->security->get_csrf_token_name();?>';
+        var csrfHash = '<?php echo $this->security->get_csrf_hash();?>';
+
+        $('.disableButton').text("Loading...").prop('disabled', true);
+
+        var formData = new FormData(form); 
+        formData.append(csrfName, csrfHash); 
+
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url(); ?>Cweb_setting/insertreminder", 
+            data: formData, 
+            dataType: "json",
+            contentType: false, 
+            processData: false,
+            success: function(response) {
+                if(response.status == 1){
+                    toastr.success(response.msg, "Success", { 
+                       closeButton: false,
+                       timeOut: 1000
+                    });
+                    $('#reminders').modal('hide');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                }else{
+                    toastr.error(response.msg, "Error", { 
+                       closeButton: false,
+                       timeOut: 1000
+                    });
+                }
+            },
+            error: function (error) {
+                toastr.error(error, "Error", { 
+                   closeButton: false,
+                   timeOut: 1000
+                });
+            }
+        });
+    }
+});
+
+// Reminder Modal Popup in dashboard top Right Bell Icon to click Open Modal
+function reminderModals() {
+   
+    var formData = new FormData();
+    formData.append(csrfName, csrfHash);
+    $.ajax({
+        type: "POST",
+        url: "<?php echo base_url(); ?>Cweb_setting/showBellNotification", 
+        data: formData, 
+        dataType: "json",
+        contentType: false, 
+        processData: false,
+        success: function(response) {
+            console.log(response, "response");
+            var tableBody = $("#tableNotificationAlerts tbody");
+            tableBody.empty();
+
+            if (response && response.length > 0) {
+                response.forEach(function(item) {
+                    var row = `<tr>
+                        <td>${item.title}</td>
+                        <td>${item.start}</td>
+                        <td>${item.source}</td>
+                        <input type='hidden' class='schedule_id' name='schedule_id' value='${item.id}' />
+                        <input type='hidden' class='user_id' name='user_id' value='${item.created_by}' />
+                    </tr>`;
+                    tableBody.append(row);
+                });
+            } else {
+                var noDataRow = `<tr>
+                    <td colspan="3" style="text-align:center;">No reminders available</td>
+                </tr>`;
+                tableBody.append(noDataRow);
+            }
+            $('.total_alerts').text(response && response.length > 0 ? response.length : 0);
+        }
+    });
+}
+
+// Close Reminder to Update Bell Notification
+$(document).ready(function() {
+
+    reminderModals();
+
+    $('.closeUpdate').click(function() {
+        $('#tableNotificationAlerts tbody tr').each(function() {
+            var sch_id = $(this).find('.schedule_id').val(); 
+            var user_id = $(this).find('.user_id').val();   
+
+            if (sch_id && user_id) {
+                var formData = new FormData();
+                formData.append(csrfName, csrfHash); 
+                formData.append('schedule_id', sch_id); 
+                formData.append('user_id', user_id);   
+                
+                // AJAX request
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url(); ?>Cweb_setting/updateBellNotification", 
+                    data: formData, 
+                    dataType: "json",
+                    contentType: false, 
+                    processData: false,
+                    success: function(response) {
+                        location.reload();
+                        console.log("Response for Schedule ID:", sch_id, response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error for Schedule ID:", sch_id, status, error);
+                    }
+                });
+            }
+        });
+    });
+});
+
 </script>
 

@@ -173,14 +173,8 @@ class Web_settings extends CI_Model {
         $this->db->where('schedule_status', 1);
 
         $this->db->where('created_by', $this->session->userdata('user_id'));
-        
-        // date_default_timezone_set('Asia/Kolkata');
-
-        // $this->db->where('end >=', date('Y-m-d H:i:s'));
 
         $query = $this->db->get();
-        
-        // echo $this->db->last_query(); die();
         
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -197,8 +191,6 @@ class Web_settings extends CI_Model {
         $this->db->where('created_by', $this->session->userdata('user_id'));
 
         $query = $this->db->get();
-
-        // echo $this->db->last_query(); die();
         
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -206,11 +198,10 @@ class Web_settings extends CI_Model {
         return false;
     }
        public function get_email_scheduled(){
-            $todayDate = date('Y-m-d');
+        $todayDate = date('Y-m-d');
         $this->db->select('id, title, description, start, end,invoice_no');
-
         $this->db->from('schedule_list');
-       $this->db->where('source', 'EMAIL');
+        $this->db->where('source', 'EMAIL');
         $this->db->where('start', $todayDate);
         $this->db->where('created_by', $this->session->userdata('user_id'));
 
@@ -226,8 +217,6 @@ class Web_settings extends CI_Model {
         $this->db->select('*');
 
         $this->db->from('company_information');
-
-      
 
         $this->db->where('company_id', $this->session->userdata('user_id'));
 
@@ -1512,15 +1501,95 @@ else
 
     }
 //To get the default setting for specific company - Surya
-public function default_company_setting($id){
-$this->db->select('*');
-$this->db->from('web_setting');
-$this->db->where('create_by', $id);
-$query = $this->db->get();
-if ($query->num_rows() > 0) {
-    return $query->result_array();
-}
-return false;
-}
+    public function default_company_setting($id){
+        $this->db->select('*');
+        $this->db->from('web_setting');
+        $this->db->where('create_by', $id);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
+
+    // Get Reminder notification List
+    public function getPaginatedNotification($limit, $offset, $orderField, $orderDirection, $search, $user_id)
+    {   
+        $this->db->distinct();
+        $this->db->select('*');
+        $this->db->from('schedule_list sl');
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like("unique_id", $search);
+            $this->db->or_like("start", $search);
+            $this->db->or_like("end", $search);
+            $this->db->or_like("schedule_status", $search);
+            $this->db->or_like("source", $search);
+            $this->db->or_like("email_id", $search);
+            $this->db->group_end();
+        }
+        $this->db->where('created_by', $user_id);
+        $this->db->limit($limit, $offset);
+        $this->db->order_by('id', $orderDirection);
+        $query = $this->db->get();
+        if ($query === false) {
+            return [];
+        }
+        return $query->result_array();
+    }
+
+    // Get Total Reminder notification List Data
+    public function getTotalNotificationListdata($limit, $offset, $search, $user_id, $orderDirection)
+    {
+        
+        $this->db->distinct();
+        $this->db->select('COUNT(DISTINCT id) as total_count');
+        $this->db->from('schedule_list');
+        
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like("unique_id", $search);
+            $this->db->or_like("start", $search);
+            $this->db->or_like("end", $search);
+            $this->db->or_like("schedule_status", $search);
+            $this->db->or_like("source", $search);
+            $this->db->or_like("email_id", $search);
+            $this->db->group_end();
+        }
+
+        $this->db->where('created_by', $user_id);
+
+        $query = $this->db->get();
+        $result = $query->row();
+
+        return $result ? $result->total_count : 0;
+    }
+
+    // Application Bell Notification
+    public function show_all_bell_notification()
+    {
+        $todayDate = date('Y-m-d');
+        $this->db->select('*');
+        $this->db->from('schedule_list');
+        $this->db->where('created_by', $this->session->userdata('user_id'));
+        $this->db->where('start', $todayDate);
+        $this->db->where('source', 'WAGERS');
+        $this->db->where('bell_notification', 1);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+        return false;
+    }
+
+    // Update Bell Notification
+    public function update_notification_status($schedule_id, $user_id)
+    {
+        $this->db->where('id', $schedule_id);
+        $this->db->where('created_by', $user_id);
+        $this->db->update('schedule_list', array('bell_notification' => 0));
+        return $this->db->affected_rows() > 0;
+    }
+
 }
 

@@ -124,9 +124,9 @@
       <div class="navbar-custom-menu">
          <ul class="nav navbar-nav">
             <li class="dropdown notifications-menu">
-               <a href="<?php echo base_url('Cweb_setting/sendAlerts') ?>" >
+               <a href="#" onclick="reminderModals()" data-toggle="modal" data-target="#showremindermodal">
                <i class="pe-7s-bell" title="Alerts"></i>
-               <span class="label total-alerts" id="total-alerts" style="background-color: #e53952;"></span>
+               <span class="label total_alerts" style="background-color: #fff;"></span>
                </a>
             </li>
             <li class="dropdown notifications-menu">
@@ -164,10 +164,15 @@
                      <div class="menuCol col-xl-3 col-lg-3 col-md-12">
                         <ul class="dropdown-submenu">
                          <li class="menu-title" style="color:#17202a"><b><?php echo ('User Details');  ?></b></li>
+
                            <li> <a href="<?php echo base_url('Company_setup/manage_company?id=' . $encode_com_id . '&admin_id=' . $encode_admin_id); ?>"> <i class="ti-settings"></i>&nbsp;&nbsp;Manage My Company </a> </li>
-                           <li><a href="<?php echo base_url('User/manage_user') ?>"><i class="ti-settings"></i>&nbsp;&nbsp;Manage Users </a></li>
+
+                           <li><a href="<?php echo base_url('User/manage_user?id=' . $encode_com_id . '&admin_id=' . $encode_admin_id); ?>"><i class="ti-settings"></i>&nbsp;&nbsp;Manage Users </a></li>
+
                            <li><a href="<?php echo base_url('Admin_dashboard/edit_profile') ?>"><i class="pe-7s-users"></i> <?php  echo  display('user_profile'); ?></a></li>
+
                          <li><a href=" <?php echo base_url('Admin_dashboard/change_password_form') ?>"><i class="pe-7s-settings"></i><?php   echo display('Change Password'); ?></a></li>
+                         
                         </ul>
                      </div>
                      <div class="menuCol col-xl-3 col-lg-3 col-md-12">
@@ -178,7 +183,7 @@
                               if(trim($split[0])=='setting'){
                            ?>
                            <li class="menu-title" style="color:#17202a"><b><?php echo display('Admin Details');  ?></b></li>
-                           <li><a href="<?php echo base_url('Currency/currency_form') ?>"><i class="ti-settings"></i>&nbsp;&nbsp;<?php echo display('currency');  ?></a></li>
+                           
                            <li><a href="<?php echo base_url('/Cweb_setting') ?>"><i class="ti-settings"></i>&nbsp;&nbsp;Setting </a></li>
                            <li><a href=" <?php echo base_url('Admin_dashboard/dashboardsetting') ?>"><i class="ti-dashboard"></i>Dashboard Settings</a></li>
                            <br>
@@ -391,6 +396,22 @@
                <li class="treeview  "><a href="<?= base_url('Chrm/payslip_setting?id=').$encode_com_id . '&admin_id=' . $encode_admin_id; ?>">Payslip Setting</a></li>                   
                <li class="treeview  "><a href="<?= base_url('Company_setup/manage_company?id=').$encode_com_id . '&admin_id=' . $encode_admin_id; ?>">Manage My Company</a></li>
                <li class="treeview  "><a href="<?= base_url('Chrm/week_setting?id=').$encode_com_id . '&admin_id=' . $encode_admin_id; ?>">Week Setting</a></li>
+
+               <li class="treeview">
+                  <a href="#">
+                     <i class=""></i> <span>Settings</span>
+                     <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span>
+                  </a>
+                  <ul class="treeview-menu">
+                     <li class="treeview"><a href="<?= base_url('Cweb_setting/notifications?id=').$encode_com_id . '&admin_id=' . $encode_admin_id; ?>">Notification</a>
+                     </li>
+                     <li class="treeview  <?php echo ($this->uri->segment(2) == 'calender_view') ? 'active' : ''; ?>">
+                        <a href="<?= base_url('Cweb_setting/calender_view?id=').$encode_com_id . '&admin_id=' . $encode_admin_id; ?>">
+                        <?php echo 'Calendar'; ?></span>
+                        </a>
+                     </li>
+                  </ul>
+               </li>
             </ul>
          </li>
       </ul>
