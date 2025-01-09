@@ -36,6 +36,11 @@
       <div class="row">
          <div class="col-sm-12">
             <div class="panel panel-bd lobidrag">
+               <div class="panel-heading">
+                  <div class="panel-title">
+                     <button class="btn btnclr" data-toggle="modal" data-target="#calanderreminders">+ Add Reminder</button>
+                  </div>
+               </div>
                <div class="panel-body">
                   <div class="table-responsive">
                      <div id="calendar"></div>
@@ -62,6 +67,11 @@
    }
 </style>
 
+<?php 
+   $modaldata['bootstrap_modals'] = array('calanderreminders');
+   $this->load->view('include/bootstrap_modal', $modaldata);
+?>
+
 <script src='https://fullcalendar.io/js/fullcalendar-2.4.0/lib/moment.min.js'></script>
 <script src='https://fullcalendar.io/js/fullcalendar-2.4.0/lib/jquery.min.js'></script>
 <script src='https://fullcalendar.io/js/fullcalendar-2.4.0/fullcalendar.min.js'></script>
@@ -70,7 +80,6 @@
   $(document).ready(function() {
       var insertdata = '<?php echo $insertdata; ?>';
       var eventData = JSON.parse(insertdata);  
-      console.log(eventData);
       var currentDate = new Date();
       $('#calendar').fullCalendar({
          header: {
@@ -89,51 +98,5 @@
          $('#calendar').fullCalendar( 'addEventSource', eventData);
       });
   });
-
-
-    //  $(document).ready(function() {
-    //     var insertdata = '<?php echo $insertdata; ?>';
-    //     var eventData = JSON.parse(insertdata);
-    
-    //     var eventDataFromLocalStorage = localStorage.getItem('eventData');
-        
-    //     if (eventDataFromLocalStorage) {
-    //         eventData = JSON.parse(eventDataFromLocalStorage);
-    //     }
-    
-    //     var currentDate = new Date();
-    //     var calendar = $('#calendar');
-    
-    //     calendar.fullCalendar({
-    //         header: {
-    //             left: 'prev,next today',
-    //             center: 'title',
-    //             right: 'month,agendaWeek,agendaDay',
-    //         },
-    //         defaultDate: currentDate,
-    //         editable: true,
-    //         eventLimit: true,
-    //         events: eventData,
-    //         eventDrop: function(event, delta, revertFunc) {
-    //             var updatedEvent = findEventById(event.id);
-    //             if (updatedEvent) {
-    //                 updatedEvent.start = event.start.format();
-    //                 saveEventInLocalStorage(eventData);
-    //             } else {
-    //                 console.error('Event with ID ' + event.id + ' not found.');
-    //                 revertFunc();
-    //             }
-    //         },
-    //     });
-    
-    //     function findEventById(eventId) {
-    //         return eventData.find(function(event) {
-    //             return event.id === eventId;
-    //         });
-    //     }
-    //     function saveEventInLocalStorage(eventData) {
-    //         localStorage.setItem('eventData', JSON.stringify(eventData));
-    //     }
-    // });
 </script>
 

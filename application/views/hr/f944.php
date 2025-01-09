@@ -489,13 +489,13 @@
                     <input type="text" value="<?php echo $decimal10; ?>" />
                 </div>
                 <div class="busniess-name">
-                    <input type="text" value="" />
+                    <input type="text" value="<?php echo $company_name; ?>">
                 </div>
                 <div class="b-address">
-                    <input type="text" value="" />
+                    <input type="text" value="<?php echo $get_address[0]; ?>">
                 </div>
                 <div class="city-state-code">
-                    <input type="text" value="" />
+                    <input type="text" style='font-size:12px;width:100%;' value="<?php echo $get_address[1] .' '. $get_address[2] .' '. $get_address[3] ; ?> " />
                 </div>
             </div>
             <div class="page-6" id="six">

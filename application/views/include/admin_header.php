@@ -124,7 +124,7 @@
       <div class="navbar-custom-menu">
          <ul class="nav navbar-nav">
             <li class="dropdown notifications-menu">
-               <a href="#" onclick="reminderModals()" data-toggle="modal" data-target="#showremindermodal">
+               <a href="#" onclick="reminderModals()" data-toggle="modal" data-target="#notifications">
                <i class="pe-7s-bell" title="Alerts"></i>
                <span class="label total_alerts" style="background-color: #fff;"></span>
                </a>

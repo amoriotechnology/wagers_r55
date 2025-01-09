@@ -201,13 +201,14 @@ class Cweb_setting extends CI_Controller {
         $CI = &get_instance();
         $CI->auth->check_admin_auth();
 
-        $insertdata = $CI->Web_settings->insertDateforSchedule();
-        $alldata = $CI->Web_settings->insertDateforScheduleStatus();
+        $encodedId      = isset($_GET["id"]) ? $_GET["id"] : null;
+        $user_id      = decodeBase64UrlParameter($encodedId);
+
+        $insertdata = $CI->Web_settings->insertDateforSchedule($user_id);
 
         $data = array(
             'title' => 'Calendar',
             'insertdata' => json_encode($insertdata),
-            'allData' => $alldata
         );
 
         $content = $this->load->view('web_setting/calendar_views', $data, true);
@@ -222,22 +223,37 @@ class Cweb_setting extends CI_Controller {
        $CI = & get_instance();
        $CI->auth->check_admin_auth();
 
+       $response = [];
+
        $title = $this->input->post('title');
        $description = $this->input->post('description');
        $start = $this->input->post('start');
        $end = $this->input->post('end');
+       $user_id  = decodeBase64UrlParameter($this->input->post('user_id'));
+       $admin_id  = decodeBase64UrlParameter($this->input->post('admin_id'));
 
        $data = array(
          'title' => $title,
          'description' => $description,
          'start' => $start,
          'end' => $end,
-         'created_by' => $this->session->userdata('user_id')
+         'created_by' => $user_id,
+         'unique_id' => $admin_id,
+         'source' => 'WAGERS',
+         'schedule_status' => 1,
+         'bell_notification' => 1
        );
 
-       $this->db->insert('schedule_list', $data);
-       // echo $this->db->last_query(); die();
-       redirect(base_url('Cweb_setting/calender_view'));
+       $insertData = $this->db->insert('schedule_list', $data);
+
+       if($insertData){
+          $response = ['status' => 1, 'msg' => 'Schedule List Added Successfully.'];
+       }else{
+          $response = ['status' => 0, 'msg' => 'Schedule List Added Failed !!!'];
+       }
+       
+       echo json_encode($response);
+       exit;
     }
 
     // Application Bell Notification
@@ -2712,110 +2728,58 @@ $userId = $this->session->userdata('user_id');
         
         $response = [];
 
+        $datesForQuarters = [
+            'Quater 1' => date('Y') . '-05-01', // May 1st (Quarter 1)
+            'Quater 2' => date('Y') . '-07-31', // July 31st (Quarter 2)
+            'Quater 3' => date('Y') . '-08-31', // August 31st (Quarter 3)
+            'Quater 4' => date('Y') . '-01-31', // January 31st (Quarter 4)
+            'Year'     => date('Y') . '-12-31'  // December 31st (Year)
+        ];
+
+        $title = $this->input->post('title');
+        $description = $this->input->post('select_date');
+
+        $targetDate = $datesForQuarters[$title];
+        $reminderDate = '';
+
+        if ($description == 'On Date') {
+            $reminderDate = $targetDate;
+        } else if ($description == '1 Day Before') {
+            $reminderDate = date('Y-m-d', strtotime($targetDate . ' -1 day'));
+        } else if ($description == '3 Days Before') {
+            $reminderDate = date('Y-m-d', strtotime($targetDate . ' -3 days'));
+        } else if ($description == '1 Week Before') {
+            $reminderDate = date('Y-m-d', strtotime($targetDate . ' -1 week'));
+        } else {
+            $response = ['status' => 0, 'msg' => 'Invalid description type provided.'];
+            echo json_encode($response);
+            exit();
+        }
+
         $data = array(
-            'title' => 'Quarter',
-            'description' => 'Quarter',
-            'unique_id' => $admin_id,
-            'start' => $this->input->post('select_date'),
-            'end' => $this->input->post('select_date'),
-            'schedule_status' => 1,
-            'source' => $this->input->post('select_source'),
-            'email_id' => $this->input->post('select_email'),
+            'title'             => $title,
+            'description'       => $description,
+            'unique_id'         => $admin_id,
+            'start'             => $reminderDate,
+            'end'               => $reminderDate,
+            'schedule_status'   => 1,
+            'source'            => $this->input->post('select_source'),
+            'email_id'          => $this->input->post('select_email'),
             'bell_notification' => 1,
-            'created_by' => $user_id,
+            'created_by'        => $user_id,
         );
-        
+
         $insertData = $this->db->insert('schedule_list', $data);
 
-        if($insertData){
-            // $this->send_mail_cronjob($data['start']);
+        if ($insertData) {
             $response = ['status' => 1, 'msg' => 'Reminder Setup Successfully.'];
-        }else{
-            $response = ['status' => 0, 'msg' => 'Reminder Setup Failed !!!.'];
+        } else {
+            $response = ['status' => 0, 'msg' => 'Reminder Setup Failed !!!'];
         }
 
         echo json_encode($response);
         exit();
-
     }
-
-    // Send Email 
-    // public function send_mail_cronjob($startdate) 
-    // {  
-
-    //     if(date('Y-m-d') == $startdate){
-
-    //         $CI = &get_instance();
-    //         $this->load->library('email');
-
-    //         $get_emails = $CI->Web_settings->get_email_scheduled();
-    //         $todaysql = $CI->Web_settings->getDataForTodayEmailSchedule();
-            
-    //         $emailStatus = [];  
-             
-
-
-    //         foreach ($get_emails as $email_data) {
-    //             $subject = "Reminder: " . $email_data->title . " Update";
-    //             $message = $email_data->title . " : Expected Date : " . $email_data->start;
-                
-    //             if (!empty($todaysql) && isset($todaysql[0]->email) && isset($todaysql[0]->company_name)) {
-    //                 $to = $todaysql[0]->email;
-    //                 $name = $todaysql[0]->company_name;
-    //                 $mail_set = $CI->Web_settings->getemailConfig();
-    //                 $stm_user = $mail_set[0]->smtp_user;
-    //                 $stm_pass = $mail_set[0]->smtp_pass;
-    //                 $domain_name = $mail_set[0]->smtp_host;
-    //                 $protocol = $mail_set[0]->protocol;
-    //                 $EMAIL_ADDRESS = $mail_set[0]->smtp_user;
-    //                 $DOMAIN = substr(strrchr($EMAIL_ADDRESS, "@"), 1);
-
-    //                 if(strtolower($DOMAIN) === 'gmail.com'){
-    //                     $config = array(
-    //                         'protocol' => $protocol,
-    //                         'smtp_host' => $domain_name,
-    //                         'smtp_user' => $stm_user,
-    //                         'smtp_pass' => $stm_pass,
-    //                         'smtp_port' => 465,
-    //                         'smtp_timeout' => 30,
-    //                         'charset' => 'utf-8',
-    //                         'newline' => '\r\n',
-    //                         'mailtype' => 'html',
-    //                     );
-    //                 } else {
-    //                     $config = array(
-    //                         'protocol' => $protocol,
-    //                         'smtp_host' => 'ssl://' . $domain_name,
-    //                         'smtp_user' => $stm_user,
-    //                         'smtp_pass' => $stm_pass,
-    //                         'smtp_port' => 465,
-    //                         'smtp_timeout' => 30,
-    //                         'charset' => 'utf-8',
-    //                         'newline' => '\r\n',
-    //                         'mailtype' => 'html',
-    //                         'validate' => true,
-    //                     );
-    //                 }
-
-    //                 $this->email->initialize($config);
-    //                 $this->email->from($to);
-    //                 $this->email->to($to);
-    //                 $this->email->subject($subject);
-    //                 $this->email->message($message);
-
-    //                 if ($this->email->send()) {
-    //                     $emailStatus[] = ['email' => $to, 'status' => 'success'];
-    //                 } else {
-    //                     $emailStatus[] = ['email' => $to, 'status' => 'failure', 'error' => $this->email->print_debugger()];
-    //                 }
-    //             }
-    //         }
-
-    //         return json_encode(['status' => '1', 'message' => 'Reminder Setup Successfully. Emails Sent.', 'email_status' => $emailStatus]);
-    //     }else{
-    //         return json_encode(['status' => '0', 'message' => '']);
-    //     }
-    // }
 
 
 }

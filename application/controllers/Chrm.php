@@ -897,7 +897,15 @@ class Chrm extends CI_Controller {
         $data['get_sc_info']       = $this->Hrm_model->get_sc_info($id);
         $data['get_paytotal']      = $this->Hrm_model->get_paytotal($id);
         $data['get_userlist']      = $this->db->select('*')->from('users')->where('user_id', $id)->get()->result_array();
+
+        $data['amountabove'] = $this->Hrm_model->getAboveAmount($id);
+
+        $data['sumQuaterWiseUnemployment'] = $this->Hrm_model->sumQuaterwiseunemploymentamount($id);
+
+        // print_r($data['sumQuaterWiseUnemployment']['Q4']); die;
+
         $data['amountGreaterThan'] = $this->Hrm_model->f940_excess_emp($id);
+
         $totalAmount               = 0;
         if ($data['amountGreaterThan']) {
             foreach ($data['amountGreaterThan'] as $row) {

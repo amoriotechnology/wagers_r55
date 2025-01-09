@@ -182,13 +182,13 @@ class Web_settings extends CI_Model {
         return false;
     }
     
-    public function insertDateforSchedule()
+    public function insertDateforSchedule($user_id)
     {
         $this->db->select('id, title, description, start, end');
 
         $this->db->from('schedule_list');
 
-        $this->db->where('created_by', $this->session->userdata('user_id'));
+        $this->db->where('created_by', $user_id);
 
         $query = $this->db->get();
         

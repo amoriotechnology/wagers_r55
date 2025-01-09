@@ -56,7 +56,7 @@
         <!-- Theme style -->
         <link href="<?= base_url('assets/css/custom.min.css') ?>" rel="stylesheet" type="text/css"/>
         <link href="<?= base_url('assets/css/style.css') ?>" rel="stylesheet" type="text/css"/>
-        <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/datatables/buttons.dataTables.min.css">        
+        <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/datatables/buttons.dataTables.min.css">     
 
        
         <?php if (!empty($Web_settings[0]['rtr']) && $Web_settings[0]['rtr'] == 1) {  ?>
