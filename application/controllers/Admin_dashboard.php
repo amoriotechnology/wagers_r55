@@ -248,6 +248,7 @@ $u_type=$row[0]['u_type'];
          $this->session->set_userdata('u_type',$u_type); 
          $this->session->set_userdata('u_name',$row[0]['username']);
          $this->session->set_userdata('unique_id',$row[0]['unique_id']); 
+         $this->session->set_userdata('userName',$row[0]['username']);
 
 $sql='select * from user_login where username="'.$_POST['username'].'"';
 

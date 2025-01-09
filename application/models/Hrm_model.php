@@ -3579,4 +3579,17 @@ public function delete_monthlydata($id)
     return $delete;
 }
 
+public function getUsers($id, $admin_id)
+{   
+    $this->db->select('*');
+    $this->db->from('user_login');
+    $this->db->where('user_id', $id);
+    $this->db->where('unique_id', $admin_id);
+    $query = $this->db->get();
+    if ($query->num_rows() > 0) {
+        return $query->result_array();
+    }
+    return false;
+}
+
 }

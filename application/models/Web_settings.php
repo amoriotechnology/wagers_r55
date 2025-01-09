@@ -32,7 +32,7 @@ class Web_settings extends CI_Model {
         }
 
     }
-    public function save_notifications($menu, $select_dates, $statuses, $select_sources, $emails, $companies, $unique_id, $user_id{
+    public function save_notifications($menu, $select_dates, $statuses, $select_sources, $emails, $companies, $unique_id, $user_id){
 
         $existing_notifications = $this->db->get_where('notification', array('unique_id' => $unique_id))->result_array();
 

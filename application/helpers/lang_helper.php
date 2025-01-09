@@ -200,33 +200,21 @@ if (!function_exists('logEntry')) {
         
         $user_ipaddress = getClientIp();
 
+        $ci->load->model('Hrm_model');
+        $res = $ci->Hrm_model->getUsers($user_id, $admin_id);
+
         date_default_timezone_set('Asia/Kolkata');
         $current_time = new DateTime();
         $formatted_time = $current_time->format('H:i:s');
         $platform = $ci->agent->platform();
         $browser = $ci->agent->browser();
-        // $user_location = getUserLocation($user_ipaddress);
-
-        // if ($user_location === 'India') {
-        //     date_default_timezone_set('Asia/Kolkata');
-        //     $current_time = new DateTime();
-        //     $formatted_time = $current_time->format('H:i:s');
-        // } elseif ($user_location === 'USA') {
-        //     date_default_timezone_set('America/New_York'); 
-        //     $current_time = new DateTime();
-        //     $formatted_time = $current_time->format('h:i A'); 
-        // } else {
-        //     date_default_timezone_set('UTC');
-        //     $current_time = new DateTime();
-        //     $formatted_time = $current_time->format('Y-m-d H:i:s');
-        // }
 
         $data = array(
             'user_id' => $user_id,
             'admin_id' => $admin_id,
             'field_id' => $field_id,
             'hint' => $hint,
-            'username' => $username,
+            'username' => $res[0]['username'],
             'user_ipaddress' => $user_ipaddress,
             'user_platform' => $platform,
             'user_browser' => $browser,
@@ -254,7 +242,6 @@ if (!function_exists('getUserLocation')) {
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch);
-        // var_dump(curl_error($ch));exit;
         if (curl_errno($ch)) {
             curl_close($ch);
             return null;

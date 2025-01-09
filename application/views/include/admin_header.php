@@ -416,6 +416,10 @@
          </li>
       </ul>
    </li>
+   <li class="treeview">
+      <a href="<?php echo base_url(); ?>/Cweb_setting/viewLogs?id=<?php echo $encode_com_id; ?>">
+      <i class="fas fa-history"></i><span><?php echo 'Logs'; ?></span></a>
+   </li> 
    <!-- Human Resource New menu end -->
    <?php break; } } ?> 
    <?php } if($_SESSION['u_type']==3) { ?>

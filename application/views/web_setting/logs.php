@@ -4,23 +4,18 @@
    <section class="content-header" style="height: 60px;">
       <div class="header-icon">
          <figure class="one">
-            <img src="<?php echo base_url() ?>asset/images/salesreport.png" class="headshotphoto" style="height:50px;" />
+            <img src="<?php echo base_url() ?>assets/images/dashboard.png" class="headshotphoto" style="height:50px;" />
          </figure>
       </div>
-      <div class="header-title">
-         <div class="logo-holder logo-9">
-         <h1><?php echo ('Logs'); ?></h1>
-         </div>
+        <div class="header-title">
+            <div class="logo-holder logo-9">
+                <h1><?php echo ('Logs'); ?></h1>
+            </div>
             <ol class="breadcrumb" style=" border: 3px solid #d7d4d6;" >
                <li><a href="<?php echo base_url()?>"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
                <li class="active" style="color:orange"><?php echo 'Logs';?></li>
-            <div class="load-wrapp">
-               <div class="load-10">
-                  <div class="bar"></div>
-               </div>
-            </div>
-         </ol>
-      </div>
+            </ol>
+        </div>
    </section>
    <section class="content">
       <div class="panel panel-bd lobidrag">
@@ -60,7 +55,6 @@
                             <th class="text-center">Time</th>
                             <th class="text-center">Username</th>
                             <th class="text-center">Module</th>
-                            <th class="text-center">Actions</th>
                             <th class="text-center">Details</th>
                            </tr>
                         </thead>
@@ -126,12 +120,11 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
          { "data": "c_time" },
          { "data": "username" },
          { "data": "module" },
-         { "data": "user_actions" },
          { "data": "details" }
          ],
         "columnDefs": [{
             "orderable": false,
-            "targets": [0, 6],
+            "targets": [0, 5],
             searchBuilder: {
                 defaultCondition: '='
             },
