@@ -11,7 +11,8 @@ class Cron extends CI_Controller {
         $this->load->model('Cron_model');
       
     } 
-
+   
+    // Settings Dropdown Inside Setting Dropdown Notification Menu: Set the source email triggers and configure the reminder for your selected email date.
     public function send_mail_cronjob() 
     {  
         $CI = & get_instance();
