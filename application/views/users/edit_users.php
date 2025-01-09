@@ -27,12 +27,12 @@
             <i class="pe-7s-note2"></i>
         </div>
         <div class="header-title">
-            <h1><?php echo ('Add Admin User') ?></h1>
+            <h1><?php echo ('Edit Admin User') ?></h1>
             <small></small>
             <ol class="breadcrumb">
                 <li><a href="index.html"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
                 <li><a href="#"><?php echo display('web_settings') ?></a></li>
-                <li class="active" style="color:orange;"><?php echo ('Add Admin User') ?></li>
+                <li class="active" style="color:orange;"><?php echo ('title Admin User') ?></li>
             </ol>
         </div>
     </section>
@@ -86,67 +86,67 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <form id="userInsertForm" method="post">
+                        <form id="editInsertForm" method="post">
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label><?php echo ('Employee Name') ?><i class="text-danger"> *</i></label>
                                         <select name="employee_name" id="employee_name" class="form-control" style="border: 2px solid #D7D4D6;" tabindex="3">
                                             <option value="">Select Employee Name</option>
                                             <?php foreach($get_employee_data as $pt) { ?>
-                                                <option value="<?php echo $pt['id'] . ' ' . $pt['first_name'] . ' ' . $pt['last_name']; ?>"><?php echo $pt['first_name'] . ' ' . $pt['last_name']; ?></option>
+                                                <option value="<?php echo $pt['id'] . ' ' . $pt['first_name'] . ' ' . $pt['last_name']; ?>"
+                                                    <?php echo ($userList[0]['employee_id'] == $pt['id']) ? 'selected' : ''; ?>>
+                                                    <?php echo $pt['first_name'] . ' ' . $pt['last_name']; ?>
+                                                </option>
                                             <?php } ?>
                                         </select>
                                     </div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label><?php echo display('Phone') ?><i class="text-danger"> *</i></label>
-                                        <input type="number" name="phone" class="form-control" required>
+                                        <input type="number" name="phone" class="form-control" required value="<?= $userList[0]['phone']; ?>">
                                         <input type="hidden" name="user_id" value="<?php echo $_GET['id']; ?>">
                                         <input type="hidden" name="admin_id" value="<?php echo $_GET['admin_id']; ?>">
+                                        <input type="hidden" name="first_name" value="<?= $userList[0]['first_name']; ?>">
+                                        <input type="hidden" name="last_name" value="<?= $userList[0]['last_name']; ?>">
+                                        <input type="hidden" name="edit_id" value="<?= $_GET['user_id']; ?>">
                                     </div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label><?php echo display('Email') ?><i class="text-danger"> *</i></label>
-                                        <input type="email" name="email" class="form-control" required>
+                                        <input type="email" name="email" class="form-control" required value="<?= $userList[0]['email_id']; ?>">
                                     </div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label><?php echo display('Gender') ?><i class="text-danger"> *</i></label>
                                         <select class="form-control" name="gender" required>
                                             <option value=""><?php echo display('Select Gender')?></option>
-                                            <option value="male">Male</option>
-                                            <option value="female">Female</option>
+                                            <option value="male" <?php if($userList[0]['gender'] == 'male'){echo 'selected';}?>>Male</option>
+                                            <option value="female" <?php if($userList[0]['gender'] == 'female'){echo 'selected';}?>>Female</option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                    <div class="form-group">
                                         <label><?php echo display('DOB') ?><i class="text-danger"> *</i></label>
-                                        <input type="date" name="dob" class="form-control" required>
+                                        <input type="date" name="dob" class="form-control" required value="<?= $userList[0]['date_of_birth']; ?>">
                                     </div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                    <div class="form-group">
                                         <label>Username<i class="text-danger"> *</i></label>
-                                        <input type="text" name="username" class="form-control" required>
+                                        <input type="text" name="username" class="form-control" required value="<?= $userList[0]['username']; ?>" readonly>
                                     </div>
                                 </div>
 
-                                <div class="col-md-3">
-                                   <div class="form-group">
-                                        <label><?php echo display('Password') ?><i class="text-danger"> *</i></label>
-                                        <input type="text" name="password" class="form-control" required>
-                                    </div>
-                                </div>
                             </div>
                             <div class="form-group mt-2">
                                 <label></label>
@@ -168,7 +168,7 @@ var csrfName = '<?= $this->security->get_csrf_token_name();?>';
 var csrfHash = '<?= $this->security->get_csrf_hash();?>';
 
 $(document).ready(function () {
-   $("#userInsertForm").validate({
+   $("#editInsertForm").validate({
         rules: {
             employee_name: "required",
             phone: "required",
@@ -193,7 +193,7 @@ $(document).ready(function () {
             formData.append(csrfName, csrfHash);
             $.ajax({
                 type: "POST",
-                url: "<?php echo base_url(); ?>User/insert_users",
+                url: "<?php echo base_url(); ?>User/updateUsers",
                 data: formData,
                 dataType: "json",
                 contentType: false,
@@ -229,5 +229,3 @@ $(document).ready(function () {
     });
 });
 </script>
-
-

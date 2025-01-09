@@ -283,22 +283,22 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
           <input type="text" value="" />
         </div>
         <?php
-$federal_sum = '0';
-if (isset($tif)) {
-     foreach ($tif as $row) {
-        $federal_sum += $row['sum_f_tax']; 
-}
-}
-$ssw = $total_amount_sum * 0.124; 
-$mw = $total_amount_sum * 0.029; 
-$gt = $ssw + $mw;
-$fot = $federal_sum + $gt; 
-$fvt = explode('.', $fot);
-$integer_parts = isset($fvt[0]) ? $fvt[0] : '0';
- $decimal_parts = isset($fvt[1]) ? substr( $fvt[1],0 ,2) : '00';
-$final_doller=$integer_parts;
-$final_cent= $decimal_parts;
-?>
+          $federal_sum = '0';
+          if (isset($tif)) {
+               foreach ($tif as $row) {
+                  $federal_sum += $row['sum_f_tax']; 
+          }
+          }
+          $ssw = $total_amount_sum * 0.124; 
+          $mw = $total_amount_sum * 0.029; 
+          $gt = $ssw + $mw;
+          $fot = $federal_sum + $gt; 
+          $fvt = explode('.', $fot);
+          $integer_parts = isset($fvt[0]) ? $fvt[0] : '0';
+           $decimal_parts = isset($fvt[1]) ? substr( $fvt[1],0 ,2) : '00';
+          $final_doller=$integer_parts;
+          $final_cent= $decimal_parts;
+        ?>
         <div class="row6">
           <input type="text" value="$<?php echo $integer_parts; ?>"  style=" margin-left: -147px;text-align:right;" />
           <input type="text" value="<?php echo  $decimal_parts; ?>"   style="margin-left: 5px;" />
@@ -316,11 +316,16 @@ $final_cent= $decimal_parts;
           <input type="text" value="$<?php echo $integer_parts; ?>" style="margin-left: -65px;width: 100px;text-align:right;" />
           <input type="text" value="<?php echo $decimal_parts; ?>"  style="margin-left: 5px;" />
         </div>
+        <?php
+          $smallBusiness11 = 0.00;
+          list($smallBusiness11, $smallBusinessdecimalPart) = explode('.', $smallBusiness11) + ['00', '00'];
+        ?>
         <div class="row11">
-          <input type="text" value=" " />
+          <input type="text" value="$<?php echo $smallBusiness11; ?>" style="margin-left: -65px;width: 100px;text-align:right;" />
+          <input type="text" value="<?php echo $smallBusinessdecimalPart; ?>"  style="margin-left: 5px;" />
         </div>
         <div class="row12">
-         <input type="text" value="$<?php echo $integer_parts; ?>" style="margin-top:5px;margin-left: -65px;width: 100px;text-align:right;" />
+         <input type="text" value="$<?php echo $integer_parts + $smallBusiness11; ?>" style="margin-top:5px;margin-left: -65px;width: 100px;text-align:right;" />
         <input type="text" value="<?php echo $decimal_parts; ?>"  style="margin-left: 5px;" />
         </div>
         <div class="row13">
@@ -446,9 +451,9 @@ $final_cent= $decimal_parts;
         <img src="<?php echo base_url()  ?>assets/images/941_3.jpg"  style="width: 99%"    />
         <div class="row1-ein">
             <?php  
-$first_two_chars = substr($Federal_Pin_Number, 0, 2);
-$remaining_chars = substr($Federal_Pin_Number, 2);
-$remaining_chars = str_replace('-', '', $remaining_chars);
+              $first_two_chars = substr($Federal_Pin_Number, 0, 2);
+              $remaining_chars = substr($Federal_Pin_Number, 2);
+              $remaining_chars = str_replace('-', '', $remaining_chars);
             ?>
             <input type="text" style='font-size:12px;width:25px;' value="<?php  echo $first_two_chars ; ?> " />
              <input type="text" style='font-size:12px;' value="<?php  echo $remaining_chars ; ?> " />
@@ -460,13 +465,13 @@ $remaining_chars = str_replace('-', '', $remaining_chars);
             <input type="text" style=' font-size:15px;' value="<?php echo $final_cent; ?>" />
           </div>
           <div class="busniess-name">
-            <input type="text" value=" " />
+            <input type="text" style='font-size:12px;width:100%;' value="<?php echo $company_name; ?> " />
           </div>
           <div class="b-address">
-            <input type="text" value="" />
+            <input type="text" style='font-size:12px;width:100%;' value="<?php echo $get_address[0]; ?> " />
           </div>
           <div class="city-state-code">
-            <input type="text" value=" " />
+            <input type="text" style='font-size:12px;width:100%;' value="<?php echo $get_address[1] .' '. $get_address[2] .' '. $get_address[3] ; ?> " />
           </div>
           <div class="q1">
     <?php $isQ1 = ($selectedValue == 'Q1'); ?>
@@ -778,12 +783,13 @@ $remaining_chars = str_replace('-', '', $remaining_chars);
 }
 .row11 {
   position: absolute;
-  top: 772px;
+  top: 778px;
   left: 655px;
+  font-size: medium;
 }
 .row12 {
   position: absolute;
-  top: 796px;
+  top: 798px;
   left: 655px;
   font-size: medium;
 }
@@ -791,6 +797,7 @@ $remaining_chars = str_replace('-', '', $remaining_chars);
   position: absolute;
   top: 829px;
   left: 655px;
+  font-size: medium;
 }
 .row14 {
   position: absolute;

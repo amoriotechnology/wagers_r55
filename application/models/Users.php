@@ -14,7 +14,6 @@ class Users extends CI_Model {
       
         $this->db->where(array('username' => $username, 'password' => $password, 'status' => 1));
         $query = $this->db->get('user_login');
-     //   echo $this->db->last_query();
        
         $result = $query->result_array();
         if (count($result) == 1) {
@@ -23,26 +22,18 @@ class Users extends CI_Model {
             $this->db->from('user_login');
          
             $this->db->where('user_id', $user_id);
-              $this->db->where('status', '1');
+            $this->db->where('status', '1');
 
-          /*  $this->db->select('a.*,b.*');
-            $this->db->from('user_login a');
-            $this->db->join('users b', 'b.user_id = a.user_id');
-            $this->db->where('a.user_id', $user_id);*/
             $query = $this->db->get();
-           // echo $this->db->last_query();
             if ($query->num_rows() > 0) {
-
                 return $query->result_array();
-       //  die();
             }else{
                 $this->db->select('*');
                 $this->db->from('users');
              
                 $this->db->where('user_id', $user_id);
                 $query = $this->db->get();
-              //  echo $this->db->last_query();
-              //  die();
+
                 return $query->result_array();
 
             }
@@ -50,7 +41,8 @@ class Users extends CI_Model {
         return false;
     }
     
-   public function user_data() {
+    public function user_data() 
+    {
         $id=$_SESSION['user_id'];
 
         $this->db->select('*');
@@ -70,6 +62,7 @@ class Users extends CI_Model {
         return false;
 
     }
+
     public function userPermissionadmin($id = null)
     {
         
@@ -97,8 +90,6 @@ class Users extends CI_Model {
 
     public function userPermission($id = null)
     {
-        
-
         $userrole=$this->db->select('sec_userrole.*,sec_role.*')->from('sec_userrole')->join('sec_role','sec_userrole.roleid=sec_role.id')->where('sec_userrole.user_id',$id)->get()->result();
 
         $roleid = array();
@@ -155,35 +146,34 @@ class Users extends CI_Model {
             }
     }
 
-public function insertToken($user_id)
+    public function insertToken($user_id)
     {   
-       // echo "ID :".$user_id;
         $token = substr(sha1(rand()), 0, 30); 
         $date = date('Y-m-d');
         
         $string = array(
-                'token'=> $token,
-                'user_id'=>$user_id,
-                'created'=>$date
-            );
+            'token'=> $token,
+            'user_id'=>$user_id,
+            'created'=>$date
+        );
           
         $query = $this->db->insert('tokens',$string);
 
         $this->db->query($query);
-     //   echo $this->db->last_query();die();
         return $token . $user_id;
         
     }
-      public function getUserInfoByEmail($email)
+
+    public function getUserInfoByEmail($email)
     {
-          $this->db->select('*');
+        $this->db->select('*');
 
         $this->db->from('user_login');
 
         $this->db->where('email_id', $email);
 
         $query = $this->db->get();
-   //echo $this->db->last_query();die();
+
         if ($query->num_rows() > 0) {
 
             return $query->result_array();
@@ -192,12 +182,8 @@ public function insertToken($user_id)
             error_log('no user found getUserInfo('.$email.')');
             return false;
         }
-
-       
-
-
-      
     }
+
     public function isTokenValid($token)
     {
        $tkn = substr($token,0,30);
@@ -206,7 +192,6 @@ public function insertToken($user_id)
         $q = $this->db->get_where('tokens', array(
             'tokens.token' => $tkn, 
             'tokens.user_id' => $uid), 1);                         
-        //   echo $this->db->last_query();
    
         if($this->db->affected_rows() > 0){
             $row = $q->row();             
@@ -242,7 +227,7 @@ public function insertToken($user_id)
         }
     }
     
-      public function updatePassword($post)
+    public function updatePassword($post)
     {   
         $this->db->where('unique_id', $post['unique_id']);
         $this->db->update('user_login', array('password' => $post['password'])); 
@@ -254,11 +239,9 @@ public function insertToken($user_id)
         }        
         return true;
     } 
-    /*
-     * *User registration
-     */
-
-    public function user_registration() {
+   
+    public function user_registration() 
+    {
         $birth_day = $this->input->post('birth_day');
         $birth_month = $this->input->post('birth_month');
         $birth_year = $this->input->post('birth_year');
@@ -274,7 +257,6 @@ public function insertToken($user_id)
         );
         $this->db->insert('users', $data1);
         $insert_id = $this->db->insert_id();
-        //Inset user Login table 
 
         $password = $this->input->post('password');
         $password = md5("ctgs" . $password);
@@ -291,14 +273,14 @@ public function insertToken($user_id)
         $this->db->insert('user_login', $data);
     }
 
-    public function profile_edit_data() {
+    public function profile_edit_data() 
+    {
         $unique_id = $this->session->userdata('unique_id');
         $this->db->select('a.*,b.*');
         $this->db->from('users a');
         $this->db->join('user_login b', 'b.unique_id = a.unique_id');
         $this->db->where('a.unique_id', $unique_id);
         $query = $this->db->get();
-//echo $this->db->last_query();
         if ($query->num_rows() > 0) {
             return $query->result_array();
         }
@@ -306,43 +288,32 @@ public function insertToken($user_id)
     }
 
     //Update Profile
-    
-    
-    
-    public function profile_update() {
-      //  $this->load->library('upload');
+    public function profile_update() 
+    {
+
         if ($_FILES['logo']['name']) {
-          
 
-        $config['upload_path']    = 'my-assets/image/logo/';
-        $config['allowed_types']  = 'gif|jpg|png|jpeg|JPEG|GIF|JPG|PNG'; 
-        $config['encrypt_name']   = TRUE;
- 
-
-
+            $config['upload_path']    = 'my-assets/image/logo/';
+            $config['allowed_types']  = 'gif|jpg|png|jpeg|JPEG|GIF|JPG|PNG'; 
+            $config['encrypt_name']   = TRUE;
+     
             $this->load->library('upload', $config);
-
-            // print_r( $config); die();
-
 
             if (!$this->upload->do_upload('logo')) {
                 $error = array('error' => $this->upload->display_errors());
-                // print_r($error); 
                 $this->session->set_userdata(array('error_message' => $this->upload->display_errors()));
-                // redirect(base_url('Admin_dashboard/edit_profile'));
             } else {
-            $data = $this->upload->data();  
-            $logo = $config['upload_path'].$data['file_name']; 
-            $config['image_library']  = 'gd2';
-            $config['source_image']   = $logo;
-            $config['create_thumb']   = false;
-            $config['maintain_ratio'] = TRUE;
-            $config['width']          = 200;
-            $config['height']         = 200;
-            $this->load->library('image_lib', $config);
-            $this->image_lib->resize();
-            $logo =  $logo;
-           
+                $data = $this->upload->data();  
+                $logo = $config['upload_path'].$data['file_name']; 
+                $config['image_library']  = 'gd2';
+                $config['source_image']   = $logo;
+                $config['create_thumb']   = false;
+                $config['maintain_ratio'] = TRUE;
+                $config['width']          = 200;
+                $config['height']         = 200;
+                $this->load->library('image_lib', $config);
+                $this->image_lib->resize();
+                $logo =  $logo;
             }
     
         }
@@ -356,53 +327,15 @@ public function insertToken($user_id)
         $new_logo = (!empty($logo) ? $logo : $old_logo);
         $user=$this->session->userdata('user_id');
 
-    //    print_r($old_logo);   die();
-
-
-if($this->session->userdata('u_type')==2){
-  
-     
-     
-     $this->db->set('logo',$new_logo)
-         ->where('cid',$user)
-               ->where('unique_id',$user_id)
-        ->update('user_login');
-        
-        
-      return   $this->db->query("UPDATE `users` AS `a`,`user_login` AS `b`,`web_setting` AS `c` SET `a`.`first_name` = '$first_name', `a`.`last_name` = '$last_name', `a`.`gender` = '$gender',`a`.`date_of_birth` = '$dob',`c`.`logo` = '$new_logo' WHERE `c`.`create_by` = '$user' AND `a`.`unique_id` = '$user_id' AND `a`.`unique_id` = `b`.`unique_id`");
-    
-
-    }else{
-          $this->db->set('logo',$new_logo)
-         ->where('cid',$user)
-               ->where('unique_id',$user_id)
-        ->update('user_login');
-           
-          return $this->db->query("UPDATE `users` AS `a`,`user_login` AS `b`,`users` AS `c` SET `a`.`first_name` = '$first_name', `a`.`last_name` = '$last_name', `a`.`gender` = '$gender',`a`.`date_of_birth` = '$dob',`c`.`userlogo` = '$new_logo' WHERE `c`.`create_by` = '$user' AND `a`.`unique_id` = '$user_id' AND `a`.`unique_id` = `b`.`unique_id`"); 
-
-    
-
-}
-    
-    
-    
+        if($this->session->userdata('u_type')==2){
+            $this->db->set('logo',$new_logo)->where('cid',$user)->where('unique_id',$user_id)->update('user_login');
+            return   $this->db->query("UPDATE `users` AS `a`,`user_login` AS `b`,`web_setting` AS `c` SET `a`.`first_name` = '$first_name', `a`.`last_name` = '$last_name', `a`.`gender` = '$gender',`a`.`date_of_birth` = '$dob',`c`.`logo` = '$new_logo' WHERE `c`.`create_by` = '$user' AND `a`.`unique_id` = '$user_id' AND `a`.`unique_id` = `b`.`unique_id`");
+        }else{
+            $this->db->set('logo',$new_logo)->where('cid',$user)->where('unique_id',$user_id)->update('user_login');
+            return $this->db->query("UPDATE `users` AS `a`,`user_login` AS `b`,`users` AS `c` SET `a`.`first_name` = '$first_name', `a`.`last_name` = '$last_name', `a`.`gender` = '$gender',`a`.`date_of_birth` = '$dob',`c`.`userlogo` = '$new_logo' WHERE `c`.`create_by` = '$user' AND `a`.`unique_id` = '$user_id' AND `a`.`unique_id` = `b`.`unique_id`"); 
+        }
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
     //Change Password
     public function change_password($email, $old_password, $new_password) {
         $user_name = md5("gef" . $new_password);

@@ -512,13 +512,9 @@ public function company_insert(){
 
 public function add_user()
 {
-
-
-    
-
-       $content = $this->lusers->ad_user();
-        $this->template->full_admin_html_view($content);
-    }
+    $content = $this->lusers->ad_user();
+    $this->template->full_admin_html_view($content);
+}
 
 
 
@@ -561,125 +557,73 @@ $row1=$query->result_array();
 
 
  }
-public function company_update()
-{
 
-}
+    // Insert Users
+    public function insert_users()
+    {
+        $id = $this->input->post('user_id');
+        $admin_id = $this->input->post('admin_id');
+        $user_id = decodeBase64UrlParameter($id);
+        $password = md5($this->input->post('password'));
+
+        $cidQuery = $this->db->select('cid')->where('user_id', $user_id)->get('user_login');
+        $cidRow = $cidQuery->row_array();
+        $cid = isset($cidRow['cid']) ? $cidRow['cid'] : null;
+
+        $num_str = sprintf("%03d", mt_rand(1, 999));
+        $unique_id = "UD" . $user_id . $num_str;
+
+        $combinedValue = $this->input->post('employee_name');
+        $splitValues = explode(' ', $combinedValue);
+        if (count($splitValues) >= 3) {
+            $id = $splitValues[0];
+            $first_name = $splitValues[1];
+            $last_name = $splitValues[2];
+        } else {
+            $first_name = '';
+            $last_name = '';
+        }
+
+        $response = array();
+
+        $userData = [
+            'last_name' => $last_name,
+            'first_name' => $first_name,
+            'employee_id' => $id,
+            'phone' => $this->input->post('phone'),
+            'user_id' => $user_id,
+            'gender' => $this->input->post('gender'),
+            'unique_id' => $unique_id,
+            'date_of_birth' => $this->input->post('dob'),
+            'create_by' => $user_id
+        ];
+
+        $userInsertSuccess = $this->db->insert('users', $userData);
+
+        $loginData = [
+            'username' => $this->input->post('username'),
+            'password' => $password,
+            'unique_id' => $unique_id,
+            'user_id' => $user_id,
+            'u_type' => 3,
+            'status' => 1,
+            'email_id' => $this->input->post('email'),
+            'cid' => $cid
+        ];
+
+        $loginInsertSuccess = $this->db->insert('user_login', $loginData);
 
 
-public function insert_users()
-{
 
-$password=md5('gef'.$_POST['password']);
+        if ($userInsertSuccess && $loginInsertSuccess) {
+            $response = array('status' => 1, 'msg' => 'User Created Successfully.');
+        } else {
+            $response = array('status' => 1, 'msg' => 'Failed to Created User !!!');
+        }
 
-
-      $sql='select * from user_login
-      where user_id='.$_SESSION['user_id'];
-    $query=$this->db->query($sql);
-    $row=$query->result_array();
-
-
-     $cid=$row[0]['cid'];
-     
-     // print_r($_REQUEST);    
-     
-$sql='SELECT * FROM `users` ORDER BY `id` DESC';
-$query=$this->db->query($sql);
-    
-    $row=$query->result_array();
-  $finalid=$row[0]['id']+1;
- $id=$this->db->insert_id();
-    $num_str = sprintf("%03d", mt_rand(1, 999));
-    
-    
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $combinedValue = isset($_POST['employee_name']) ? $_POST['employee_name'] : ''; // Check if set to avoid Undefined index error
-    $splitValues = explode(' ', $combinedValue);
-    if (count($splitValues) >= 3) {
-        $id = $splitValues[0];
-        $first_name = $splitValues[1];
-        $last_name = $splitValues[2];
-        $data = array(
-            'last_name' => $last_name,   // Corrected to use $last_name
-            'first_name' => $first_name, // Corrected to use $first_name
-            'employee_id' => $id,        // Corrected to use $id
-            'company_name' => $_SESSION['user_id'],
-            'phone' => $_POST['phone'],
-            'user_id' => $_SESSION['user_id'],
-            'gender' => $_POST['gender'],
-            'unique_id' => "UD" . $_SESSION['user_id'] . $num_str,
-            'date_of_birth' => $_POST['Date'],
-            'create_by' => $_SESSION['user_id']
-        );
-        $this->db->insert('users', $data);
+        echo json_encode($response);
+        exit;
     }
-}
-    
-    
-    
-//      $sql='insert into users(
-
-//   last_name,
-//   first_name,
-//   company_name,
-//   phone,
-//   user_id,
-//   gender,
-//   unique_id,
-//   date_of_birth,
-// create_by
-
-//   )
-
-//   values(
-
-//   "'.$_POST['lname'].'",
-//   "'.$_POST['fname'].'",            
-//   "'.$_SESSION['user_id'].'",            
-//   "'.$_POST['phone'].'",    
-//   "'.$_SESSION['user_id'].'",   
-//   "'.$_POST['gender'].'",    
-//  "'."UD".$_SESSION['user_id'].$num_str.'",
-//   "'.$_POST['Date'].'" , 
-//   "'.$_SESSION['user_id'].'" 
-//   )
-
-//   ';
-   
-   // $this->db->query($sql);
-
-  
-
-$query='insert into user_login(
-    
-    username,
-    password,
-    unique_id,
-    user_id,
-    u_type,
-    email_id,
-    user_delete_id,
-    cid
-)
-
-values(
-    "'.$_POST['username'].'",
-    "'.$password.'",
-    "'."UD".$_SESSION['user_id'].$num_str.'",
-    "'.$_SESSION['user_id'].'",
-    "3",
-    "'.$_POST['email'].'",
-    "'.$id.'",
-    "'.$_SESSION['user_id'].'"
-    
-) ';
-
-  $this->db->query($query);
-
-$this->session->set_userdata(array('message' => display('successfully_added')));
-    redirect('User/manage_user');
-
-}
 
  
     public function user_search_item() {
@@ -693,6 +637,49 @@ $this->session->set_userdata(array('message' => display('successfully_added')));
     public function manage_user() {
         $content = $this->lusers->user_list();
         $this->template->full_admin_html_view($content);
+    }
+
+    // Manage User Data Listing
+
+    public function userdataLists() 
+    {
+        $encodedId      = isset($_GET['id']) ? $_GET['id'] : null;
+        $encodedAdmin   = isset($_GET['admin_id']) ? $_GET['admin_id'] : null;
+        $decodeAdmin    = decodeBase64UrlParameter($encodedAdmin);
+        $decodedId      = decodeBase64UrlParameter($encodedId);
+        $limit          = $this->input->post('length');
+        $start          = $this->input->post('start');
+        $search         = $this->input->post('search')['value'];
+        $orderField     = $this->input->post("columns")[$this->input->post("order")[0]["column"]]["data"];
+        $orderDirection = $this->input->post("order")[0]["dir"];
+        $totalItems     = $this->Userm->getTotalUserListdata($limit, $start, $search, $decodedId, $orderDirection);
+        $items          = $this->Userm->getPaginatedUsers($limit, $start, $orderField, $orderDirection, $search, $decodedId);
+        $data           = [];
+        $i              = $start + 1;
+        foreach ($items as $item) {
+
+            $edit  = '<a href="' . base_url('User/user_update_form?id=' . $encodedId . '&admin_id=' . $encodedAdmin . '&user_id=' . $item['unique_id']) . '" class="btnclr btn" style="margin-bottom: 5px;" data-toggle="tooltip" data-placement="right" title="' . display('edit') . '"><i class="fa fa fa-pencil" aria-hidden="true"></i></a>';
+
+            $delete  = '<a href="' . base_url('User/user_delete?id=' . $encodedId . '&admin_id=' . $encodedAdmin . '&user_id=' . $item['unique_id']) . '" class="btnclr btn" style="margin-bottom: 5px;"  onclick="return confirm(\'' . display('are_you_sure') . '\')" data-toggle="tooltip" data-placement="right" title="' . display('delete') . '"><i class="fa fa-trash-o" aria-hidden="true"></i></a>';
+
+            $row     = [
+                "id"                     => $i,
+                "username"               => $item['username'],
+                "email_id"               => $item['email_id'],
+                "user_type"              => ($item['user_type'] == 2) ? 'Admin' : 'User',
+                "status"                 => ($item['status'] == 1) ? 'Active' : 'Inactive',
+                'action'                 => $edit .' '. $delete,
+            ];
+            $data[] = $row;
+            $i++;
+        }
+        $response = [
+            "draw"            => $this->input->post('draw'),
+            "recordsTotal"    => $totalItems,
+            "recordsFiltered" => $totalItems,
+            "data"            => $data,
+        ];
+        echo json_encode($response);
     }
 
 
@@ -747,11 +734,55 @@ $this->session->set_userdata(array('message' => display('successfully_added')));
 
     #===============User update form================#
 
-    public function user_update_form($user_id) {
-        $user_id = $user_id;
-        $content = $this->lusers->user_edit_data($user_id);
+    public function user_update_form() 
+    {   
+        $id = $this->input->get('user_id');
+        $content = $this->lusers->user_edit_data($id);
         $this->template->full_admin_html_view($content);
     }
+
+    // Edit users
+
+    public function updateUsers()
+    {
+        $editId = $this->input->post('edit_id'); 
+
+        $id = $this->input->post('user_id');
+        $admin_id = $this->input->post('admin_id');
+        $user_id = decodeBase64UrlParameter($id);
+        $response = array();
+
+        $userData = [
+            'last_name' => $this->input->post('last_name'),
+            'first_name' => $this->input->post('first_name'),
+            'employee_id' => $this->input->post('employee_name'),
+            'phone' => $this->input->post('phone'),
+            'gender' => $this->input->post('gender'),
+            'date_of_birth' => $this->input->post('dob'),
+            'create_by' => $user_id, 
+        ];
+
+        $this->db->where('unique_id', $editId);
+        $userUpdateSuccess = $this->db->update('users', $userData);
+
+        $loginData = [
+            'email_id' => $this->input->post('email'),
+            'status' => 1,
+        ];
+
+        $this->db->where('unique_id', $editId);
+        $loginUpdateSuccess = $this->db->update('user_login', $loginData);
+
+        if ($userUpdateSuccess && $loginUpdateSuccess) {
+            $response = array('status' => 1, 'msg' => 'User updated successfully.');
+        } else {
+            $response = array('status' => 0, 'msg' => 'Failed to update user.');
+        }
+
+        echo json_encode($response);
+        exit;
+    }
+
 
     #===============User update===================#
 
@@ -790,11 +821,14 @@ $this->session->set_userdata(array('message' => display('successfully_added')));
    
     #============User delete===========#
 
-    public function user_delete($user_id) {
-        $this->Userm->delete_user($user_id);
+    public function user_delete() 
+    {   
+        $user_id = $this->input->get('user_id');
+        $this->Userm->deleteUser($user_id);
         $this->session->set_userdata(array('message' => display('successfully_delete')));
-      redirect(base_url('User/manage_user'));
+        redirect(base_url("User/manage_user?id=" . $_GET['id'] . "&admin_id=" . $_GET['admin_id']));
     }
+
 
     // Random Id generator
     public function generator($lenth) {

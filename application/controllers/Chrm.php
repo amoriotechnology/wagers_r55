@@ -870,6 +870,7 @@ class Chrm extends CI_Controller {
         $content                                   = $this->parser->parse("hr/formnj927", $data, true);
         $this->template->full_admin_html_view($content);
     }
+
     public function form941Form($selectedValue) {
 
         $company_id            = decodeBase64UrlParameter($_GET['id']);
@@ -897,7 +898,15 @@ class Chrm extends CI_Controller {
         $data['get_sc_info']       = $this->Hrm_model->get_sc_info($id);
         $data['get_paytotal']      = $this->Hrm_model->get_paytotal($id);
         $data['get_userlist']      = $this->db->select('*')->from('users')->where('user_id', $id)->get()->result_array();
+
+        $data['amountabove'] = $this->Hrm_model->getAboveAmount($id);
+
+        $data['sumQuaterWiseUnemployment'] = $this->Hrm_model->sumQuaterwiseunemploymentamount($id);
+
+        // print_r($data['sumQuaterWiseUnemployment']['Q4']); die;
+
         $data['amountGreaterThan'] = $this->Hrm_model->f940_excess_emp($id);
+
         $totalAmount               = 0;
         if ($data['amountGreaterThan']) {
             foreach ($data['amountGreaterThan'] as $row) {
@@ -1272,11 +1281,14 @@ class Chrm extends CI_Controller {
     }
     public function payslip_setting() {
         $data['title'] = display('payslip');
+
         $this->CI->load->model('Web_settings');
         $this->CI->load->model('Invoice_content');
+
         $setting_detail = $this->CI->Web_settings->retrieve_setting_editdata();
         $dataw          = $this->CI->Invoice_content->get_data_payslip();
         $datacontent    = $this->CI->Invoice_content->retrieve_data();
+        
         $data           = array(
             'header'       => (!empty($dataw[0]['header']) ? $dataw[0]['header'] : ''),
             'logo'         => (!empty($dataw[0]['logo']) ? $dataw[0]['logo'] : ''),

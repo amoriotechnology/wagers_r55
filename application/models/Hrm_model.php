@@ -1467,12 +1467,77 @@ public function total_amt_wr30($id)
     return false;
   }
 }
-                        public function f940_excess_emp()
+
+// Sum Employee Above 7000  - form 940
+public function getAboveAmount($user_id)
 {
-    $user_id = $this->session->userdata('user_id');
+    $this->db->select('SUM(total_amount) AS totalAmount, templ_name');
+    $this->db->from('info_payslip');
+    $this->db->where('total_amount >=', 7000);
+    $this->db->where('create_by', $user_id);
+    $this->db->group_by('templ_name');
+    $query = $this->db->get();
+    
+    if ($query->num_rows() > 0) {
+        $result = $query->result_array();
+        
+        $totalAboveAmount = 0;  
+        foreach ($result as &$row) {
+            if ($row['totalAmount'] > 7000) {
+                $row['adjustedTotalAmount'] = $row['totalAmount'] - 7000;  
+            } else {
+                $row['adjustedTotalAmount'] = 0; 
+            }
+
+            $totalAboveAmount += $row['adjustedTotalAmount'];
+
+            $row['aboveAmount'] = $totalAboveAmount;
+        }
+
+        return $totalAboveAmount;
+    }
+    
+    return false;
+}
+
+
+// Sum Quater Wise Unemployment - form 940
+
+public function sumQuaterwiseunemploymentamount($user_id)
+{
+    $this->db->select('SUM(b.u_tax) as unemploymentAmount, a.quarter');
+    $this->db->from('timesheet_info a');
+    $this->db->join('tax_history_employer b', 'b.time_sheet_id = a.timesheet_id', 'left');
+    $this->db->where('a.create_by', $user_id);
+    $this->db->group_by('a.quarter'); 
+    $query = $this->db->get();
+    
+    if ($query->num_rows() > 0) {
+        $result = $query->result_array();
+        $quarterSums = [
+            'Q1' => 0,
+            'Q2' => 0,
+            'Q3' => 0,
+            'Q4' => 0
+        ];
+
+        foreach ($result as $row) {
+            $quarterSums[$row['quarter']] = $row['unemploymentAmount'];
+        }
+
+        return $quarterSums;
+    }
+
+    return false;
+}
+
+
+
+public function f940_excess_emp($user_id)
+{
     $this->db->select('SUM(total_amount) AS totalAmount');       
     $this->db->from('info_payslip');
-    $this->db->where('total_amount >', 7000);
+    $this->db->where('total_amount >=', 7000);
     $this->db->where('create_by', $user_id);
     $query = $this->db->get();
     if ($query->num_rows() > 0) {
@@ -1480,7 +1545,8 @@ public function total_amt_wr30($id)
     }
     return false;
 }
-                        public function getQuarterlyMonthData($user_id,$quarter)
+
+public function getQuarterlyMonthData($user_id,$quarter)
 {
     $currentYear = date('Y');
     switch ($quarter) {
@@ -1873,7 +1939,8 @@ public function getother_tax($id)
         }
         return false;
     }
-                            public function get_payslip_info($id)  {
+
+    public function get_payslip_info($id)  {
        
         $this->db->select(' SUM(total_amount) as overalltotal_amount , SUM(f_tax) as  ftotal_amount , SUM(s_tax) as  stotal_amount ,  SUM(m_tax) as  mtotal_amount , sales_c_amount');
         $this->db->from('info_payslip');
@@ -1885,8 +1952,9 @@ public function getother_tax($id)
        }
        return false;
    }
-      public function get_employer_federaltax($user_id)
-   {
+
+    public function get_employer_federaltax($user_id)
+    {
       
        $this->db->select('*');
        $this->db->from('user_login');
@@ -1898,11 +1966,11 @@ public function getother_tax($id)
            return $query->result_array();
        }
        return false;
-   }
+    }
 
                           //============================Forms===================================//
       //===============================Sales Commission ====================================//
-public function sc_info_count($templ_name, $payperiod) {
+    public function sc_info_count($templ_name, $payperiod) {
     $date = explode('-', $payperiod);
     $formattedStartDate = date('Y-m-d', strtotime($date[0]));
     $formattedendDate = date('Y-m-d', strtotime($date[1]));

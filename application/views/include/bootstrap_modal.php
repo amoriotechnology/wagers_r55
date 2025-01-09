@@ -1085,8 +1085,168 @@ if(in_array(BOOTSTRAP_MODALS['add_states'],$bootstrap_modals)){ ?>
       </div>
    </div>
 </div>
-<?php } ?>
 
+<?php } if(in_array(BOOTSTRAP_MODALS['reminders'], $bootstrap_modals)) { ?>
+
+<!------ Add Reminders -->  
+<div class="modal fade" id="reminders" role="dialog">
+   <div class="modal-dialog" role="document" style="width: 800px !important;">
+      <!-- <div class="modal-dialog" role="document"> -->
+    <form id="notificationForm" method="post" style="text-align: left !important;">
+
+        <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
+        <input type="hidden" name="user_id" value="<?php echo $_GET['id']; ?>">
+        <input type="hidden" name="admin_id" value="<?php echo $_GET['admin_id']; ?>">
+
+        <div class="modal-content">
+            <div class="modal-header btnclr"  style="text-align:center;" >
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h4 class="modal-title">Setup Reminder</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" id="tableAlerts">
+                   <thead style="text-align:center;">
+                        <tr>
+                            <th>Period</th>
+                            <th>Date</th>
+                            <th>Source</th>
+                        </tr>
+                   </thead>
+                   <tbody>
+                        <tr>
+                            <td>
+                                <select class="when form-control" name="title" style="width: -webkit-fill-available;">
+                                    <option value="">Select Period</option>
+                                    <option value="Quater 1">Quater 1</option>
+                                    <option value="Quater 2">Quater 2</option>
+                                    <option value="Quater 3">Quater 3</option>
+                                    <option value="Quater 4">Quater 4</option>
+                                    <option value="Year">Year</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="when form-control" name="select_date" style="width: -webkit-fill-available;">
+                                    <option value=""><?php echo display('Select Preferred Date') ?></option>
+                                    <option value="On Date">On Date</option>
+                                    <option value="1 Day Before">1 Day Before</option>
+                                    <option value="3 Days Before">3 Days Before</option>
+                                    <option value="1 Week Before">1 Week Before</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="where form-control select_source" name="select_source" onchange="selectSource(this)" style="width: -webkit-fill-available;">
+                                    <option value="">Select Preferred Source</option>
+                                    <option value="EMAIL">EMAIL</option>
+                                    <option value="WAGERS">WAGERS</option>
+                                    <option value="CALENDER">CALENDER</option>
+                                </select>
+
+                                <br>
+                                <select class="form-control select_email" name="select_email" style="width: -webkit-fill-available; display: none;">
+                                    <option value="">Select Email</option>
+                                    <?php foreach ($email as $value) { ?>
+                                    <option value="<?php echo $value['email']; ?>"><?php echo $value['email']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                        </tr>
+                   </tbody>
+                </table>
+             </div>
+             <div class="modal-footer">
+                <a href="#" class="btn btnclr" data-dismiss="modal"><?php echo display('Close') ?> </a>
+                <button type="submit" class="btn btnclr disableButton">Submit</button>
+             </div>
+            </div>
+        </form>
+      <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+</div>
+
+<?php } if(in_array(BOOTSTRAP_MODALS['calanderreminders'], $bootstrap_modals)) { ?>
+
+<!-- Calander Reminder Modal -->
+<div class="modal fade" id="calanderreminders" role="dialog">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header btnclr">
+            <a href="#" class="close" data-dismiss="modal">&times;</a>
+            <h4 class="modal-title"><?php echo 'Add Reminder' ?></h4>
+         </div>
+         <div class="modal-body">
+            <form id="calanderaddreminder" method="post">
+               <div class="panel-body">
+                    <div class="row">
+                       <div class="col-md-12">
+                         <label>Title <span class="text-danger">*</span></label>
+                         <input type="text" name="title" id="title" class="form-control" placeholder="Enter your Title">
+                         
+                         <input type="hidden" name="user_id" value="<?php echo $_GET['id']; ?>">
+                         <input type="hidden" name="admin_id" value="<?php echo $_GET['admin_id']; ?>">
+                         <br>
+                       </div>
+                       <div class="col-md-12">
+                         <label>Description</label>
+                         <input type="text" name="description" id="description" class="form-control" placeholder="Enter your Description">
+                         <br>
+                       </div>
+                       <div class="col-md-12">
+                         <label>Schedule From <span class="text-danger">*</span></label>
+                         <input type="date" name="start" id="start" class="form-control">
+                         <br>
+                       </div>
+                       <div class="col-md-12">
+                         <label>Schedule To <span class="text-danger">*</span></label>
+                         <input type="date" name="end" id="end" class="form-control">
+                         <br>
+                       </div>
+                       <div class="col-md-12">
+                         <button type="submit" class="btn btnclr btn-md">Save</button>
+                       </div>
+                    </div>
+               </div>
+            </form>
+      </div>
+   </div>
+</div>
+
+<?php } if(in_array(BOOTSTRAP_MODALS['notifications'], $bootstrap_modals)) { ?>
+
+<!-- Show Reminder Modal -->
+<div class="modal fade" id="notifications" role="dialog">
+   <div class="modal-dialog" role="document" style="width: 800px !important;">
+      <!-- <div class="modal-dialog" role="document"> -->
+    <form method="post" style="text-align: left !important;">
+        <div class="modal-content">
+            <div class="modal-header btnclr"  style="text-align:center;" >
+                <a href="#" class="close closeUpdate" data-dismiss="modal">&times;</a>
+                <h4 class="modal-title">Notification</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" id="tableNotificationAlerts">
+                   <thead style="text-align:center;">
+                        <tr>
+                            <th>Period</th>
+                            <th>Tax Due Date</th>
+                            <th>Source</th>
+                        </tr>
+                   </thead>
+                   <tbody>
+                   </tbody>
+                </table>
+             </div>
+             <div class="modal-footer">
+                <a href="#" class="btn btnclr closeUpdate" data-dismiss="modal"><?php echo display('Close') ?> </a>
+             </div>
+            </div>
+        </form>
+      <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+</div>
+
+<?php } ?>
 
 <script>
 
@@ -1864,5 +2024,220 @@ document.addEventListener('change', function (event) {
         window.location.href = selectedId ? baseLink + selectedId : baseLink;
     }
 });
+
+
+// Select Notification Source
+function selectSource(element) 
+{
+    var row = $(element).closest('tr');
+    var source = $(element).val();
+
+    if (source === 'EMAIL') {
+        row.find('.select_email').show();
+    } else {
+        row.find('.select_email').hide();
+    }
+}
+
+
+// Insert Reminder 
+$("#notificationForm").validate({
+    rules: {
+        title: "required",
+        select_date: "required",
+        select_source: "required",
+        select_email: "required",
+    },
+    messages: {
+        title: "Title is required",
+        select_date: "Date is required",
+        select_source: "Source is required",
+        select_email: "Email is required",
+    },
+    errorPlacement: function(error, element) {
+        if (element.hasClass("select2-hidden-accessible")) {
+            error.insertAfter(element.next('span.select2')); 
+        } else {
+            error.insertAfter(element);
+        }
+    },
+    submitHandler: function(form) {
+        var csrfName = '<?php echo $this->security->get_csrf_token_name();?>';
+        var csrfHash = '<?php echo $this->security->get_csrf_hash();?>';
+
+        $('.disableButton').text("Loading...").prop('disabled', true);
+
+        var formData = new FormData(form); 
+        formData.append(csrfName, csrfHash); 
+
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url(); ?>Cweb_setting/insertreminder", 
+            data: formData, 
+            dataType: "json",
+            contentType: false, 
+            processData: false,
+            success: function(response) {
+                if(response.status == 1){
+                    toastr.success(response.msg, "Success", { 
+                       closeButton: false,
+                       timeOut: 1000
+                    });
+                    $('#reminders').modal('hide');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                }else{
+                    toastr.error(response.msg, "Error", { 
+                       closeButton: false,
+                       timeOut: 1000
+                    });
+                }
+            },
+            error: function (error) {
+                toastr.error(error, "Error", { 
+                   closeButton: false,
+                   timeOut: 1000
+                });
+            }
+        });
+    }
+});
+
+// Reminder Modal Popup in dashboard top Right Bell Icon to click Open Modal
+function reminderModals() {
+   
+    var formData = new FormData();
+    formData.append(csrfName, csrfHash);
+    $.ajax({
+        type: "POST",
+        url: "<?php echo base_url(); ?>Cweb_setting/showBellNotification", 
+        data: formData, 
+        dataType: "json",
+        contentType: false, 
+        processData: false,
+        success: function(response) {
+            var tableBody = $("#tableNotificationAlerts tbody");
+            tableBody.empty();
+
+            if (response && response.length > 0) {
+                response.forEach(function(item) {
+                    var row = `<tr>
+                        <td>${item.title}</td>
+                        <td>${item.start}</td>
+                        <td>${item.source}</td>
+                        <input type='hidden' class='schedule_id' name='schedule_id' value='${item.id}' />
+                        <input type='hidden' class='user_id' name='user_id' value='${item.created_by}' />
+                    </tr>`;
+                    tableBody.append(row);
+                });
+            } else {
+                var noDataRow = `<tr>
+                    <td colspan="3" style="text-align:center;">No reminders available</td>
+                </tr>`;
+                tableBody.append(noDataRow);
+            }
+            $('.total_alerts').text(response && response.length > 0 ? response.length : 0);
+        }
+    });
+}
+
+// Close Reminder to Update Bell Notification
+$(document).ready(function() {
+    reminderModals();
+    $('.closeUpdate').click(function() {
+        $('#tableNotificationAlerts tbody tr').each(function() {
+            var sch_id = $(this).find('.schedule_id').val(); 
+            var user_id = $(this).find('.user_id').val();   
+
+            if (sch_id && user_id) {
+                var formData = new FormData();
+                formData.append(csrfName, csrfHash); 
+                formData.append('schedule_id', sch_id); 
+                formData.append('user_id', user_id);   
+                
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url(); ?>Cweb_setting/updateBellNotification", 
+                    data: formData, 
+                    dataType: "json",
+                    contentType: false, 
+                    processData: false,
+                    success: function(response) {
+                        location.reload();
+                        console.log("Response for Schedule ID:", sch_id, response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error for Schedule ID:", sch_id, status, error);
+                    }
+                });
+            }
+        });
+    });
+});
+
+// Validation in Add Reminder
+
+$("#calanderaddreminder").validate({
+    rules: {
+        title: "required",
+        description: "required",
+        start: "required",
+        end: "required",
+    },
+    messages: {
+        title: "Title is required",
+        description: "Description is required",
+        start: "Start is required",
+        end: "End is required",
+    },
+    errorPlacement: function(error, element) {
+        if (element.hasClass("select2-hidden-accessible")) {
+            error.insertAfter(element.next('span.select2')); 
+        } else {
+            error.insertAfter(element);
+        }
+    },
+    submitHandler: function(form, event) {
+        event.preventDefault();
+        var csrfName = '<?php echo $this->security->get_csrf_token_name();?>';
+        var csrfHash = '<?php echo $this->security->get_csrf_hash();?>';
+        var formData = new FormData(form); 
+        formData.append(csrfName, csrfHash); 
+
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url(); ?>Cweb_setting/add_reminder", 
+            data: formData, 
+            dataType: "json",
+            contentType: false, 
+            processData: false,
+            success: function(response) {
+                if(response.status == 1){
+                    toastr.success(response.msg, "Success", { 
+                       closeButton: false,
+                       timeOut: 1000
+                    });
+                    $('#calanderreminders').modal('hide');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                }else{
+                    toastr.error(response.msg, "Error", { 
+                       closeButton: false,
+                       timeOut: 1000
+                    });
+                }
+            },
+            error: function (error) {
+                toastr.error(error, "Error", { 
+                   closeButton: false,
+                   timeOut: 1000
+                });
+            }
+        });
+    }
+});
+
 </script>
 

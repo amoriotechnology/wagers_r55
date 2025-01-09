@@ -370,6 +370,10 @@ table.table.table-hover.table-borderless td {
 </style>
 
 
+<?php 
+   $modaldata['bootstrap_modals'] = array('notifications');
+   $this->load->view('include/bootstrap_modal', $modaldata);
+?>
 
 
 <script type="text/javascript">

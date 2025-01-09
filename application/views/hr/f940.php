@@ -199,30 +199,68 @@
                      <input type="text" value="<?php echo $decimalPart ; ?>" style="margin-left: -65px;width: 104px; text-align:right;" />
 
                     </div>
-
+                   
+                  <?php
+                     $exemptFutatax = 0.00;
+                     $parts = explode('.', number_format($exemptFutatax, 2, '.', ''));
+                     $futaTax = isset($parts[0]) ? $parts[0] : '00'; 
+                     $futadecimalPart = isset($parts[1]) ? $parts[1] : '00'; 
+                  ?>
 
                   <div class="row5">
-                     <input type="text" value="" />
+                     <input type="text" value="$<?php echo $futaTax ; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $futadecimalPart ; ?> " style="margin-left: -65px;width: 104px; text-align:right;" />
                   </div>
  
                   <?php
-                     $parts = explode('.', number_format($amt, 2, '.', ''));
-                     $integerPart = $parts[0];
-                     $decimalPart = isset($parts[1]) ? $parts[1] : '00'; 
+                     $aboveAmount = $amountabove;
+                     $parts = explode('.', number_format($aboveAmount, 2, '.', ''));
+                     $aboveamount1 = isset($parts[0]) ? $parts[0] : '00'; 
+                     $aboveamountdecimalPart = isset($parts[1]) ? $parts[1] : '00'; 
                   ?>
                   <div class="total-payment">
+                     <input type="text" value="$<?php echo $aboveamount1; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $aboveamountdecimalPart ; ?>" style="margin-left: -65px;width: 104px; text-align:right;" />
                   </div>
+
+                  <?php
+                     $partSubtotal = number_format($exemptFutatax + $amountabove, 2, '.', '');
+                     list($sub1, $subdecimalPart) = explode('.', $partSubtotal) + ['00', '00'];
+                  ?>
+
                   <div class="subtotal-text">
-                     <input type="text" value="" />
+                     <input type="text" value="$<?php echo $sub1; ?>" style="margin-left: -89px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $subdecimalPart; ?>" style="margin-left: -65px;width: 104px;text-align:right;" />
                   </div>
+
+                  <?php
+                     $totaltaxableFutaWagers = number_format($total_grosspay - $partSubtotal, 2, '.', '');
+                     list($totaltaxableFutaWagers1, $totaltaxableFutaWagersdecimalPart) = explode('.', $totaltaxableFutaWagers) + ['00', '00'];
+                  ?>
+
                   <div class="total-taxable-text">
-                     <input type="text" value="" />
+                     <input type="text" value="$<?php echo $totaltaxableFutaWagers1 ; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $totaltaxableFutaWagersdecimalPart ; ?>" style="margin-left: -65px;width: 104px; text-align:right;" />
                   </div>
+
+                  <?php
+                     $futaBeforeAdjustments = number_format($totaltaxableFutaWagers1 * 0.006, 2, '.', '');
+                     list($futaBefore1, $futaBeforedecimalPart) = explode('.', $futaBeforeAdjustments) + ['00', '00'];
+                  ?>
+
                   <div class="row8">
-                     <input type="text" value="" />
+                     <input type="text" value="$<?php echo $futaBefore1 ; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $futaBeforedecimalPart ; ?>" style="margin-left: -65px;width: 104px; text-align:right;" />
                   </div>
+
+                  <?php
+                     $excludedStateUnemploymentTax = number_format($totaltaxableFutaWagers1 * 0.054, 2, '.', '');
+                     list($excludedStateUnemploymentTax1, $excludedStateUnemploymentTaxdecimalPart) = explode('.', $excludedStateUnemploymentTax) + ['00', '00'];
+                  ?>
+
                   <div class="row9">
-                     <input type="text" value="" />
+                     <input type="text" value="$<?php echo $excludedStateUnemploymentTax1 ; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $excludedStateUnemploymentTaxdecimalPart ; ?>" style="margin-left: -65px;width: 104px; text-align:right;" />
                   </div>
                   <div class="row10">
                      <input type="text" value="" />
@@ -230,8 +268,14 @@
                   <div class="row11">
                      <input type="text" value="" />
                   </div>
+
+                  <?php
+                     $futaTaxAfterAdjustments = number_format($futaBeforeAdjustments + $excludedStateUnemploymentTax, 2, '.', '');
+                     list($futaTaxAfterAdjustments1, $futaTaxAfterAdjustmentsdecimalPart) = explode('.', $futaTaxAfterAdjustments) + ['00', '00'];
+                  ?>
                   <div class="row12">
-                     <input type="text" value="" />
+                     <input type="text" value="$<?php echo $futaTaxAfterAdjustments1 ; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $futaTaxAfterAdjustmentsdecimalPart ; ?>" style="margin-left: -65px;width: 104px; text-align:right;" />
                   </div>
                   <div class="row13">
                      <input type="text" value="" />
@@ -261,17 +305,40 @@
                   <div class="ein">
                      <input type="text" value="<?php echo $Federal_Pin_Number;  ?>" />
                   </div>
+                  
+                  <?php
+                     $quater1 = number_format($sumQuaterWiseUnemployment['Q1'], 2, '.', '');
+                     list($quaterwise1, $quater1decimalPart) = explode('.', $quater1) + ['00', '00'];
+                  ?>
+
                   <div class="row16a">
-                     <input type="text" value="" />
+                     <input type="text" value="$<?php echo $quaterwise1; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $quater1decimalPart ; ?>" style="margin-left: -59px;width: 104px; text-align:right;" />
                   </div>
+
+                  <?php
+                     $quater2 = number_format($sumQuaterWiseUnemployment['Q2'], 2, '.', '');
+                     list($quaterwise2, $quater2decimalPart) = explode('.', $quater2) + ['00', '00'];
+                  ?>
                   <div class="row16b">
-                     <input type="text" value="" />
+                     <input type="text" value="$<?php echo $quaterwise2; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $quater2decimalPart ; ?>" style="margin-left: -59px;width: 104px; text-align:right;" />
                   </div>
+                  <?php
+                     $quater3 = number_format($sumQuaterWiseUnemployment['Q3'], 2, '.', '');
+                     list($quaterwise3, $quater3decimalPart) = explode('.', $quater3) + ['00', '00'];
+                  ?>
                   <div class="row16c">
-                     <input type="text" value="" />
+                     <input type="text" value="$<?php echo $quaterwise3; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $quater3decimalPart ; ?>" style="margin-left: -59px;width: 104px; text-align:right;" />
                   </div>
+                  <?php
+                     $quater4 = number_format($sumQuaterWiseUnemployment['Q4'], 2, '.', '');
+                     list($quaterwise3, $quater4decimalPart) = explode('.', $quater4) + ['00', '00'];
+                  ?>
                   <div class="row16d">
-                     <input type="text" value="" />
+                     <input type="text" value="$<?php echo $quaterwise3; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $quater3decimalPart ; ?>" style="margin-left: -59px;width: 104px; text-align:right;" />
                   </div>
                   <div class="row17">
                      <input type="text" value="" />
@@ -595,7 +662,7 @@ input {
 /* row5 */
 .row5 {
   position: absolute;
-  top: 476px;
+  top: 486px;
   left: 498px
 }
 .row5 input {
@@ -606,7 +673,7 @@ input {
 /* total-payment */
 .total-payment {
   position: absolute;
-  top: 550px;
+  top: 554px;
   left: 502px;
 }
 .total-payment input {
@@ -616,7 +683,7 @@ input {
 /* subtotal-text */
 .subtotal-text {
   position: absolute;
-  top: 569px;
+  top: 577px;
   left: 682px;
 }
 .subtotal-text input {
@@ -626,7 +693,7 @@ input {
 /* total-taxable-text */
 .total-taxable-text {
   position: absolute;
-  top: 598px;
+  top: 608px;
   left: 682px;;
 }
 .total-taxable-text input {
@@ -636,7 +703,7 @@ input {
 /* row-8 */
 .row8 {
   position: absolute;
-  top: 631px;
+  top: 640px;
   left: 682px;;
 }
 .row8 input {
@@ -646,7 +713,7 @@ input {
 /* row-9 */
 .row9 {
   position: absolute;
-  top: 684px;
+  top: 694px;
   left: 682px;;
 }
 .row9 input {
@@ -676,7 +743,7 @@ input {
 /* row-12 */
 .row12 {
   position: absolute;
-  top: 794px;
+  top: 809px;
   left: 682px;;
 }
 .row12 input {
@@ -743,22 +810,22 @@ input {
 /* row16a */
 .row16a {
   position: absolute;
-  top: 153px;
+  top: 157px;
   left: 536px;
 }
 .row16b {
-  position: absolute;
-  top: 183px;
+   position: absolute;
+   top: 188px;
    left: 536px;
 }
 .row16c {
   position: absolute;
-  top: 213px;
+  top: 218px;
    left: 536px;
 }
 .row16d {
   position: absolute;
-  top: 243px;
+  top: 250px;
    left: 536px;
 }
 .row17 {
@@ -919,6 +986,7 @@ input {
   bottom: 212px;
   left: 290px;
 }
+
 </style> 
 
 </body>

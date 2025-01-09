@@ -9,7 +9,6 @@ class Lusers {
     public function user_list() {
         $CI = & get_instance();
         
-
         $CI->load->model('Web_settings');
 
         $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
@@ -31,23 +30,22 @@ class Lusers {
             'user_list' => $user_list,
             'user_data_get'=> $user_data_get,
             'setting_detail'=> $setting_detail,
-
-
          );
         $userList = $CI->parser->parse('users/user', $data, true);
         return $userList;
     }
 
-public function edit_user($id)
-{
-    $CI = & get_instance();
+    public function edit_user($id)
+    {
+        $CI = & get_instance();
         $CI->load->model('Userm');
         $user = $CI->Userm->edituser($id);
         echo $user;
         exit;
-}   
-public function ad_user()
-{
+    }   
+
+    public function ad_user()
+    {
         $CI = & get_instance();
         $CI->load->model('Userm');
         $CI->load->model('Web_settings');
@@ -58,15 +56,9 @@ public function ad_user()
             'setting_detail' => $setting_detail,
             'get_employee_data' => $get_employee_data
         );
-        // print_r($get_employee_data);
         $userForm = $CI->parser->parse('users/ad_user_form', $data, true);
         return $userForm;
-}
-
-
-
-
-
+    }
 
 
 
@@ -173,25 +165,20 @@ public function ad_user()
         $userForm = $CI->parser->parse('users/add_admin', $data, true);
         return $userForm;
     }
-    public function user_edit_data($user_id) {
+
+    public function user_edit_data($id) {
         $CI = & get_instance();
         $CI->load->model('Userm');
-        $user_detail = $CI->Userm->retrieve_user_editdata($user_id);
-      print_r($user_detail);
-      exit;
+        $CI->load->model('Web_settings');
+        $user_detail = $CI->Userm->retrieve_user_editdata($id);
+        $get_employee_data = $CI->Web_settings->get_employee_data();
         $data = array(
             'title'      => display('user_edit'),
-            'user_id'    => $user_detail[0]['id'],
-            'first_name' => $user_detail[0]['first_name'],
-            'last_name'  => $user_detail[0]['last_name'],
-            'username'   => $user_detail[0]['username'],
-            'password'   => $user_detail[0]['password'],
-            'email'   => $user_detail[0]['email'],
-            'gender'   => $user_detail[0]['gender'],
-            
+            'userList'   => $user_detail,
+            'get_employee_data' => $get_employee_data
         );
 
-        $companyList = $CI->parser->parse('users/edit_user', $data, true);
+        $companyList = $CI->parser->parse('users/edit_users', $data, true);
         return $companyList;
     }
 
