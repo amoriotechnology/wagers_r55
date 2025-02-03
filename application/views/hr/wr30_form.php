@@ -1125,7 +1125,7 @@
 <script>
 
 $(document).ready(function() {
-    downloadPagesAsPDF();
+ //   downloadPagesAsPDF();
 });
 
 async function downloadPagesAsPDF() {

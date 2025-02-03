@@ -136,7 +136,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
          ],
         "order": [[0, "desc"]],
         "columnDefs": [{
-            "orderable": false,
+            "orderable": true,
             "targets": [0, 7],
             searchBuilder: {
                 defaultCondition: '='

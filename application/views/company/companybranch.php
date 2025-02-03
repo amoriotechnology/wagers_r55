@@ -643,21 +643,33 @@
 $("#insertCompany").validate({
     rules: {
         company_name: "required",
-        email: "required",
+        email: {
+        required: true,
+        email: true
+        },
         mobile: "required",
         c_city: "required",
         c_state: "required",
         address: "required",
-        website: "required",
+        website: {
+        required: true,
+        url: true
+        }
     },
     messages: {
         company_name: "Company name is required",
-        email: "Email is required",
+        email: {
+        required: "Email is required",
+        email: "Please enter a valid email address <br> (e.g., user@example.com)"
+        },
         mobile: "Mobile is required",
         c_city: "City is required",
         c_state: "State is required",
         address: "Address is required",
-        website: "Website is required",
+        website: {
+        required: "Website is required",
+        url: "Please enter a valid URL <br> (e.g., https://example.com)"
+        }
     },
     submitHandler: function(form) {
         var formData = new FormData(form); 

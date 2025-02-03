@@ -869,6 +869,7 @@ class Chrm extends CI_Controller {
         $data['month']                             = $this->Hrm_model->fetchQuarterlyData($company_id, $quarter, $year);
         $data['get_cominfo']                       = $this->Hrm_model->get_company_info($company_id);
         $data['quarterData']                       = $this->Hrm_model->getQuarterlyMonthData($company_id, $quarter, $year);
+      
         $content                                   = $this->parser->parse("hr/formnj927", $data, true);
         $this->template->full_admin_html_view($content);
     }
@@ -913,7 +914,7 @@ class Chrm extends CI_Controller {
         $data['get_sc_info']       = $this->Hrm_model->get_sc_info($id);
         $data['get_paytotal']      = $this->Hrm_model->get_paytotal($id,$year);
         $data['get_userlist']      = $this->db->select('*')->from('users')->where('user_id', $id)->get()->result_array();
-        $data['state_code']        = $this->Hrm_model->get_state_code($id);
+
         $data['amountabove'] = $this->Hrm_model->getAboveAmount($id,$year);
         $data['sumQuaterWiseUnemployment'] = $this->Hrm_model->sumQuaterwiseunemploymentamount($id,$year);
         $data['amountGreaterThan'] = $this->Hrm_model->f940_excess_emp($id,$year);
@@ -1069,7 +1070,6 @@ class Chrm extends CI_Controller {
         // Weekly Data
         $data['weekly_taxinfo'] = $this->db->select("*")->from('weekly_tax_info')->where('tax',$query['tax'])->where('created_by', $decodedId)->where('year', $year)->get()->result_array();
         // BiWeekly Data
-      
         $data['biweekly_taxinfo'] = $this->db->select("*")->from('biweekly_tax_info')->where('tax',$query['tax'])->where('created_by', $decodedId)->where('year', $year)->get()->result_array();
         // Monthly Data
         $data['monthly_taxinfo'] = $this->db->select("*")->from('monthly_tax_info')->where('tax', $query['tax'])->where('created_by', $decodedId)->where('year', $year)->get()->result_array();
@@ -1102,6 +1102,8 @@ class Chrm extends CI_Controller {
         parse_str($parts['query'], $query);
         // county Data
         $data['countydata'] = $this->db->select("*")->from('county_tax_info')->where('tax',$query['tax'])->where('created_by', $decodedId)->where('year', $year)->get()->result_array();
+
+    
 
         $content                 = $this->parser->parse('hr/add_countydetails', $data, true);
         $this->template->full_admin_html_view($content);
@@ -1455,10 +1457,10 @@ class Chrm extends CI_Controller {
         
         foreach ($all_overtime as $time) {
             list($time_hours, $time_minutes) = explode(":", $time);
-$time_in_minutes = $time_hours * 60 + $time_minutes; 
+            $time_in_minutes = $time_hours * 60 + $time_minutes; 
 
-list($work_hours, $work_minutes) = explode(":", $data['extratime_info'][0]['work_hour']);
-$work_in_minutes = $work_hours * 60 + $work_minutes;
+            list($work_hours, $work_minutes) = explode(":", $data['extratime_info'][0]['work_hour']);
+            $work_in_minutes = $work_hours * 60 + $work_minutes;
           if ($time_in_minutes > $work_in_minutes) {
            
                 list($hours, $minutes) = explode(':', $time);
@@ -3472,12 +3474,18 @@ $work_in_minutes = $work_hours * 60 + $work_minutes;
         $limit          = $this->input->post('length');
         $start          = $this->input->post('start');
         $search         = $this->input->post('search')['value'];
+
+       // echo $search; exit;
         $orderField     = 'e.' . $this->input->post('columns')[$this->input->post('order')[0]['column']]['data'];
         $orderDirection = $this->input->post("order")[0]["dir"];
         $totalItems     = $this->Hrm_model->getTotalEmployee($search, $decodedId);
         $items          = $this->Hrm_model->getPaginatedEmployee($limit, $start, $orderField, $orderDirection, $search, $decodedId);
         $data           = [];
         $i              = $start + 1;
+
+        //print_r($items); exit;
+
+        //echo $totalItems; exit;
         foreach ($items as $item) { 
 
             $profile = '<a href="' . base_url('Chrm/employee_details?id=' . $encodedId . '&admin_id=' . $encodedAdmin . '&' . ($item['e_type'] == 1 ? 'employee' : 'salespartner') . '=' . $item['id']) . '" class="btnclr btn m-b-5 m-r-2"><i class="fa fa-user"></i></a>';

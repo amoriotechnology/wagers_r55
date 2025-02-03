@@ -166,12 +166,11 @@
                   <div class="typed">
                      <input type="checkbox">
                   </div>
-                  <?php  $split_code = str_split($state_code); ?>
                   <div class="a1">
-                     <input type="text" value="<?php echo isset($split_code[0]) ? $split_code[0] : ''; ?>">
+                     <input type="text" value="N">
                   </div>
                   <div class="a2">
-                     <input type="text" value="<?php echo isset($split_code[1]) ? $split_code[1] : ''; ?>">
+                     <input type="text" value="J">
                   </div>
                   <div class="b1">
                      <input type="checkbox">
@@ -314,11 +313,11 @@
                
                
                   <div class="trade-name">
-                     <input type="text" value="<?php echo $company_name; ?>" style="margin-top:4px;">
+                     <input type="text" value="<?php echo $company_name; ?>">
                   </div>
  
                   <div class="ein">
-                     <input type="text" value="<?php echo $Federal_Pin_Number;  ?>" style="margin-top:4px;"/>
+                     <input type="text" value="<?php echo $Federal_Pin_Number;  ?>" />
                   </div>
                   <?php
                      $quater1 = number_format($sumQuaterWiseUnemployment['Q1'], 2, '.', '');
@@ -326,7 +325,7 @@
                   ?>
 
                   <div class="row16a">
-                     <input type="text" value="$<?php echo $quaterwise1; ?> "  style="margin-top: 4px;margin-left: -7px;width: 38px;text-align:right;"/>
+                     <input type="text" value="$<?php echo $quaterwise1; ?> "  style="margin-left: -7px;width: 38px;text-align:right;"/>
                      <input type="text" value="<?php echo $quater1decimalPart ; ?>" style="margin-left: -161px; text-align:right;" />
                   </div>
 
@@ -335,7 +334,7 @@
                      list($quaterwise2, $quater2decimalPart) = explode('.', $quater2) + ['00', '00'];
                   ?>
                   <div class="row16b">
-                     <input type="text" value="$<?php echo $quaterwise2; ?> "  style="margin-top: 4px;margin-left: -7px;width: 38px;text-align:right;"/>
+                     <input type="text" value="$<?php echo $quaterwise2; ?> "  style="margin-left: -7px;width: 38px;text-align:right;"/>
                      <input type="text" value="<?php echo $quater2decimalPart ; ?>" style="margin-left: -161px; text-align:right;" />
                   </div>
                   <?php
@@ -343,7 +342,7 @@
                      list($quaterwise3, $quater4decimalPart) = explode('.', $quater3) + ['00', '00'];
                   ?>
                   <div class="row16c">
-                     <input type="text" value="$<?php echo $quaterwise3; ?> "  style="margin-top: 4px;margin-left: -7px;width: 38px;text-align:right;"/>
+                     <input type="text" value="$<?php echo $quaterwise3; ?> "  style="margin-left: -7px;width: 38px;text-align:right;"/>
                      <input type="text" value="<?php echo $quater4decimalPart ; ?>" style="margin-left: -161px; text-align:right;" />
                   </div>
                   <?php
@@ -351,11 +350,11 @@
                      list($quaterwise4, $quater4decimalPart) = explode('.', $quater4) + ['00', '00'];
                   ?>
                   <div class="row16d">
-                     <input type="text" value="$<?php echo $quaterwise4; ?>"  style="margin-top: 4px;margin-left: -11px;width: 38px;text-align:right;"/>
+                     <input type="text" value="$<?php echo $quaterwise4; ?>"  style="margin-left: -11px;width: 38px;text-align:right;"/>
                      <input type="text" value="<?php echo "00" ; ?>" style="margin-left: -159px; text-align:right;" />
                   </div>
                  <div class="row17">
-                     <input type="text" style="margin-top: 4px;margin-left: 13px;width: 38px;text-align:right;" value="$<?php
+                     <input type="text" style="margin-left: 13px;width: 38px;text-align:right;" value="$<?php
                         $Quater1 = $sumQuaterWiseUnemployment['Q1'];
                         $Quater2 = $sumQuaterWiseUnemployment['Q2'];
                         $Quater3 = $sumQuaterWiseUnemployment['Q3'];
@@ -393,16 +392,16 @@
                      <input type="text" value="" />
                   </div>
                   <div class="printname">
-                     <input type="text" value="<?php echo $company_name; ?>" style="margin-top:4px;"/>
+                     <input type="text" value="<?php echo $company_name; ?>" />
                   </div>
                   <div class="printitle">
-                     <input type="text" value="Admin" style="margin-top:4px;"/>
+                     <input type="text" value="Admin" />
                   </div>
                   <div class="date">
-                     <input type="text" value="<?php echo date('m/d/Y'); ?>" style="margin-top:4px;"/>
+                     <input type="text" value="<?php echo date('m/d/Y'); ?>" />
                   </div>
                   <div class="dayphone">
-                     <input type="text" value="<?php echo $mobile; ?>" style="margin-top:4px;"/>
+                     <input type="text" value="<?php echo $mobile; ?>" />
                   </div>
                   <div class="pre-name">
                      <input type="text" value="" />
@@ -445,7 +444,7 @@
                   <img src="<?php echo base_url()  ?>assets/images/f940_03.jpg" width="100%"/>
                
                   <div class="row1-ein">
-                     <input type="text" value="<?php echo $Federal_Pin_Number; ?>" style="position: absolute;top: -17px;"/>
+                     <input type="text" value="<?php echo $Federal_Pin_Number; ?>" />
                   </div>
 
                   <div class="dollar">
@@ -459,13 +458,13 @@
                     
                   </div>
                   <div class="busniess-name">
-                     <input type="text" value="<?php echo $company_name; ?>" style="position: absolute;margin-top: -19px;"/>
+                     <input type="text" value="<?php echo $company_name; ?>"/>
                   </div>
                   <div class="b-address">
-                     <input type="text" value="<?php echo $get_address[0]; ?>" style="position: absolute;margin-top: -19px;"/>
+                     <input type="text" value="<?php echo $get_address[0]; ?>" />
                   </div>
                   <div class="city-state-code">
-                     <input type="text" value="<?php echo $get_address[1] .' '. $get_address[2] .' '. $get_address[3]; ?>" style="position: absolute;margin-top: -19px;"/>
+                     <input type="text" value="<?php echo $get_address[1] .' '. $get_address[2] .' '. $get_address[3]; ?>" />
                   </div>
                </div>
             </div>

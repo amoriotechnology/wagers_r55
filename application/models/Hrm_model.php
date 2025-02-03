@@ -146,11 +146,11 @@ class Hrm_model extends CI_Model {
         return $query->result_array();
     }
     public function getTotalEmployee($search, $Id) {
-        $this->db->select('e.first_name,e.middle_name,e.last_name,d.id,d.designation as des_name');
+        $this->db->select('e.first_name,e.middle_name,e.last_name');
         $this->db->from('employee_history e');
-        $this->db->join('designation d', 'd.id = e.designation');
+        
         if ($search != "") {
-            $this->db->or_like(['e.first_name' => $search, 'd.designation'            => $search, 'e.phone'         => $search, 'e.email'        => $search,
+            $this->db->or_like(['e.first_name' => $search,  'e.phone'         => $search, 'e.email'        => $search,
                 'e.zip'                            => $search, 'e.social_security_number' => $search, 'e.employee_type' => $search, 'e.payroll_type' => $search]);
         }
         $this->db->where('e.is_deleted', 0);
@@ -184,6 +184,7 @@ class Hrm_model extends CI_Model {
         }
         return false;
     }
+
     public function no_salecommission($selectedValue) {
         $user_id = $this->session->userdata('user_id');
         $this->db->select("SUM(extra_amount) as sc_nocomission");
@@ -196,6 +197,7 @@ class Hrm_model extends CI_Model {
         }
         return false;
     }
+    
     public function emp_yes_salecommission($selectedValue) {
         $this->load->library('session');
         $user_id = $this->session->userdata('user_id');
@@ -1360,20 +1362,6 @@ class Hrm_model extends CI_Model {
     }
     //===============================Reports===============================//
     //============================Forms===================================//
-    //For F940
-      public function get_state_code($id) {
-    $this->db->distinct();
-    $this->db->select('code');  
-    $this->db->from('tax_history');
-    $this->db->where('created_by', $id);
-    $query = $this->db->get();  
-    $codes = $query->result();
-     if (count($codes) === 1) {
-        return $codes[0]->code;  
-    } else {
-        return 'XX';
-    }
-}
     public function total_amountofthis_qt($quarter, $id) {
         $this->db->select('SUM(c.total_amount) as OverallTotal');
         $this->db->from('timesheet_info a');
@@ -1478,14 +1466,13 @@ public function getAboveAmount()
 }
 
 // Sum Quater Wise Unemployment - form 940
-public function sumQuaterwiseunemploymentamount($id,$year)
+public function sumQuaterwiseunemploymentamount()
 {
     $this->db->select('SUM(b.u_tax) as unemploymentAmount, a.quarter');
     $this->db->from('timesheet_info a');
     $this->db->join('tax_history_employer b', 'b.time_sheet_id = a.timesheet_id', 'left');
-    $this->db->where('a.create_by', $id);
-    $this->db->where('b.tax !=', 'Unemployment');
-     $this->db->where("YEAR(STR_TO_DATE(SUBSTRING_INDEX(a.end, ' - ', -1), '%m/%d/%Y')) = ", $year);
+    $this->db->where('a.create_by', $this->session->userdata('user_id'));
+    $this->db->where('b.tax', 'Unemployment');
     $this->db->group_by('a.quarter');
     $query = $this->db->get();
     if ($query->num_rows() > 0) {
@@ -1548,7 +1535,6 @@ public function sumQuaterwiseunemploymentamount($id,$year)
         $this->db->where('b.quarter', $quarter);
         $this->db->where('b.create_by', $id);
         $this->db->where('b.end >=', $startDate);
-        $this->db->where('a.code','NJ');
         $this->db->where('b.end <=', $endDate);
         $this->db->where("YEAR(STR_TO_DATE(SUBSTRING_INDEX(b.end, ' - ', -1), '%m/%d/%Y')) = ", $year);
 

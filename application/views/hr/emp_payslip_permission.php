@@ -252,7 +252,9 @@ th,td{
                                         <th style='height:25px;' class="col-md-2">End Time (HH:MM)</th>
                                         <th style='height:25px;' class="col-md-5">Hours</th>
                                         <th style='height:25px;' class="col-md-5">Over Time</th>
-                                        <?php if ($time_sheet_data[0]['uneditable'] != '1') {echo "<th style='height:25px;' class='col-md-5'>Action</th>";}?>
+                                        <?php if ($time_sheet_data[0]['uneditable'] != '1') { //echo "<th style='height:25px;' class='col-md-5'>Action</th>";
+
+                                        } ?>
 
                                     <?php } elseif ($employee_name[0]['payroll_type'] != 'Hourly') {?>
                                         <th style='height:25px;' class="col-md-2">Date</th>
@@ -319,7 +321,7 @@ if ($employee_name[0]['payroll_type'] == 'Hourly') {?>
                                     </select>
                                 </td>
                                 <td class="start-time">
-                                    <input type="time"                                                       <?php if ($timesheetdata[$date]['edit'] == 1) {echo 'readonly';}?> name="start[]" readonly data-id='<?php echo $data_id; ?>' class="hasTimepicker start" value="<?php echo empty($date) ? 'readonly' : $timesheetdata[$date]['start'];?>">
+                                    <input type="time" <?php if ($timesheetdata[$date]['edit'] == 1) {echo 'readonly';}?> name="start[]" readonly data-id='<?php echo $data_id; ?>' class="hasTimepicker start" value="<?php echo empty($date) ? 'readonly' : $timesheetdata[$date]['start'];?>">
                                 </td>
                                 <td class="finish-time">
                                     <input type="time"                                                       <?php if ($timesheetdata[$date]['edit'] == 1) {echo 'readonly';}?> name="end[]" readonly data-id='<?php echo $data_id; ?>' class="hasTimepicker end" value="<?php echo empty($date) ? 'readonly' : $timesheetdata[$date]['end'];?>">
@@ -333,11 +335,11 @@ if ($employee_name[0]['payroll_type'] == 'Hourly') {?>
                                 </td>
 
                                 <?php if ($time_sheet_data[0]['uneditable'] != 1) {?>
-                                    <td>
+                                   <!--  <td>
                                         <a style="color: white;" class="delete_day btnclr btn m-b-5 m-r-2" >
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
-                                    </td>
+                                    </td> -->
                                 <?php }?>
 
                                 <?php if ($end_week == $timesheetdata[$date]['day']) {
@@ -1119,4 +1121,7 @@ $("#datavalidate").validate({
     }
 });
 
+$(".dailybreak ").prop('disabled',true);
+$(".weekly_hour").prop('disabled',true);
+ 
 </script>

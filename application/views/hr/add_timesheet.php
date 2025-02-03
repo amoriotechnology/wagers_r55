@@ -703,7 +703,7 @@ $('body').on('input select change', '#reportrange',function() {
                         $('#tBody').append(`<tr> 
                             <td colspan="5" class="text-right" style="font-weight:bold;"> Weekly Total Hours:</td> 
                             <td class="hour_week_total">
-                                <input type="text" name="hour_weekly_total[]" class= "weekly_hour" id="hourly_`+data_id+`" value="" />
+                                <input type="text" name="hour_weekly_total[]" class="weekly_hour" id="hourly_`+data_id+`" value="" />
                             </td>
                         </tr>`);
                         data_id++;
@@ -739,6 +739,39 @@ $('body').on('input select change', '#reportrange',function() {
 
 
 $(document).ready(function() {
+
+
+
+
+       $(document).on("keyup", ".weekly_hour", function () {
+        $(this).val($(this).val().replace(/[^0-9:]/g, "").substring(0, 5));
+
+        // Updated regular expression to match valid times (00:00 to 23:59)
+        let timeRegex = /^[0-9]+:00$/;
+        let isValid = true;
+
+        
+        isValid = !$(".weekly_hour").map(function () {
+            return !timeRegex.test($(this).val());
+        }).get().some(Boolean);  
+
+        console.log(isValid);
+
+        
+        if (!isValid) {
+            console.log('Invalid time, disabled');
+             setTimeout(function() {
+                $(".sub_btn").prop("disabled", true);
+            }, 50);
+            
+        } else {
+            console.log('Valid time, enabled');
+            setTimeout(function() {
+                $(".sub_btn").prop("disabled", false);
+            }, 50);
+        }
+    });
+
 
     function updateCounter() {
         var sumOfDays = 0;

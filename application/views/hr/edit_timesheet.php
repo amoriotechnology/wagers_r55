@@ -1,5 +1,34 @@
 <div class="content-wrapper">
 
+    <div class="modal fade" id="dailybreak_add" role="dialog">
+<div class="modal-dialog" role="document">
+    <div class="modal-content" style="margin-top: 190px;text-align:center;">
+        <div class="modal-header btnclr"  >
+            <a href="#" class="close" data-dismiss="modal">&times;</a>
+            <h4 class="modal-title">Add New Daily Break</h4>
+        </div>
+        <div class="modal-body">
+            <form id="insert_daily_break" method="post" style="text-align: left !important;">
+                <div class="panel-body">
+                    <input type ="hidden" name="csrf_test_name" value="aabaa524ab872dd43eaf39d7adcb0fde">
+                    <div class="form-group row">
+                        <label for="customer_name" class="col-sm-3 col-form-label" style="width: auto;">Daily Break<i class="text-danger">*</i></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="decimal form-control dBreaks" name ="dbreak" id="dbreak" placeholder="Integer and decimal only" required />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btnclr "   data-dismiss="modal">Close </a>
+                <input type="submit" class="btn btnclr "  value=Submit>
+            </div>
+        </form>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
     <section class="content-header" style="height:70px;">
         <div class="header-icon">
             <i class="pe-7s-note2"></i>
@@ -77,7 +106,9 @@
                                         <?php if ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
                                             <th style='height:25px;' class="col-md-2">Date</th>
                                             <th style='height:25px;' class="col-md-1">Day</th>
-                                            <th class="col-md-1">Daily Break in mins</th>
+                                            <th class="col-md-1">Daily Break in mins  <a class="btnclr client-add-btn btn dailyBreak" aria-hidden="true" style="color:white;border-radius: 5px; padding: 5px 10px 5px 10px;" data-toggle="modal" data-target="#dailybreak_add">
+                                                <i class="fa fa-plus"></i>
+                                            </a></th>
                                             <th style='height:25px;' class="col-md-2">Start Time (HH:MM)</th>
                                             <th style='height:25px;' class="col-md-2">End Time (HH:MM)</th>
                                             <th style='height:25px;' class="col-md-5">Hours</th>

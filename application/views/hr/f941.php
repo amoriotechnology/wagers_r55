@@ -298,7 +298,7 @@ $decimal = isset($s[1]) ? substr($s[1],0,2) : '00';
 ?>    
 
         <div class="row5a2">
-          <input type="text" value="$<?php echo $integer; ?>" style="margin-top:6px;margin-left: -43px;text-align:right;" />
+          <input type="text" value="$<?php echo $integer; ?>" style="margin-left: -43px;text-align:right;" />
           <input type="text" value="<?php echo $decimal ; ?>" style="margin-left: 3px;" />
 
 
@@ -332,7 +332,7 @@ $decimal = isset($s[1]) ? substr($s[1],0,2) : '00';
  
     
         <div class="row5c">
-          <input type="text" value="$<?php echo $integer_parts; ?>" style="margin-top:6px;margin-left: -34px;text-align:right;"  />
+          <input type="text" value="$<?php echo $integer_parts; ?>" style="margin-left: -34px;text-align:right;"  />
           <input type="text" value="<?php echo $decimal_parts; ?>"  style="margin-left: 4px;" />
 
         </div>
@@ -365,7 +365,7 @@ $decimal = isset($s[1]) ? substr($s[1],0,2) : '00';
             ?>
  
         <div class="row5c2">
-          <input type="text" value="$<?php echo $integer_part_mcal  ; ?>"  style="margin-top:6px;margin-left: -53px;text-align:right;"  />
+          <input type="text" value="$<?php echo $integer_part_mcal  ; ?>"  style="margin-left: -53px;text-align:right;"  />
           <input type="text" value="<?php echo $decimal_part_mcal  ; ?>" style="margin-left: 4px;" />
 
         </div>
@@ -396,7 +396,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
    
     
         <div class="row5e">
-          <input type="text" value="$<?php echo $integer_parts  ; ?>" style=" margin-top:6px;margin-left: -44px;text-align:right;"  />
+          <input type="text" value="$<?php echo $integer_parts  ; ?>" style=" margin-left: -44px;text-align:right;"  />
       
           <input type="text" value="<?php echo $decimal_parts  ; ?>" style="margin-left: 5px;" />
 
@@ -435,7 +435,7 @@ $final_cent= $decimal_parts;
 ?>
  
         <div class="row6">
-          <input type="text" value="$<?php echo $integer_parts; ?>"  style=" margin-top:6px;margin-left: -147px;text-align:right;" />
+          <input type="text" value="$<?php echo $integer_parts; ?>"  style=" margin-left: -147px;text-align:right;" />
           <input type="text" value="<?php echo  $decimal_parts; ?>"   style="margin-left: 5px;" />
 
        
@@ -457,7 +457,7 @@ $final_cent= $decimal_parts;
     
     
         <div class="row10">
-          <input type="text" value="$<?php echo $integer_parts; ?>" style="margin-top:6px;margin-left: -65px;width: 100px;text-align:right;" />
+          <input type="text" value="$<?php echo $integer_parts; ?>" style="margin-left: -65px;width: 100px;text-align:right;" />
      
           <input type="text" value="<?php echo $decimal_parts; ?>"  style="margin-left: 5px;" />
 
@@ -468,7 +468,7 @@ $final_cent= $decimal_parts;
           <input type="text" value=" " />
         </div>
         <div class="row12">
-         <input type="text" value="$<?php echo $integer_parts; ?>" style="margin-top:6px;margin-left: -65px;width: 100px;text-align:right;" />
+         <input type="text" value="$<?php echo $integer_parts; ?>" style="margin-top:5px;margin-left: -65px;width: 100px;text-align:right;" />
         <input type="text" value="<?php echo $decimal_parts; ?>"  style="margin-left: 5px;" />
         </div>
         <div class="row13">
@@ -496,12 +496,12 @@ $final_cent= $decimal_parts;
 
       
         <div class="f41-name">
-          <input type="text" value="<?php echo $company_name; ?>" style="margin-top:4px;"/>
+          <input type="text" value="<?php echo $company_name; ?>" />
         </div>
 
        
         <div class="f41-ein">
-          <input type="text" value="<?php echo $Federal_Pin_Number; ?>" style="margin-top:4px;"/>
+          <input type="text" value="<?php echo $Federal_Pin_Number; ?>" />
         </div>
         <div class="row16a">
           <input type="checkbox" />
@@ -549,16 +549,16 @@ $final_cent= $decimal_parts;
           <input type="text" value="" />
         </div>
         <div class="row19-date">
-          <input type="text" value="<?php echo date('m/d/Y'); ?>" style="margin-top:4px" />
+          <input type="text" value="<?php echo date('m/d/Y'); ?>" />
         </div>
         <div class="row19-name">
-          <input type="text" value="<?php echo $company_name; ?>" style="margin-top:4px"/>
+          <input type="text" value="<?php echo $company_name; ?>" />
         </div>
         <div class="row19-title">
-          <input type="text" value="Admin" style="margin-top:4px"/>
+          <input type="text" value="Admin" />
         </div>
         <div class="row19-day">
-          <input type="text" value="<?php echo $mobile; ?>" style="margin-top:4px"/>
+          <input type="text" value="<?php echo $mobile; ?>" />
         </div>
         <div class="pre-name">
           <input type="text" value=" " />

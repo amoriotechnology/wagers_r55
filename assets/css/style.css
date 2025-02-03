@@ -255,3 +255,13 @@ tbody{
 .error-border {
     border: 2px solid red;
 }
+
+ul.sidebar-menu li.treeview {
+    background: #424f5c;
+}
+
+
+.sidebar-menu .treeview-menu>li>a {
+    
+    font-size: 12px;
+}

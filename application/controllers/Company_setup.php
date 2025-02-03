@@ -40,8 +40,12 @@ class Company_setup extends CI_Controller {
 	{
        $id = isset($_GET['id']) ? $_GET['id'] : '';
        $admin_id = isset($_GET['admin_id']) ? $_GET['admin_id'] : '';
+
+       //echo decodeBase64UrlParameter($id); exit;
        $decodedId = decodeBase64UrlParameter($id);
        $companyLists = $this->Companies->company_info($decodedId);
+
+       //print_r($companyLists); exit
        $content = $this->parser->parse('company/company', $companyLists, true);
         $this->template->full_admin_html_view($content);
     }
@@ -75,18 +79,22 @@ class Company_setup extends CI_Controller {
             $edit = '<a href="' . base_url("Company_setup/company_update_form?id=" . $encodedId . "&admin_id=" . $encodedAdmin . "&company_id=" . $item["company_id"]) . '" class="btnclr btn m-b-5 m-r-2" data-toggle="tooltip" data-placement="left" title="" data-original-title="Update"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
 
             $company_id   = encodeBase64UrlParameter($item['company_id']);
-            $admin_id   = encodeBase64UrlParameter($item['unique_id']);
+
+
+            //echo $decodeAdmin; exit;
+
+            $admin_id   = encodeBase64UrlParameter($decodeAdmin);
 
             $redirect = '<a href="' . base_url("chrm/manage_employee?id=" . $company_id . "&admin_id=" . $admin_id) . '" class="btnclr btn m-b-5 m-r-2" data-toggle="tooltip" data-placement="left" title="Hr" data-original-title="Hr" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>';
 
             $row     = [
                 "company_id"             => $i,
-                "username"           => $item['username'],
+                "username"           => '',/*$item['username'],*/
                 "company_name"           => $item['company_name'],
                 "address"                => $item['address'],
                 "mobile"                 => $item['mobile'],
                 "website"                => $item['website'],
-                'action'                 => $edit . " " . $redirect,
+                'action'                 => $edit. " " . $redirect
             ];
             $data[] = $row;
             $i++;

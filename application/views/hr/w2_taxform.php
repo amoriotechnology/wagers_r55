@@ -100,7 +100,7 @@ $overalltotal_amount = isset($get_payslip_info[0]['ftotal_amount']) ? number_for
                <p style="position:absolute;top:272px;left:63px;white-space:nowrap" class="ft23"><b>e &#160;</b>Employee’s first name and initial <br><span style="color: #000; font-size: 14px;"><?php echo $e_details[0]['first_name']." ".$e_details[0]['middle_name']; ?></span></p>
                <p style="position:absolute;top:272px;left:265px;white-space:nowrap" class="ft22">Last name <br><span style="color: #000; font-size: 14px;"><?php echo $e_details[0]['last_name']; ?></span></p>
                <p style="position:absolute;top:272px;left:470px;white-space:nowrap" class="ft22">Suff.</p>
-               <p style="position:absolute;top:416px;left:63px;white-space:nowrap" class="ft23"><b>f &#160;</b>Employee’s address and ZIP code <br><span style="color: #000; font-size: 14px; position: absolute; bottom: 18px;"><?php echo $e_details[0]['address_line_1']."<br/>".$e_details[0]['city']."<br/>".$e_details[0]['zip']; ?> </span></p>
+               <p style="position:absolute;top:416px;left:63px;white-space:nowrap" class="ft23"><b>f &#160;</b>Employee’s address and ZIP code <br><span style="color: #000; font-size: 14px; position: absolute; bottom: 18px;"><?php echo $e_details[0]['address_line_1']."<br/>".$e_details[0]['zip']; ?> </span></p>
                <p style="position:absolute;top:92px;left:508px;white-space:nowrap" class="ft23"><b>1 &#160;&#160;</b>Wages, tips, other compensation <br>
                   <span style="color: #000; font-size: 14px;">
                 <?php echo   isset($get_payslip_info[0]['overalltotal_amount']) ? '$'.number_format($get_payslip_info[0]['overalltotal_amount'], 2) : '0.00'; ?> </span>
@@ -298,7 +298,7 @@ echo '$'.$t_tax;
                <p style="position:absolute;top:528px;left:54px;white-space:nowrap" class="ft23"><b>Form</b></p>
                <p style="position:absolute;top:504px;left:86px;white-space:nowrap" class="ft26"><b>W-2</b></p>
                <p style="position:absolute;top:516px;left:160px;white-space:nowrap" class="ft27">Wage and Tax Statement</p>
-               <p style="position:absolute;top:509px;left:434px;white-space:nowrap" class="ft28"><?php echo $year; ?></p>
+               <p style="position:absolute;top:509px;left:434px;white-space:nowrap" class="ft28"><?php echo date('Y'); ?></p>
                <p style="position:absolute;top:513px;left:608px;white-space:nowrap" class="ft22">Department of the Treasury—Internal Revenue Service&#160;</p>
                <p style="position:absolute;top:529px;left:654px;white-space:nowrap" class="ft211"><b>For Privacy Act and Paperwork Reduction&#160;<br/></b>&#160;</p>
                <p style="position:absolute;top:541px;left:657px;white-space:nowrap" class="ft23"><b>Act Notice, see the separate instructions.&#160;</b></p>
@@ -343,7 +343,7 @@ echo '$'.$t_tax;
                <p style="position:absolute;top:272px;left:63px;white-space:nowrap" class="ft32"><b>e &#160;</b>Employee’s first name and initial <br><span style="color: #000; font-size: 14px;"><?php echo $e_details[0]['first_name']; ?></span></p>
                <p style="position:absolute;top:272px;left:265px;white-space:nowrap" class="ft33">Last name <br><span style="color: #000; font-size: 14px;"><?php echo $e_details[0]['last_name']; ?></span></p>
                <p style="position:absolute;top:272px;left:470px;white-space:nowrap" class="ft33">Suff.</p>
-               <p style="position:absolute;top:416px;left:63px;white-space:nowrap" class="ft32"><b>f &#160;</b>Employee’s address and ZIP code <br><span style="color: #000; font-size: 14px; position: absolute; bottom: 18px;"><?php echo $e_details[0]['address_line_1']."<br/>".$e_details[0]['city']."<br/>".$e_details[0]['zip']; ?> </span></p>
+               <p style="position:absolute;top:416px;left:63px;white-space:nowrap" class="ft32"><b>f &#160;</b>Employee’s address and ZIP code <br><span style="color: #000; font-size: 14px; position: absolute; bottom: 18px;"><?php echo $e_details[0]['address_line_1']."<br/>".$e_details[0]['zip']; ?> </span></p>
                <p style="position:absolute;top:92px;left:508px;white-space:nowrap" class="ft32"><b>1 &#160;&#160;</b>Wages, tips, other compensation 
                   <br><span style="color: #000; font-size: 14px;"> 
                  <?php echo '$' . $overalltotal_amount; ?> </span>
@@ -537,7 +537,7 @@ echo '$'.$t_tax;
                <p style="position:absolute;top:528px;left:54px;white-space:nowrap" class="ft32"><b>Form</b></p>
                <p style="position:absolute;top:504px;left:86px;white-space:nowrap" class="ft36"><b>W-2</b></p>
                <p style="position:absolute;top:516px;left:160px;white-space:nowrap" class="ft37">Wage and Tax Statement</p>
-               <p style="position:absolute;top:509px;left:434px;white-space:nowrap" class="ft38"><?php echo $year; ?></p>
+               <p style="position:absolute;top:509px;left:434px;white-space:nowrap" class="ft38"><?php echo date('Y'); ?></p>
                <p style="position:absolute;top:513px;left:608px;white-space:nowrap" class="ft33">Department of the Treasury—Internal Revenue Service</p>
                <p style="position:absolute;top:544px;left:54px;white-space:nowrap" class="ft39"><b>Copy 1—For State, City, or Local Tax Department</b></p>
             </div>
@@ -582,7 +582,7 @@ echo '$'.$t_tax;
                <p style="position:absolute;top:272px;left:63px;white-space:nowrap" class="ft41"><b>e &#160;</b>Employee’s first name and initial <br><span style="color: #000; font-size: 14px;"><?php echo $e_details[0]['first_name']; ?></span></p>
                <p style="position:absolute;top:272px;left:265px;white-space:nowrap" class="ft42">Last name <br><span style="color: #000; font-size: 14px;"><?php echo $e_details[0]['last_name']; ?></span></p>
                <p style="position:absolute;top:272px;left:470px;white-space:nowrap" class="ft42">Suff.</p>
-               <p style="position:absolute;top:416px;left:63px;white-space:nowrap" class="ft41"><b>f &#160;</b>Employee’s address and ZIP code <br><span style="color: #000; font-size: 14px; position: absolute; bottom: 18px;"><?php echo $e_details[0]['address_line_1']."<br/>".$e_details[0]['city']."<br/>".$e_details[0]['zip']; ?> </span></p>
+               <p style="position:absolute;top:416px;left:63px;white-space:nowrap" class="ft41"><b>f &#160;</b>Employee’s address and ZIP code <br><span style="color: #000; font-size: 14px; position: absolute; bottom: 18px;"><?php echo $e_details[0]['address_line_1']."<br/>".$e_details[0]['zip'];; ?> </span></p>
                <p style="position:absolute;top:92px;left:508px;white-space:nowrap" class="ft41"><b>1 &#160;&#160;</b>Wages, tips, other compensation 
                   <br><span style="color: #000; font-size: 14px;"> 
                   $
@@ -769,7 +769,7 @@ echo '$'.$t_tax;
                <p style="position:absolute;top:528px;left:54px;white-space:nowrap" class="ft41"><b>Form</b></p>
                <p style="position:absolute;top:504px;left:86px;white-space:nowrap" class="ft46"><b>W-2</b></p>
                <p style="position:absolute;top:516px;left:160px;white-space:nowrap" class="ft47">Wage and Tax Statement</p>
-               <p style="position:absolute;top:509px;left:434px;white-space:nowrap" class="ft48"><?php echo $year; ?></p>
+               <p style="position:absolute;top:509px;left:434px;white-space:nowrap" class="ft48"><?php echo date('Y'); ?></p>
                <p style="position:absolute;top:513px;left:608px;white-space:nowrap" class="ft42">Department of the Treasury—Internal Revenue Service</p>
                <p style="position:absolute;top:545px;left:54px;white-space:nowrap" class="ft412"><b>Copy B—To Be Filed With Employee’s FEDERAL Tax Return.&#160;<br/></b>This information is being furnished to the Internal Revenue Service.</p>
             </div>
@@ -899,7 +899,7 @@ echo '$'.$t_tax;
                <p style="position:absolute;top:272px;left:63px;white-space:nowrap" class="ft61"><b>e &#160;</b>Employee’s first name and initial <br><span style="color: #000; font-size: 14px;"><?php echo $e_details[0]['first_name']; ?></span></p>
                <p style="position:absolute;top:272px;left:265px;white-space:nowrap" class="ft62">Last name <br><span style="color: #000; font-size: 14px;"><?php echo $e_details[0]['last_name']; ?></span></p>
                <p style="position:absolute;top:272px;left:470px;white-space:nowrap" class="ft62">Suff.</p>
-               <p style="position:absolute;top:416px;left:63px;white-space:nowrap" class="ft61"><b>f &#160;</b>Employee’s address and ZIP code <br><span style="color: #000; font-size: 14px; position: absolute; bottom: 18px;"><?php echo $e_details[0]['address_line_1']."<br/>".$e_details[0]['city']."<br/>".$e_details[0]['zip']; ?> </span></p>
+               <p style="position:absolute;top:416px;left:63px;white-space:nowrap" class="ft61"><b>f &#160;</b>Employee’s address and ZIP code <br><span style="color: #000; font-size: 14px; position: absolute; bottom: 18px;"><?php echo $e_details[0]['address_line_1']."<br/>".$e_details[0]['zip'];; ?> </span></p>
                <p style="position:absolute;top:92px;left:508px;white-space:nowrap" class="ft61"><b>1 &#160;&#160;</b>Wages, tips, other compensation 
                   <br><span style="color: #000; font-size: 14px;"> 
                   $<?php 
@@ -1081,7 +1081,7 @@ echo '$'.$S_tax;
                <p style="position:absolute;top:528px;left:54px;white-space:nowrap" class="ft61"><b>Form</b></p>
                <p style="position:absolute;top:504px;left:86px;white-space:nowrap" class="ft65"><b>W-2</b></p>
                <p style="position:absolute;top:516px;left:160px;white-space:nowrap" class="ft66">Wage and Tax Statement</p>
-               <p style="position:absolute;top:509px;left:434px;white-space:nowrap" class="ft67"><?php echo $year; ?></p>
+               <p style="position:absolute;top:509px;left:434px;white-space:nowrap" class="ft67"><?php echo date('Y'); ?></p>
                <p style="position:absolute;top:513px;left:608px;white-space:nowrap" class="ft62">Department of the Treasury—Internal Revenue Service</p>
                <p style="position:absolute;top:545px;left:54px;white-space:nowrap" class="ft610"><b>Copy C—For EMPLOYEE’S RECORDS&#160;<br/></b>(See&#160;<i>Notice to Employee&#160;</i>on the back of Copy B.)</p>
                <p style="position:absolute;top:531px;left:660px;white-space:nowrap" class="ft611"><b>Safe, accurate,&#160;<br/>FAST! &#160;Use</b></p>
@@ -1214,7 +1214,7 @@ echo '$'.$S_tax;
                <p style="position:absolute;top:272px;left:63px;white-space:nowrap" class="ft81"><b>e &#160;</b>Employee’s first name and initial <br><span style="color: #000; font-size: 14px;"><?php echo $e_details[0]['first_name']; ?></span></p>
                <p style="position:absolute;top:272px;left:265px;white-space:nowrap" class="ft82">Last name <br><span style="color: #000; font-size: 14px;"><?php echo $e_details[0]['last_name']; ?></span></p>
                <p style="position:absolute;top:272px;left:470px;white-space:nowrap" class="ft82">Suff.</p>
-               <p style="position:absolute;top:416px;left:63px;white-space:nowrap" class="ft81"><b>f &#160;</b>Employee’s address and ZIP code  <br><span style="color: #000; font-size: 14px; position: absolute; bottom: 18px;"><?php echo $e_details[0]['address_line_1']."<br/>".$e_details[0]['city']."<br/>".$e_details[0]['zip']; ?> </span></p>
+               <p style="position:absolute;top:416px;left:63px;white-space:nowrap" class="ft81"><b>f &#160;</b>Employee’s address and ZIP code  <br><span style="color: #000; font-size: 14px; position: absolute; bottom: 18px;"><?php echo $e_details[0]['address_line_1']."<br/>".$e_details[0]['zip'];; ?> </span></p>
                <p style="position:absolute;top:92px;left:508px;white-space:nowrap" class="ft81"><b>1 &#160;&#160;</b>Wages, tips, other compensation 
                   <br><span style="color: #000; font-size: 14px;"> 
                    $<?php 
@@ -1395,7 +1395,7 @@ echo '$'.$t_tax;
                <p style="position:absolute;top:528px;left:54px;white-space:nowrap" class="ft81"><b>Form</b></p>
                <p style="position:absolute;top:504px;left:86px;white-space:nowrap" class="ft85"><b>W-2</b></p>
                <p style="position:absolute;top:516px;left:160px;white-space:nowrap" class="ft86">Wage and Tax Statement</p>
-               <p style="position:absolute;top:509px;left:434px;white-space:nowrap" class="ft87"><?php echo $year; ?></p>
+               <p style="position:absolute;top:509px;left:434px;white-space:nowrap" class="ft87"><?php echo date('Y'); ?></p>
                <p style="position:absolute;top:513px;left:608px;white-space:nowrap" class="ft82">Department of the Treasury—Internal Revenue Service</p>
                <p style="position:absolute;top:545px;left:54px;white-space:nowrap" class="ft89"><b>Copy 2—To Be Filed With Employee’s State, City, or Local&#160;<br/>Income Tax Return</b></p>
             </div>
@@ -1519,7 +1519,7 @@ echo '$'.$t_tax;
                <p style="position:absolute;top:272px;left:63px;white-space:nowrap" class="ft102"><b>e &#160;</b>Employee’s first name and initial<br><span style="color: #000; font-size: 14px;"><?php echo $e_details[0]['first_name']; ?></span></p>
                <p style="position:absolute;top:272px;left:265px;white-space:nowrap" class="ft101">Last name<br><span style="color: #000; font-size: 14px;"><?php echo $e_details[0]['last_name']; ?></span></p>
                <p style="position:absolute;top:272px;left:470px;white-space:nowrap" class="ft101">Suff.</p>
-               <p style="position:absolute;top:416px;left:63px;white-space:nowrap" class="ft102"><b>f &#160;</b>Employee’s address and ZIP code <br><span style="color: #000; font-size: 14px; position: absolute; bottom: 18px;"><?php echo $e_details[0]['address_line_1']."<br/>".$e_details[0]['city']."<br/>".$e_details[0]['zip']; ?> </span></p>
+               <p style="position:absolute;top:416px;left:63px;white-space:nowrap" class="ft102"><b>f &#160;</b>Employee’s address and ZIP code <br><span style="color: #000; font-size: 14px; position: absolute; bottom: 18px;"><?php echo $e_details[0]['address_line_1']."<br/>".$e_details[0]['zip'];; ?> </span></p>
                <p style="position:absolute;top:92px;left:508px;white-space:nowrap" class="ft102"><b>1 &#160;&#160;</b>Wages, tips, other compensation
                   <br><span style="color: #000; font-size: 14px;"> 
                    $<?php 
@@ -1751,7 +1751,7 @@ $this->load->view('include/bootstrap_modal', $modaldata);
 ?>
 <script>
 $(document).ready(function(){
-  downloadPagesAsPDF();
+ // downloadPagesAsPDF();
 });
 async function downloadPagesAsPDF() {
     const ids = ['page1-div', 'page2-div', 'page3-div', 'page4-div', 'page5-div', 'page6-div', 'page7-div', 'page8-div', 'page9-div', 'page10-div', 'page11-div'];

@@ -159,6 +159,7 @@ public function editurldata($company_id)
 		$this->db->from('company_information');
 		$this->db->where('create_by', $user_id);
 		$query = $this->db->get();
+
 		if ($query->num_rows() > 0) {
 			return $query->result_array();	
 		}
@@ -460,20 +461,20 @@ public function editurldata($company_id)
     public function getPaginatedCompany($limit, $offset, $orderField, $orderDirection, $search, $user_id)
     {   
     	$this->db->distinct();
-        $this->db->select('ci.*,ul.user_id, ul.unique_id, ul.username');
-        $this->db->from('company_information ci');
-        $this->db->join('user_login ul', 'ul.user_id = ci.company_id');
+        $this->db->select('*');
+        $this->db->from('company_information');
+        //$this->db->join('user_login ul', 'ul.user_id = ci.company_id');
         if (!empty($search)) {
             $this->db->group_start();
-            $this->db->like("ci.company_name", $search);
-            $this->db->or_like("ci.address", $search);
-            $this->db->or_like("ci.mobile", $search);
-            $this->db->or_like("ci.website", $search);
+            $this->db->like("company_name", $search);
+            $this->db->or_like("address", $search);
+            $this->db->or_like("mobile", $search);
+            $this->db->or_like("website", $search);
             $this->db->group_end();
         }
-        $this->db->where('ci.create_by', $user_id);
+        $this->db->where('create_by', $user_id);
         $this->db->limit($limit, $offset);
-        $this->db->order_by('ci.company_id', $orderDirection);
+        $this->db->order_by('company_id', $orderDirection);
         $query = $this->db->get();
         if ($query === false) {
             return [];
@@ -485,21 +486,21 @@ public function editurldata($company_id)
     public function getTotalCompanyListdata($limit, $offset, $search, $user_id, $orderDirection)
 	{   
 		$this->db->distinct();
-	    $this->db->select('ci.*,ul.user_id, ul.unique_id');
-        $this->db->from('company_information ci');
-        $this->db->join('user_login ul', 'ul.user_id = ci.company_id');
+	    $this->db->select('*');
+        $this->db->from('company_information');
+        
 	    
 	    if (!empty($search)) {
 	        $this->db->group_start(); 
-	        $this->db->like("ci.company_name", $search);
-            $this->db->or_like("ci.address", $search);
-            $this->db->or_like("ci.mobile", $search);
-            $this->db->or_like("ci.website", $search);
+	        $this->db->like("company_name", $search);
+            $this->db->or_like("address", $search);
+            $this->db->or_like("mobile", $search);
+            $this->db->or_like("website", $search);
 	        $this->db->group_end(); 
 	    }
 
-	    $this->db->where('ci.create_by', $user_id);
-	    $this->db->order_by('ci.company_id', $orderDirection);
+	    $this->db->where('create_by', $user_id);
+	    $this->db->order_by('company_id', $orderDirection);
 	    $count = $this->db->count_all_results();
 
 	    return $count; 

@@ -171,33 +171,39 @@ foreach ($info_for_nj as $amount) {
       </div>
  <div class="e7">
      <?php
-if ($quarter == 'Q1' && $quarterData[0]['amount']  != 0) {
+if ($quarter == 'Q1') {
     echo '<input type="text" value="' . $month['month_1_total_count'] . '" />';
-} elseif ($quarter == 'Q2'  && $quarterData[1]['amount']  != 0) {
+} elseif ($quarter == 'Q2') {
     echo '<input type="text" value="' . $month['month_1_total_count'] . '" />';
-} elseif ($quarter == 'Q3' && $quarterData[2]['amount']  != 0) {
+} elseif ($quarter == 'Q3') {
+    echo '<input type="text" value="' . $month['month_1_total_count'] . '" />';
+} else {
     echo '<input type="text" value="' . $month['month_1_total_count'] . '" />';
 }
 ?>
       </div>
       <div class="e7b">
          <?php
-if ($quarter == 'Q1'  && $quarterData[0]['amount'] != 0) {
+if ($quarter == 'Q1') {
     echo '<input type="text" value="' . $month['month_2_total_count'] . '" />';
-} elseif ($quarter == 'Q2' && $quarterData[1]['amount']  != 0) {
+} elseif ($quarter == 'Q2') {
     echo '<input type="text" value="' . $month['month_2_total_count'] . '" />';
-} elseif ($quarter == 'Q3' && $quarterData[2]['amount']  != 0) {
+} elseif ($quarter == 'Q3') {
+    echo '<input type="text" value="' . $month['month_2_total_count'] . '" />';
+} else {
     echo '<input type="text" value="' . $month['month_2_total_count'] . '" />';
 }
 ?>
       </div>
       <div class="e7c">
         <?php
-if ($quarter == 'Q1'  && $quarterData[0]['amount']  != 0) {
+if ($quarter == 'Q1') {
     echo '<input type="text" value="' . $month['month_3_total_count'] . '" />';
-} elseif ($quarter == 'Q2' && $quarterData[1]['amount']  != 0) {
+} elseif ($quarter == 'Q2') {
     echo '<input type="text" value="' . $month['month_3_total_count'] . '" />';
-} elseif ($quarter == 'Q3' && $quarterData[2]['amount']  != 0) {
+} elseif ($quarter == 'Q3') {
+    echo '<input type="text" value="' . $month['month_3_total_count'] . '" />';
+} else {
     echo '<input type="text" value="' . $month['month_3_total_count'] . '" />';
 }
 ?>
@@ -238,25 +244,26 @@ if ($quarter == 'Q1'  && $quarterData[0]['amount']  != 0) {
 
     
     <?php
-    if (!empty($quarterData[0]['amount']) || !empty($quarterData[1]['amount']) || !empty($quarterData[2]['amount'])) {
 if(isset($total_overall)  ) {
     // Check if both keys exist
     $overallTotal = floatval($total_overall);
     $saleOverallTotal = floatval($info_info_for_salescommssion_data[0]['SaleOverallTotal']);
     
     if(is_numeric($overallTotal)  ) {
-
+        
+            // if(is_numeric($overallTotal) && is_numeric($saleOverallTotal)) {
+        // Perform calculation only if values are numeric
+        // $ulandwf = ($overallTotal + $saleOverallTotal) * 0.038250;
         $ulandwf = $overallTotal * 0.038250;
 
-     
-        $formattedValue = number_format($ulandwf, 2); 
+        // Format output if needed
+        $formattedValue = number_format($ulandwf, 2); // Formats to 2 decimal places
         echo "$formattedValue";
     } else {
        // echo "One of the values is not numeric.";
     }
 } else {
     // echo "OverallTotal or SaleOverallTotal key is not set in the array element.";
-}
 }
 ?>
 
@@ -271,7 +278,6 @@ if(isset($total_overall)  ) {
 
       
 <?php
- if (!empty($quarterData[0]['amount']) || !empty($quarterData[1]['amount']) || !empty($quarterData[2]['amount'])) {
 if(isset($total_overall)  ) {
     $overallTotal = floatval($total_overall);
     $saleOverallTotal = floatval($info_info_for_salescommssion_data[0]['SaleOverallTotal']);
@@ -282,7 +288,6 @@ if(isset($total_overall)  ) {
     } else {
     }
 } else {
-}
 }
 ?>
  
@@ -295,7 +300,6 @@ if(isset($total_overall)  ) {
 
     
 <?php
- if (!empty($quarterData[0]['amount']) || !empty($quarterData[1]['amount']) || !empty($quarterData[2]['amount'])) {
 if(isset($total_overall)  ) {
     $overallTotal = floatval($total_overall);
     $saleOverallTotal = floatval($info_info_for_salescommssion_data[0]['SaleOverallTotal']);
@@ -306,7 +310,6 @@ if(isset($total_overall)  ) {
     } else {
     }
 } else {
-}
 }
 ?>
 

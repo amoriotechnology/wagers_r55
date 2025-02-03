@@ -168,7 +168,8 @@
             ],
             "order": [[0, "desc"]],
             "columnDefs": [
-                { "orderable": false, "targets": [0, 12] }
+                { "orderable": false, "targets": [0, 12] },
+                { "visible": false, "targets": [4] } 
             ],
             "pageLength": 10,
             "colReorder": true,
@@ -179,6 +180,10 @@
             "stateLoadCallback": function(settings) {
                 var savedState = localStorage.getItem('employee');
                 return savedState ? JSON.parse(savedState) : null;
+            },
+            "drawCallback": function(settings) {
+                // Hides the email column after the table is drawn
+                this.api().column(4).visible(false);
             },
            "dom": "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6'i><'col-sm-6'p>>",
             "buttons": [

@@ -340,7 +340,7 @@ $email = isset($employeer[0]['email']) ? $employeer[0]['email'] : '';
 <p style="position:absolute;top:632px;left:54px;white-space:nowrap" class="ft23">Form</p>
 <p style="position:absolute;top:615px;left:86px;white-space:nowrap" class="ft25"><b>W-3</b></p>
 <p style="position:absolute;top:623px;left:151px;white-space:nowrap" class="ft26"><b>Transmittal of Wage and Tax Statements</b></p>
-<p style="position:absolute;top:620px;left:572px;white-space:nowrap" class="ft27"><?php echo $year; ?></p>
+<p style="position:absolute;top:620px;left:572px;white-space:nowrap" class="ft27"><?php echo date('Y'); ?></p>
 <p style="position:absolute;top:622px;left:754px;white-space:nowrap" class="ft28">Department of the Treasury&#160;</p>
 <p style="position:absolute;top:632px;left:764px;white-space:nowrap" class="ft28">Internal Revenue Service</p>
 <p style="position:absolute;top:650px;left:54px;white-space:nowrap" class="ft218"><b>Send this entire page with the entire Copy A page of Form(s) W-2 to the Social Security Administration (SSA). &#160;<br/>Photocopies are not acceptable. Do not send Form W-3 if you filed electronically with the SSA.&#160;<br/>Do not&#160;</b>send any payment (cash, checks, money orders, etc.) with Forms W-2 and W-3.</p>
@@ -406,7 +406,7 @@ $this->load->view('include/bootstrap_modal', $modaldata);
 ?>
 <script>
 $(document).ready(function(){
-  downloadPagesAsPDF();
+   downloadPagesAsPDF();
 });
 async function downloadPagesAsPDF() {
     const element1 = document.getElementById('page1-div');

@@ -116,7 +116,7 @@
                <table class="federal table table-bordered" cellspacing="0" width="100%" id="federal_summary">
                   <thead class="sortableTable">
                      <tr class="sortableTable__header btnclr">
-                        <th rowspan="2" class="1 value" data-col="1" style="height: 45.0114px;width: 60px; text-align:center; "> <?= 'S.NO'?> </th>
+                        <th rowspan="2" class="1 value" data-col="1" style="height: 45.0114px; text-align:center; "> <?= 'S.NO'?> </th>
                         <th rowspan="2" class="2 value" data-col="2" style="text-align:center; width: 250px;"> <?= 'Employee Name'?> </th>
                         <th rowspan="2" class="3 value" data-col="3" style="text-align:center;width: 120px; "> <?= 'Gross'?> </th>
                         <th rowspan="2" class="3 value" data-col="3" style="text-align:center;width: 120px; "> <?= 'Net'?> </th>

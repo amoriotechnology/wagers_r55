@@ -11,6 +11,9 @@
 .tax_head >label {
    color: #fff;
 }
+#LivingStateTaxTable {
+    display: inline-table;
+}
 </style>
 <div class="content-wrapper">
    <section class="content-header" style="height: 60px;">

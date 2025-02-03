@@ -18,11 +18,11 @@
       </div>
 
       <div class="header-title">
-         <div class="logo-holder logo-9"><h1>Payroll Setting</h1></div>
+         <div class="logo-holder logo-9"><h1>Tax Ranges</h1></div>
 
        <small></small>
          <ol class="breadcrumb" style="border: 3px solid #d7d4d6;">
-         <li><a href="#"><i class="pe-7s-home"></i>                                                                                                       <?php echo display('home') ?></a></li>
+         <li><a href="#"><i class="pe-7s-home"></i><?php echo display('home') ?></a></li>
             <li><a href="#">Taxes</a></li>
             <li class="active" style="color:orange">Tax Ranges</li>
          </ol>
@@ -75,7 +75,7 @@
         <div class="panel panel-default" style="border:3px solid #d7d4d6;">
             <div class="panel-body">
                 <div class="row">
-                    <h3 class="col-sm-3" style="margin: 0;">Federal Taxes <span class="show_year"></span></h3>
+                    <h3 class="col-sm-3" style="margin: 0;">Federal Taxes</h3>
                     <div class="col-sm-9 text-right"></div>
                     <br>
                     <div class="col-sm-12">
@@ -143,7 +143,7 @@
             <div class="panel panel-default" style="border:3px solid #d7d4d6;" >
                <div class="panel-body">
                   <div class="row">
-                     <h3 class="col-sm-3" style="margin: 0;">State Taxes <span class="show_year"></span></h3>
+                     <h3 class="col-sm-3" style="margin: 0;">State Taxes</h3>
                      <div class="col-sm-9 text-right">
                         <a href="#" data-toggle="modal" data-target="#add_states"   class="btnclr btn"> Add States </a>
                         <a href="#" data-toggle="modal" data-target="#add_state_tax"   class="btnclr btn">Add New State Tax </a>
@@ -223,7 +223,7 @@
             <div class="panel panel-default" style="border:3px solid #d7d4d6;" >
                <div class="panel-body">
                   <div class="row">
-                     <h3 class="col-sm-3" style="margin: 0;">City Taxes <span class="show_year"></span></h3>
+                     <h3 class="col-sm-3" style="margin: 0;">City Taxes</h3>
                      <div class="col-sm-9 text-right">
                         <a href="#" data-toggle="modal" data-target="#add_city_info"   class="btnclr btn"> Add City </a>
                         <a href="#" data-toggle="modal" data-target="#add_city_tax"   class="btnclr btn">Add City Tax </a>
@@ -295,7 +295,7 @@
             <div class="panel panel-default" style="border:3px solid #D7D4D6;" >
                <div class="panel-body">
                   <div class="row">
-                     <h3 class="col-sm-3" style="margin: 0;">County  Taxes <span class="show_year"></span></h3>
+                     <h3 class="col-sm-3" style="margin: 0;">Country  Taxes</h3>
                      <div class="col-sm-9 text-right">
                         <a href="#" data-toggle="modal" data-target="#add_county_info"   class="btnclr btn"> Add County </a>
                         <a href="#" data-toggle="modal" data-target="#add_county_tax"   class="btnclr btn">Add County Tax </a>
@@ -457,8 +457,6 @@
    var csrfName = $('.txt_csrfname').attr('name');
    var csrfHash = $('.txt_csrfname').val();
    $(document).ready(function(){
-       debugger;
-       $('.show_year').text(" - "+new Date().getFullYear());
        $("#ADD_CITY").click(function(event){
          event.preventDefault();
          var city = $('#city_tax').val();
@@ -634,9 +632,6 @@ $("#datepicker").datepicker({
     format: "yyyy",
     viewMode: "years",
     minViewMode: "years"
-}).on('changeDate', function(e) {
-    var selectedYear = e.format("yyyy");
-    $('.show_year').text(" - "+selectedYear);
 });
 
 // Function to pass the selected year to the <a> tag
@@ -647,9 +642,7 @@ document.querySelectorAll('.tax_data').forEach(function(link) {
         var currentYear = new Date().getFullYear();
         if (inputValue === '') {
           inputValue =currentYear;
-      
          }
-        $('.show_year').text(" - "+inputValue);
         var currentUrl = link.getAttribute('data-url');
         var id = link.getAttribute('data-id');
         var adminId = link.getAttribute('data-admin-id');

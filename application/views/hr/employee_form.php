@@ -268,7 +268,7 @@
                   <div class="form-group row" id="payment_from">
                      <label for="city" class="col-sm-4 col-form-div"><?php echo  ('Sales Commission') ?></label>
                      <div class="col-sm-8">
-                        <input name="sc" class="form-control" type="text" placeholder="<?php echo 'sales commission percentage' ?>">
+                        <input name="sc" class="form-control" type="text" placeholder="<?php echo 'sales commission percentage' ?>" oninput="salesCommisionInput(this)">
                      </div>
                   </div>
                   <div class="form-group row" id="payment_from">
@@ -329,10 +329,10 @@
                         <input name="ssn" class="form-control" type="text" placeholder="Social security number" required oninput="exitsocialsecurity(this, 9)">
                      </div>
                   </div>
-                  <div class="form-group row" id="bank_name">
+                  <div class="form-group row bankdiv" id="bank_name">
                      <label for="bank_name" class="col-sm-4 col-form-label"> <?php echo display('Bank') ?></label>
                      <div class="col-sm-7">
-                        <select name="bank_name" id="bank_name"  class="form-control bankpayment">
+                        <select name="bank_name" id="bank_name"  class="form-control bankpayment bankdiv">
                            <option>Select Bank</option>
                            <option value="NA">NA (Not Applicable)</option>
                            <option value="JPMorgan Chase">JPMorgan Chase</option>
@@ -442,20 +442,20 @@
                            <?php  } ?>
                         </select>
                      </div>
-                     <div class="col-sm-1">
-                        <a data-toggle="modal" href="#add_bank_info" class="btn btnclr addbank_info"><i class="fa fa-plus"></i></a>
+                     <div class="col-sm-1 ">
+                        <a data-toggle="modal" href="#add_bank_info" class="btn btnclr addbank_info "><i class="fa fa-plus"></i></a>
                      </div>
                   </div>
                   <div class="form-group row">
                      <label for="blood_group" class="col-sm-4 col-form-div">Routing number </label>
                      <div class="col-sm-8">
-                        <input name="routing_number" class="form-control" type="text" placeholder="Routing number" oninput="routingrestrict(this, 15)">
+                        <input name="routing_number" class="form-control bankdiv" type="text" placeholder="Routing number" oninput="routingrestrict(this, 15)">
                      </div>
                   </div>
-                  <div class="form-group row">
+                  <div class="form-group  row">
                      <label for="zip" class="col-sm-4 col-form-div"><?php echo 'Account Number' ?></label>
                      <div class="col-sm-8">
-                        <input type="text" name="account_number" class="form-control" placeholder="Account Number" oninput="routingrestrict(this, 15)">
+                        <input type="text" name="account_number" class="form-control bankdiv" placeholder="Account Number" oninput="routingrestrict(this, 15)">
                      </div>
                   </div>
                   <div class="form-group row">
@@ -1078,7 +1078,22 @@
    $modaldata['bootstrap_modals'] = array('bank_info_modal', 'designation_modal', 'city_tax_modal', 'payroll_type_modal', 'emp_type_modal', 'pay_type_modal');
    $this->load->view('include/bootstrap_modal', $modaldata);
 ?>
+<script type="text/javascript">
 
+   $(document).ready(function () {
+    $('#paytype').change(function () {
+         console.log('yes changing');
+         if ($(this).val().trim().toLowerCase() === 'bank transfer') {
+            $('.bankdiv').prop('disabled', false);
+            $('.addbank_info').show();
+        } else {
+             $('.bankdiv').prop('disabled', true);
+             $('.addbank_info').hide();
+        }
+    }).trigger('change'); 
+});
+
+</script>
 <script type="text/javascript">
    var payrollTypeSelect = document.getElementById('payroll_type');
    var asteriskSpan = document.getElementById('asterisk');
@@ -1285,8 +1300,12 @@
       function salesCommisionInput(input) {
          const value = input.value;
          const validValue = value.match(/^\d*%?$/);
-         if (!validValue) {
+         if (!validValue || value.length > 3) {
             input.value = value.slice(0, -1); 
+         }
+
+         if (parseInt(value) > 100) {
+            input.value = value.slice(0, -1);
          }
       }
 

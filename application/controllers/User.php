@@ -247,7 +247,7 @@ public function company_insert_branch()
         'lc_tax_id'               => $this->input->post('localtx', TRUE),
         'State_Sales_Tax_Number'  => $this->input->post('State_Sales_Tax_Number', TRUE),
         'create_by'               => $uid,
-        'status'                  => 0
+        'status'                  => 1
     ];
 
     $this->db->insert('company_information', $company_data);
