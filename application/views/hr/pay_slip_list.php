@@ -79,6 +79,15 @@
    </section>
 </div>
 
+<style type="text/css">
+.style-column {
+    max-width: 200px;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+}
+</style>
+
 <script type="text/javascript">
 
 var payslipDataTable;
@@ -115,8 +124,8 @@ $(document).ready(function() {
         },
          "columns": [
          { "data": "table_id" },
-         { "data": "first_name" },
-         { "data": "job_title" },
+         { "data": "first_name" , "className": "style-column" },
+         { "data": "job_title" , "className": "style-column" },
          { "data": "month" },
          { "data": "total_hours" },
          { "data": "overtime" },

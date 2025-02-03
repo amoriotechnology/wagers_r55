@@ -100,6 +100,15 @@
    </section>
 </div>
 
+<style type="text/css">
+.style-column {
+    max-width: 200px;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+}
+</style>
+
 <script type="text/javascript">
 var federalincomeDataTable;
 $(document).ready(function() {
@@ -133,8 +142,8 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             }
         },
          "columns": [
-            { "data": "table_id" },
-            { "data": "first_name" },
+            { "data": "id" },
+            { "data": "first_name" , "className": "style-column" },
             { "data": "gross" },
             { "data": "net" },
             { "data": "f_employee" },
@@ -372,7 +381,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             {
                 extend: 'colvis',
                 className: 'btn-sm',
-                columnText: function (dt, idx, title) {  console.log(idx, "idx");
+                columnText: function (dt, idx, title) {  
                     if (idx == 4 && title === 'Employee Contribution') {
                         return 'Federal Employee Contribution';
                     } else if (idx == 5 && title === 'Employer Contribution') {

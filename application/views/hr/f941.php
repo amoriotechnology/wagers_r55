@@ -1,4 +1,5 @@
 <style>
+
 .pe-7s-cart{
     position: absolute;
     top: -44px;
@@ -24,53 +25,78 @@
  }
  .navbar {
     height: 40px;
+
  }
  .sidebar-toggle{
     margin-top: -97px;
     margin-left: -971px;
  }
+
 .pe-7s-bell{
     position: relative;
     left: 768px;
 }
+
   </style>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/css/timesheet/bootstrap.min.css">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" href="style.css" />
 
+    <title>Document</title>
   </head>
   <body>
+ 
+
 
 <body bgcolor="#A0A0A0" vlink="blue" link="blue"   >
 <div id="download"  >
+
+
     <div class="container-fluid" id="one">
       <div class="row">
+     
       <img src="<?php echo base_url()  ?>assets/images/941_1.jpg"  style="width:99%; margin-top: -2px; "  />
+    
       <?php
 $Federal_Pin_Number = isset($get_cominfo[0]['Federal_Pin_Number']) ? $get_cominfo[0]['Federal_Pin_Number'] : '';
 if (strlen($Federal_Pin_Number) >= 9) {
     $one = substr($Federal_Pin_Number, 0, 2);
     $two = substr($Federal_Pin_Number, -7);
+
     $one1 = $one[0];
     $one2 = $one[1];
-    $two3 = $two[0];
-    $two4 = $two[1];
-    $two5 = $two[2]; 
-    $two6 = $two[3]; 
-    $two7 = $two[4];
-    $two8 = $two[5];
-    $two9 = $two[6];
+
+    $two3 = $two[0]; // Corrected from $two[2]
+    $two4 = $two[1]; // Corrected from $two[3]
+    $two5 = $two[2]; // Corrected from $two[4]
+    $two6 = $two[3]; // Corrected from $two[5]
+    $two7 = $two[4]; // Corrected from $two[6]
+    $two8 = $two[5]; // Corrected from $two[7]
+    $two9 = $two[6]; // Corrected from $two[8]
+
 } else {
-    $one = '00';$two = '0000000'; 
+    $one = '00'; // Example default value
+    $two = '0000000'; // Example default value
 }
 ?>
+
+      
+      
       <div class="two-digit d-flex gap-3">
+       
           <input class="ein-number" value=" <?php echo $one1; ?>" />
           <input class="ein-number second-value" value="<?php echo $one2; ?>" />
+      
         </div>
         <div class="two-digit-2 d-flex gap-1">
           <input class="ein-number-2" value="<?php echo $two3; ?>" />
@@ -105,25 +131,35 @@ if (strlen($Federal_Pin_Number) >= 9) {
             value="<?php echo $two9; ?>"
           />
         </div>
+
+
+
         <?php
  if (isset($get_cominfo) && !empty($get_cominfo)) {
     $company_name = $get_cominfo[0]['company_name'];
     $mobile  = $get_cominfo[0]['mobile'];
+
 } else {
      $company_name = '';
      $mobile  = '';
 }
 ?>
+
         <div class="name-text">
           <input type="text" value="<?php echo $company_name; ?>" />
         </div>
         <div class="trade-text">
           <input type="text" value="<?php echo $company_name; ?>" />
         </div>
+
         <?php
 $address = isset($get_cominfo[0]['address']) ? $get_cominfo[0]['address'] : '';
 $get_address = explode(',' , $address);
 ?>
+
+
+
+  
 <div class="qq1">
     <?php $isQ1 = ($selectedValue == 'Q1'); ?>
     <input type="checkbox" name="quarter[]" <?php echo $isQ1 ? 'checked' : ''; ?>>
@@ -140,6 +176,8 @@ $get_address = explode(',' , $address);
     <?php $isQ4 = ($selectedValue == 'Q4'); ?>
     <input type="checkbox" name="quarter[]" <?php echo $isQ4 ? 'checked' : ''; ?>>
 </div>
+
+ 
         <div class="Address-text">
           <input type="text" value="<?php echo $get_address[0]; ?>" />
         </div>
@@ -161,148 +199,250 @@ $get_address = explode(',' , $address);
         <div class="postal-code">
           <input type="text" value="" />
         </div>
+
+ 
+        
         <div class="row1">
           <input type="text" value="<?php echo $gt[0]['count_rows']; ?>"  style="margin-left: 9px;"/>
         </div>
+
+
+
+        
         <?php
+
+
 $total_amount_sum = '0';
+// Check if get_941_sc_info is set and not empty, and add its value to $total_amount_sum
 if (isset($get_941_sc_info[0]['salebalanceamount'])) {
     $total_amount_sum += $get_941_sc_info[0]['salebalanceamount'];
 }
+// Check if $tif is set, then iterate over it and add each total_amount to $total_amount_sum
 if (isset($tif)) {
     foreach ($tif as $row) {
         $total_amount_sum += ($row['sum_total_amount']);
+       
     }
 $total_amount_sum = $total_amount_sum - $get_941_sc_info[0]['salebalanceamount'];
 }
+
+
+
+ 
 $amount_partss = explode('.', $total_amount_sum);
+// Extract the integer and decimal parts
 $integer_parts = isset($amount_partss[0]) ? $amount_partss[0] : '0';
 $decimal_parts = isset($amount_partss[1]) ? substr($amount_partss[1], 0, 2) : '00';
 ?>
+
+
+    
         <div class="row2">
           <input type="text" value="$<?php echo $integer_parts; ?>"  style="text-align:right;" />
           <input type="text" value="<?php echo $decimal_parts; ?>" />
+
         </div>
+
+
         <?php
 $federal_sum = '0';
 if (isset($tif)) {
+  
      foreach ($tif as $row) {
-        $federal_sum += $row['sum_f_tax']; 
+        $federal_sum += $row['sum_f_tax']; // Add each total_amount to the sum
 }
 }
 $amount_partsf = explode('.', $federal_sum);
+
+// Extract the integer and decimal parts
 $integer_part_f = isset($amount_partsf[0]) ? $amount_partsf[0] : '0';
 $decimal_part_f = isset($amount_partsf[1]) ? substr($amount_partsf[1], 0, 2) : '00';
-$decimal_part_f = str_pad($decimal_part_f, 2, '0');
 ?>
+
         <div class="row3">
           <input type="text" value="$<?php echo $integer_part_f; ?>" style="margin-left: -41px;text-align:right;" />
           <input type="text" value="<?php echo $decimal_part_f; ?>"  style="margin-left: 2px;" />
+
         </div>
+
+
+
         <div class="row4">
           <input type="checkbox" />
         </div>
+
         <?php
+  
   $amount_parts_s = explode('.', $total_amount_sum);
+
+  // Extract the integer and decimal parts
  $integer_part_s = isset($amount_parts_s[0]) ? $amount_parts_s[0] : '0';
  $decimal_part_s = isset($amount_parts_s[1]) ? substr($amount_parts_s[1],0 ,2) : '00';
  ?>
+ 
+
+
+
         <div class="row5a">
           <input type="text" value="$<?php echo $integer_part_s; ?>"  style="margin-left: -34px;text-align:right;"  />
           <input type="text" value="<?php echo $decimal_part_s; ?>"  style="    margin-left: 4px;" />
         </div>
+
+          
 <?php
 $value =$total_amount_sum * 0.124;
  $s = explode('.', $value);
+// Extract the integer and decimal parts
 $integer = isset($s[0]) ? $s[0] : '0';
 $decimal = isset($s[1]) ? substr($s[1],0,2) : '00';
-$decimal = str_pad($decimal, 2, '0');
 ?>    
+
         <div class="row5a2">
-          <input type="text" value="$<?php echo $integer; ?>" style="margin-left: -43px;text-align:right;" />
+          <input type="text" value="$<?php echo $integer; ?>" style="margin-top:6px;margin-left: -43px;text-align:right;" />
           <input type="text" value="<?php echo $decimal ; ?>" style="margin-left: 3px;" />
+
+
+
         </div>
+
+
+
+ 
+ 
+  
         <div class="row5b">
           <input type="text" value="" />
         </div>
         <div class="row5b2">
           <input type="text" value="" />
         </div>
+
+ 
+
                 <?php
+       
         $amount_partss = explode('.', $total_amount_sum);
+
+        // Extract the integer and decimal parts
         $integer_parts = isset($amount_partss[0]) ? $amount_partss[0] : '0';
         $decimal_parts = isset($amount_partss[1]) ? substr($amount_partss[1], 0, 2) : '00';
         ?>
+ 
+
+ 
+    
         <div class="row5c">
-          <input type="text" value="$<?php echo $integer_parts; ?>" style="margin-left: -34px;text-align:right;"  />
+          <input type="text" value="$<?php echo $integer_parts; ?>" style="margin-top:6px;margin-left: -34px;text-align:right;"  />
           <input type="text" value="<?php echo $decimal_parts; ?>"  style="margin-left: 4px;" />
+
         </div>
+
                     <?php
             $medicare = '0';
             if (isset($tif)) {
+            
                 foreach ($tif as $row) {
-                    $medicare += $row['sum_m_tax']; 
+                    $medicare += $row['sum_m_tax']; // Add each total_amount to the sum
             }
             }
             $amount_parts_m = explode('.', $total_amount_sum);
+            // Extract the integer and decimal parts
             $integer_part_m = isset($amount_parts_m[0]) ? $amount_parts_m[0] : '0';
             $decimal_part_m = isset($amount_parts_m[1]) ? substr($amount_parts_m[1],0,2) : '00';
             $medicare_cal=$total_amount_sum *0.029;
             if (strpos($medicare_cal, '.') !== false) {
+                // Split the $medicare_cal by dot
                 $amount_parts_mcal = explode('.', $medicare_cal);
+
+                // Extract the integer and decimal parts
                 $integer_part_mcal = isset($amount_parts_mcal[0]) ? $amount_parts_mcal[0] : '0';
                 $decimal_part_mcal = isset($amount_parts_mcal[1]) ? substr($amount_parts_mcal[1],0,2) : '00';
             } else {
+                // If $medicare_cal does not contain a dot, set default values
                 $integer_part_mcal = $medicare_cal;
                 $decimal_part_mcal = '00';
             }
             ?>
+ 
         <div class="row5c2">
-          <input type="text" value="$<?php echo $integer_part_mcal  ; ?>"  style="margin-left: -53px;text-align:right;"  />
+          <input type="text" value="$<?php echo $integer_part_mcal  ; ?>"  style="margin-top:6px;margin-left: -53px;text-align:right;"  />
           <input type="text" value="<?php echo $decimal_part_mcal  ; ?>" style="margin-left: 4px;" />
+
         </div>
+
+
+  
         <div class="row5d">
           <input type="text" value="" />
         </div>
         <div class="row5d2">
           <input type="text" value="" />
         </div>
+
+
         <?php
+     
     $ssw = $total_amount_sum * 0.124; 
     $mw = $total_amount_sum * 0.029; 
-    $gt = $ssw + $mw; 
+    $gt = $ssw + $mw; // Corrected the missing $ sign
+
 $ovt = explode('.', $gt);
+// Extract the integer and decimal parts
 $integer_parts = isset($ovt[0]) ? $ovt[0] : '0';
 $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
+
+ // Use $gt for further operations or output
 ?> 
+   
+    
         <div class="row5e">
-          <input type="text" value="$<?php echo $integer_parts  ; ?>" style=" margin-left: -44px;text-align:right;"  />
+          <input type="text" value="$<?php echo $integer_parts  ; ?>" style=" margin-top:6px;margin-left: -44px;text-align:right;"  />
+      
           <input type="text" value="<?php echo $decimal_parts  ; ?>" style="margin-left: 5px;" />
+
         </div>
+
+ 
+
         <div class="row5f">
           <input type="text" value="" />
         </div>
+
+
+
         <?php
-          $federal_sum = '0';
-          if (isset($tif)) {
-               foreach ($tif as $row) {
-                  $federal_sum += $row['sum_f_tax']; 
-          }
-          }
-          $ssw = $total_amount_sum * 0.124; 
-          $mw = $total_amount_sum * 0.029; 
-          $gt = $ssw + $mw;
-          $fot = $federal_sum + $gt; 
-          $fvt = explode('.', $fot);
-          $integer_parts = isset($fvt[0]) ? $fvt[0] : '0';
-           $decimal_parts = isset($fvt[1]) ? substr( $fvt[1],0 ,2) : '00';
-          $final_doller=$integer_parts;
-          $final_cent= $decimal_parts;
-        ?>
+$federal_sum = '0';
+if (isset($tif)) {
+  
+     foreach ($tif as $row) {
+        $federal_sum += $row['sum_f_tax']; // Add each total_amount to the sum
+}
+}
+
+$ssw = $total_amount_sum * 0.124; 
+$mw = $total_amount_sum * 0.029; 
+$gt = $ssw + $mw; // Additional calculations based on total amount sum
+
+$fot = $federal_sum + $gt; // Corrected by adding a semicolon at the end
+
+$fvt = explode('.', $fot);
+// Extract the integer and decimal parts
+$integer_parts = isset($fvt[0]) ? $fvt[0] : '0';
+ $decimal_parts = isset($fvt[1]) ? substr( $fvt[1],0 ,2) : '00';
+$final_doller=$integer_parts;
+$final_cent= $decimal_parts;
+
+?>
+ 
         <div class="row6">
-          <input type="text" value="$<?php echo $integer_parts; ?>"  style=" margin-left: -147px;text-align:right;" />
+          <input type="text" value="$<?php echo $integer_parts; ?>"  style=" margin-top:6px;margin-left: -147px;text-align:right;" />
           <input type="text" value="<?php echo  $decimal_parts; ?>"   style="margin-left: 5px;" />
+
+       
         </div>
+
+
+
         <div class="row7">
           <input type="text" value=" " />
         </div>
@@ -312,20 +452,23 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
         <div class="row9">
           <input type="text" value=" " />
         </div>
+
+        
+    
+    
         <div class="row10">
-          <input type="text" value="$<?php echo $integer_parts; ?>" style="margin-left: -65px;width: 100px;text-align:right;" />
+          <input type="text" value="$<?php echo $integer_parts; ?>" style="margin-top:6px;margin-left: -65px;width: 100px;text-align:right;" />
+     
           <input type="text" value="<?php echo $decimal_parts; ?>"  style="margin-left: 5px;" />
+
         </div>
-        <?php
-          $smallBusiness11 = 0.00;
-          list($smallBusiness11, $smallBusinessdecimalPart) = explode('.', $smallBusiness11) + ['00', '00'];
-        ?>
+
+
         <div class="row11">
-          <input type="text" value="$<?php echo $smallBusiness11; ?>" style="margin-left: -65px;width: 100px;text-align:right;" />
-          <input type="text" value="<?php echo $smallBusinessdecimalPart; ?>"  style="margin-left: 5px;" />
+          <input type="text" value=" " />
         </div>
         <div class="row12">
-         <input type="text" value="$<?php echo $integer_parts + $smallBusiness11; ?>" style="margin-top:5px;margin-left: -65px;width: 100px;text-align:right;" />
+         <input type="text" value="$<?php echo $integer_parts; ?>" style="margin-top:6px;margin-left: -65px;width: 100px;text-align:right;" />
         <input type="text" value="<?php echo $decimal_parts; ?>"  style="margin-left: 5px;" />
         </div>
         <div class="row13">
@@ -345,14 +488,20 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
         </div>
       </div>
     </div>
+    <!-- second-page   -->
     <div class="container-fluid"  id="two" >
       <div class="row">
+        <!-- <img src="img/941-2.jpg" alt="" /> -->
         <img src="<?php echo base_url()  ?>assets/images/941_2.jpg"  style="width: 99%"   />
+
+      
         <div class="f41-name">
-          <input type="text" value="<?php echo $company_name; ?>" />
+          <input type="text" value="<?php echo $company_name; ?>" style="margin-top:4px;"/>
         </div>
+
+       
         <div class="f41-ein">
-          <input type="text" value="<?php echo $Federal_Pin_Number; ?>" />
+          <input type="text" value="<?php echo $Federal_Pin_Number; ?>" style="margin-top:4px;"/>
         </div>
         <div class="row16a">
           <input type="checkbox" />
@@ -400,16 +549,16 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
           <input type="text" value="" />
         </div>
         <div class="row19-date">
-          <input type="text" value="<?php echo date('m/d/Y'); ?>" />
+          <input type="text" value="<?php echo date('m/d/Y'); ?>" style="margin-top:4px" />
         </div>
         <div class="row19-name">
-          <input type="text" value="<?php echo $company_name; ?>" />
+          <input type="text" value="<?php echo $company_name; ?>" style="margin-top:4px"/>
         </div>
         <div class="row19-title">
-          <input type="text" value="Admin" />
+          <input type="text" value="Admin" style="margin-top:4px"/>
         </div>
         <div class="row19-day">
-          <input type="text" value="<?php echo $mobile; ?>" />
+          <input type="text" value="<?php echo $mobile; ?>" style="margin-top:4px"/>
         </div>
         <div class="pre-name">
           <input type="text" value=" " />
@@ -445,19 +594,35 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
           <input type="text" value=" " />
         </div>
       </div>
+
+     
     </div>
     <div class="container-fluid" id="three" >
       <div class="row">
+        <!-- <img src="img/942-3.jpg" alt="" class="f941-img3"> -->
         <img src="<?php echo base_url()  ?>assets/images/941_3.jpg"  style="width: 99%"    />
+
+
+
+
+
         <div class="row1-ein">
             <?php  
-              $first_two_chars = substr($Federal_Pin_Number, 0, 2);
-              $remaining_chars = substr($Federal_Pin_Number, 2);
-              $remaining_chars = str_replace('-', '', $remaining_chars);
+        
+
+// Extract the first two characters
+$first_two_chars = substr($Federal_Pin_Number, 0, 2);
+
+// Extract the remaining characters
+$remaining_chars = substr($Federal_Pin_Number, 2);
+$remaining_chars = str_replace('-', '', $remaining_chars);
             ?>
             <input type="text" style='font-size:12px;width:25px;' value="<?php  echo $first_two_chars ; ?> " />
              <input type="text" style='font-size:12px;' value="<?php  echo $remaining_chars ; ?> " />
           </div>
+
+
+
           <div class="dollar">
             <input type="text" style='font-size:15px;' value="<?php echo "$".$final_doller; ?>"   />
           </div>
@@ -465,42 +630,53 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
             <input type="text" style=' font-size:15px;' value="<?php echo $final_cent; ?>" />
           </div>
           <div class="busniess-name">
-            <input type="text" style='font-size:12px;width:100%;' value="<?php echo $company_name; ?> " />
+            <input type="text" value="<?php echo $company_name; ?>" />
           </div>
           <div class="b-address">
-            <input type="text" style='font-size:12px;width:100%;' value="<?php echo $get_address[0]; ?> " />
+            <input type="text" value="<?php echo $get_address[0]; ?>" />
           </div>
           <div class="city-state-code">
-            <input type="text" style='font-size:12px;width:100%;' value="<?php echo $get_address[1] .' '. $get_address[2] .' '. $get_address[3] ; ?> " />
+            <input type="text" value="<?php echo $get_address[1] .' '. $get_address[2].' '. $get_address[3]; ?>" />
           </div>
+
+
+
+
+
+
           <div class="q1">
     <?php $isQ1 = ($selectedValue == 'Q1'); ?>
     <input type="radio" name="quarter" <?php echo $isQ1 ? 'checked' : ''; ?> id="q1">
 </div>
+
 <div class="q2">
     <?php $isQ2 = ($selectedValue == 'Q2'); ?>
     <input type="radio" name="quarter" <?php echo $isQ2 ? 'checked' : ''; ?> id="q2">
 </div>
+
 <div class="q3">
     <?php $isQ3 = ($selectedValue == 'Q3'); ?>
     <input type="radio" name="quarter" <?php echo $isQ3 ? 'checked' : ''; ?> id="q3">
 </div>
+
 <div class="q4">
     <?php $isQ4 = ($selectedValue == 'Q4'); ?>
     <input type="radio" name="quarter" <?php echo $isQ4 ? 'checked' : ''; ?> id="q4">
 </div>
+
+
+
+
       </div>
+       
     </div>
   </body>
-  <?php
-   $modaldata['bootstrap_modals'] = array('generatedownload');
-   $this->load->view('include/bootstrap_modal', $modaldata);
-?>
 </html>
 
 <style>
     input {
   border: 0;
+  /* background-color: #f1f4ff; */
   background-color: transparent;
 }
 .ein-number {
@@ -517,6 +693,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
   box-sizing: border-box;
   position: relative;
 }
+
 .two-digit {
   position: absolute;
   top: 85px;
@@ -529,71 +706,89 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
   left: 282px;
   font-size: medium;
 }
+/* name-box */
 .name-text {
   position: absolute;
   top: 113px;
   left: 176px;
   font-size: medium;
+
 }
 .name-text input {
   height: 20px;
   width: 250px;
   font-size: medium;
+
 }
+/* trade-box */
 .trade-text {
   position: absolute;
   top: 143px;
   left: 147px;
   font-size: medium;
+
 }
 .trade-text input {
   height: 20px;
   width: 250px;
   font-size: medium;
+
 }
+/* address-text */
 .Address-text {
   position: absolute;
   top: 174px;
   left: 102px;
   font-size: medium;
+
 }
 .Address-text input {
   height: 20px;
   width: 250px;
   font-size: medium;
+
 }
+/* city-text */
 .city-text {
   position: absolute;
   top: 211px;
   left: 102px;
   font-size: medium;
+
 }
 .city-text input {
   height: 20px;
   width: 225px;
   font-size: medium;
+
 }
+/* state-text */
 .state-text {
   position: absolute;
   top: 211px;
   left: 355px;
   font-size: medium;
+
 }
 .state-text input {
   height: 20px;
   width: 30px;
   font-size: medium;
+
 }
+/* zipcode-text */
 .zipcode-text {
   position: absolute;
   top: 211px;
   left: 410px;
   font-size: medium;
+
 }
 .zipcode-text input {
   height: 20px;
   width: 80px;
 }
+/* country */
 .country {
   position: absolute;
   top: 249px;
@@ -603,6 +798,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
   height: 20px;
   width: 100px;
 }
+/* foreign */
 .foreign {
   position: absolute;
   top: 247px;
@@ -612,6 +808,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
   height: 20px;
   width: 100px;
 }
+/* postal-code */
 .postal-code {
   position: absolute;
   top: 249px;
@@ -626,6 +823,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
   top: 370px;
   left: 630px;
   font-size: medium;
+
 }
 .row1 input {
   height: 20px;
@@ -633,9 +831,10 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
 }
 .row2 {
   position: absolute;
-  top: 397px;
+  top: 395px;
   left: 612px;
   font-size: medium;
+
 }
 .row2 input {
   height: 20px;
@@ -643,9 +842,10 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
 }
 .row3 {
   position: absolute;
-  top: 424px;
+  top: 420px;
   left: 653px;
   font-size: medium;
+
 }
 .row3 input {
   height: 20px;
@@ -662,20 +862,24 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
 }
 .row5a {
   position: absolute;
-  top: 489px;
+  top: 486px;
   left: 309px;
   font-size: medium;
+
 }
 .row5a input {
   height: 20px;
   width: 80px;
   font-size: medium;
+
 }
+
 .row5a2 {
   position: absolute;
-  top: 489px;
+  top: 486px;
   left: 491px;
   font-size: medium;
+
 }
 .row5a2 input {
   height: 20px;
@@ -701,9 +905,10 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
 }
 .row5c {
   position: absolute;
-  top: 539px;
+  top: 536px;
   left: 309px;
   font-size: medium;
+
 }
 .row5c input {
   height: 20px;
@@ -711,9 +916,10 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
 }
 .row5c2 {
   position: absolute;
-  top: 539px;
+  top: 536px;
   left: 500px;
   font-size: medium;
+
 }
 .row5c2 input {
   height: 20px;
@@ -724,6 +930,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
   top: 568px;
   left: 321px;
   font-size: medium;
+
 }
 .row5d input {
   height: 20px;
@@ -740,9 +947,10 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
 }
 .row5e {
   position: absolute;
-  top: 600px;
+  top: 596px;
   left: 655px;
   font-size: medium;
+
 }
 .row5e input {
   height: 20px;
@@ -753,12 +961,14 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
   top: 621px;
   left: 655px;
   font-size: medium;
+
 }
 .row6 {
   position: absolute;
-  top: 653px;
+  top: 646px;
   left: 655px;
   font-size: medium;
+
 }
 .row7 {
   position: absolute;
@@ -777,19 +987,19 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
 }
 .row10 {
   position: absolute;
-  top: 753px;
+  top: 747px;
   left: 655px;
   font-size: medium;
+
 }
 .row11 {
   position: absolute;
-  top: 778px;
+  top: 772px;
   left: 655px;
-  font-size: medium;
 }
 .row12 {
   position: absolute;
-  top: 798px;
+  top: 792px;
   left: 655px;
   font-size: medium;
 }
@@ -797,7 +1007,6 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
   position: absolute;
   top: 829px;
   left: 655px;
-  font-size: medium;
 }
 .row14 {
   position: absolute;
@@ -819,17 +1028,21 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
   top: 885px;
   left: 653px;
 }
+
+/* second-page */
 .f41-name {
   position: absolute;
-  top: 73px;
-  left: 129px;
+  top: 68px;
+  left: 44px;
   font-size: medium;
+
 }
 .f41-ein {
   position: absolute;
-  top: 75px;
+  top: 70px;
   left: 526px;
   font-size: medium;
+
 }
 .row16a {
   position: absolute;
@@ -881,6 +1094,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
   top: 441px;
   left: 607px;
 }
+
 .row18a {
   position: absolute;
   top: 511px;
@@ -908,28 +1122,35 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
 }
 .row19-date {
   position: absolute;
-  top: 715px;
+  top: 709px;
   left: 148px;
   font-size: medium;
+
 }
 .row19-day{
   position: absolute;
-  top: 713px;
+  top: 708px;
   left: 545px;
   font-size: medium;
+
 }
 .row19-title{
   position: absolute;
-  top: 676px;
+  top: 670px;
   left: 503px;
   font-size: medium;
+
+
 }
 .row19-name  {
   position: absolute;
-  top: 645px;
+  top: 640px;
   left: 503px;
   font-size: medium;
+
 }
+
+
 .pre-name{
   position: absolute;
   top: 765px;
@@ -945,6 +1166,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
   top: 825px;
   left: 162px;
 }
+
 .address{
   position: absolute;
   top: 857px;
@@ -990,6 +1212,8 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
   bottom: 329px;
   left: 83px
 }
+/* third-page */
+
 .cent {
   position: absolute;
   bottom: 330px;
@@ -1040,6 +1264,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
   bottom: 244px;
   left: 173px;
 }
+
 @page {
   size: A4;
   margin: 0;
@@ -1217,6 +1442,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
     height: 20px;
     width: 80px;
   }
+
   .row5a {
     position: absolute;
     top: 755px;
@@ -1226,6 +1452,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
     height: 20px;
     width: 80px;
   }
+
   .row5a2 {
     position: absolute;
     top: 755px;
@@ -1235,6 +1462,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
     height: 20px;
     width: 80px;
   }
+
   .row5b {
     position: absolute;
     top: 795px;
@@ -1253,6 +1481,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
     height: 20px;
     width: 80px;
   }
+
   .row5c {
     position: absolute;
     top: 835px;
@@ -1271,6 +1500,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
     height: 20px;
     width: 80px;
   }
+
   .row5d {
     position: absolute;
     top: 885px;
@@ -1358,6 +1588,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
     height: 25px;
     width: 25px;
   }
+
   .row15b {
     position: absolute;
     top: 1370px;
@@ -1387,6 +1618,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
     height: 25px;
     width: 20px;
   }
+
   .row16b {
     position: absolute;
     top: 298px;
@@ -1405,6 +1637,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
     height: 25px;
     width: 20px;
   }
+
   .tax-month1 {
     position: absolute;
     top: 363px;
@@ -1481,6 +1714,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
     height: 25px;
     width: 20px;
   }
+
   .row19 {
     position: absolute;
     top: 1008px;
@@ -1498,6 +1732,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
   }
   .row19-title {
     position: absolute;
+
     top: 1036px;
     left: 770px;
   }
@@ -1506,6 +1741,10 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
     top: 990px;
     left: 770px;
   }
+
+
+
+
   .pre-name{
     position: absolute;
     top: 1185px;
@@ -1626,10 +1865,13 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
   height: 25px;
   width: 20px;
 }
+ 
 }
 .qq1 input, .qq2 input ,.qq3 input ,.qq4 input{
     height:15px;
     width:20px
+
+
 }
 .qq1{
     position: absolute;
@@ -1651,6 +1893,7 @@ $decimal_parts = isset($ovt[1]) ? substr($ovt[1],0,2) : '00';
     top: 177px;
     left: 531px;
 }
+
 </style>
 
 <script>
@@ -1697,3 +1940,5 @@ async function generatePDF(elements) {
     }
 }
 </script>
+
+ 

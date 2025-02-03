@@ -276,10 +276,11 @@ if ($this->db->field_exists($txd, 'quotation_taxinfo')) {
 
     
     public function delete_row()
-    {
+    {  
         $id = $this->input->post('rowId');
         $tax_type = $this->input->post('taxType');
-        $result = $this->Hrm_model->delete_payrolldata($id, $tax_type);
+        $year = $this->input->post('year');
+        $result = $this->Hrm_model->delete_payrolldata($id, $tax_type, $year);
     }
     
     // Delete for Federal Tax
@@ -310,7 +311,7 @@ if ($this->db->field_exists($txd, 'quotation_taxinfo')) {
     public function create_tax_federal()
     {
         $tax_name = $this->input->post('tax_name', TRUE);
-        $year = date("Y");
+        $year = $this->input->post('year', TRUE);
 
         $user_id = $this->input->post('admin_company_id');
         $decodedId = decodeBase64UrlParameter($user_id);
@@ -329,6 +330,7 @@ if ($this->db->field_exists($txd, 'quotation_taxinfo')) {
         $head_household_to = $this->input->post('head_household_to', TRUE);
 
         $this->db->where('tax', $tax_name);
+        $this->db->where('year', $year);
         $this->db->delete('federal_tax');
 
         for ($i = 0, $n = count($details); $i < $n; $i++) {
@@ -359,17 +361,18 @@ if ($this->db->field_exists($txd, 'quotation_taxinfo')) {
             );
 
             $this->db->where('tax', $tax_name);
+            $this->db->where('year',  $year);
             $this->db->where('single', $sfrom . "-" . $sto);
             $existing = $this->db->get('federal_tax')->row_array();
 
             if ($existing) {
                 $this->db->where('id', $existing['id']);
+                $this->db->where('year', $year);
                 $this->db->update('federal_tax', $data1);
             } else {
                 $this->db->insert('federal_tax', $data1);
             }
         }
-
         $this->session->set_flashdata('message', display('save_successfully'));
         redirect(base_url('Chrm/payroll_setting?id=' . $user_id . '&admin_id=' . $companyId));
     }
@@ -860,7 +863,7 @@ if ($this->db->field_exists($txd, 'quotation_taxinfo')) {
         $type = $_GET['type'];
         $tname = $this->input->post('tax_name', TRUE);
         $tax_name = str_replace("_", " ", $tname);
-        $year = date("Y");
+        $year = $this->input->post('year', TRUE);
         $user_id = $this->input->post('admin_company_id', TRUE);
         $decodedId = decodeBase64UrlParameter($user_id);
         $companyId = $this->input->post('adminId', TRUE);
@@ -877,7 +880,7 @@ if ($this->db->field_exists($txd, 'quotation_taxinfo')) {
         $head_household_to = $this->input->post('head_household_to', TRUE);
 
         $this->db->where('tax', $tax_name);
-
+        $this->db->where('year', $year);
         if ($type == 'statetax') {
             $this->db->delete('state_localtax');
         } elseif ($type == 'weekly') {
@@ -931,11 +934,10 @@ if ($this->db->field_exists($txd, 'quotation_taxinfo')) {
 
     // City Tax
     public function create_citytax_setup()
-    {
-        $type=$_GET['type'];
+    {    
         $tname = $this->input->post('tax_name',TRUE);
         $tax_name= str_replace("_"," ",$tname);
-        $year = date("Y");
+        $year = $this->input->post('year',TRUE);
         $user_id      = $this->input->post('admin_company_id',TRUE);
         $decodedId      = decodeBase64UrlParameter($user_id);
         $companyId      = $this->input->post('adminId',TRUE);
@@ -951,9 +953,9 @@ if ($this->db->field_exists($txd, 'quotation_taxinfo')) {
         $head_household_from = $this->input->post('head_household_from',TRUE);
         $head_household_to = $this->input->post('head_household_to',TRUE);
         $this->db->where('tax',$tax_name);
+        $this->db->where('year',$year);
         $this->db->delete('city_tax_info');
-
-       for ($i = 0, $n = count($details); $i < $n; $i++)
+        for ($i = 0, $n = count($details); $i < $n; $i++)
        {
             $samount = $start_amount[$i];
             $eamount = $end_amount[$i];
@@ -978,9 +980,8 @@ if ($this->db->field_exists($txd, 'quotation_taxinfo')) {
                 'tax'  =>$tname,
                 'created_by' => $decodedId
             );
-
             $this->db->insert('city_tax_info', $data1);
-
+          
         }
         $this->session->set_flashdata('message', display('save_successfully'));
         redirect(base_url('Chrm/payroll_setting?id=' . $user_id . '&admin_id=' . $companyId));
@@ -996,8 +997,8 @@ if ($this->db->field_exists($txd, 'quotation_taxinfo')) {
     {
         $type=$_GET['type'];
         $tname = $this->input->post('tax_name',TRUE);
+        $year = $this->input->post('year', TRUE);
         $tax_name= str_replace("_"," ",$tname);
-        $year = date("Y");
         $user_id      = $this->input->post('admin_company_id',TRUE);
         $decodedId      = decodeBase64UrlParameter($user_id);
         $companyId      = $this->input->post('adminId',TRUE);
@@ -1013,6 +1014,7 @@ if ($this->db->field_exists($txd, 'quotation_taxinfo')) {
         $head_household_from = $this->input->post('head_household_from',TRUE);
         $head_household_to = $this->input->post('head_household_to',TRUE);
         $this->db->where('tax',$tax_name);
+        $this->db->where('year', $year);
         $this->db->delete('county_tax_info');
 
        for ($i = 0, $n = count($details); $i < $n; $i++)

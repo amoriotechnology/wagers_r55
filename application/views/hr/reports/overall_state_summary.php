@@ -1,3 +1,4 @@
+<?php  error_reporting(1);  ?>
 <div class="content-wrapper">
    <section class="content-header" style="height:70px;">
       <div class="header-icon">
@@ -26,6 +27,7 @@
          <div class="panel panel-bd lobidrag" style='height:80px; border: 3px solid #d7d4d6;'>
             <div class='col-sm-12' style="position: relative; left: 50px;">
                <form id="fetch_tax">
+                  <input type="hidden" value="<?php  echo $_GET['id']; ?>" id="company_id" name="company_id"/> 
                   <table class="table" align="center" style="overflow-x: unset;position: relative;">
                      <tr style='text-align:center;font-weight:bold;' class="filters">
                         <td style='visibility:hidden' class="hidden_td search_dropdown" style="color: black;">
@@ -114,7 +116,7 @@
                <table class="federal table table-bordered" cellspacing="0" width="100%" id="federal_summary">
                   <thead class="sortableTable">
                      <tr class="sortableTable__header btnclr">
-                        <th rowspan="2" class="1 value" data-col="1" style="height: 45.0114px; text-align:center; "> <?= 'S.NO'?> </th>
+                        <th rowspan="2" class="1 value" data-col="1" style="height: 45.0114px;width: 60px; text-align:center; "> <?= 'S.NO'?> </th>
                         <th rowspan="2" class="2 value" data-col="2" style="text-align:center; width: 250px;"> <?= 'Employee Name'?> </th>
                         <th rowspan="2" class="3 value" data-col="3" style="text-align:center;width: 120px; "> <?= 'Gross'?> </th>
                         <th rowspan="2" class="3 value" data-col="3" style="text-align:center;width: 120px; "> <?= 'Net'?> </th>
@@ -139,6 +141,7 @@
                         $count=1;
                         if(empty($tax)){  
                            $i=0;
+                           if($fed_tax) {
                            foreach($fed_tax as $f_tax) { ?> 
                      <tr>
                         <td> <?= $count; ?> </td>
@@ -154,7 +157,9 @@
                         <td> <?=  round($f_tax['u_utax_sum'],2); ?> </td>
                         <td> <?php if($mergedArray[$i]['u_utax_sum_er']){echo  round($mergedArray[$i]['u_utax_sum_er'],2); }else{echo '0';}?> </td>
                      </tr>
-                     <?php $count++;$i++; }}  ?> 
+                     <?php $count++;$i++; }
+                           }
+                  }  ?> 
                   </tbody>
                   <tfoot>
                      <?php
@@ -388,7 +393,7 @@ function federal_summary(){
    $.ajax({
       type: "POST",
       dataType: "json",
-      url: "<?= base_url('Chrm/social_taxsearch/'. $_GET['id']); ?>",
+      url: "<?= base_url('Chrm/social_taxsearch/'); ?>",
       data: dataString,
       success: function(response) {
          var employeeData = response.aggregated_employe; 
@@ -470,6 +475,7 @@ function federal_summary(){
    });
 }
 function generateTaxTable(taxType, employerContributions, employeeContributions, table) {
+
    const allTaxTypes = {};
    const taxTypeCounts = {};
    employerContributions.forEach(item => {
@@ -529,41 +535,50 @@ function generateTaxTable(taxType, employerContributions, employeeContributions,
          }
          consolidatedContributions[employeeName][taxKey].employer = parseFloat(item.total_amount).toFixed(2) || "0.00";
       });
-      employeeContributions.forEach(item => {
-         const employeeName = item.employee_name;
-         const taxKey = item.tax + "-" + (item.code ? item.code : "");
-         if (!consolidatedContributions[employeeName]) {
-            consolidatedContributions[employeeName] = {};
-         }
-         if (!consolidatedContributions[employeeName]) {
-            consolidatedContributions[employeeName] = { gross: item.gross || 0, net: item.net || 0 };
-         }
-         if (!consolidatedContributions[employeeName][taxKey]) {
-            consolidatedContributions[employeeName][taxKey] = { employee: "0.00", employer: "0.00" };
-         }
-            consolidatedContributions[employeeName][taxKey].employee = parseFloat(item.total_amount).toFixed(2) || "0.00";
-         consolidatedContributions[employeeName].gross = item.gross || consolidatedContributions[employeeName].gross;
-         consolidatedContributions[employeeName].net = item.net || consolidatedContributions[employeeName].net;
-      });
-      const tbody = table.find("tbody");
-      let serialNumber = 1; 
-      Object.keys(consolidatedContributions).forEach(employeeName => {
-         const contributions = consolidatedContributions[employeeName];
-         const row = $("<tr>");
-         row.append("<td>" + serialNumber++ + "</td>"); 
-         row.append("<td class='style-column'>" + employeeName + "</td>");
-         row.append("<td>$" + (isNaN(parseFloat(contributions.gross)) ? '0.00' : parseFloat(contributions.gross).toFixed(2)) + "</td>");
-         row.append("<td>$" + (isNaN(parseFloat(contributions.net)) ? '0.00' : parseFloat(contributions.net).toFixed(2)) + "</td>");
-         Object.keys(taxTypeMap).forEach(taxType => {
-            const taxes = taxTypeMap[taxType];
-            taxes.forEach(taxKey => {
-               const taxData = contributions[taxKey] || { employee: "0.00", employer: "0.00" };
-               row.append("<td>$" + taxData.employee + "</td>");
-               row.append("<td>$" + taxData.employer + "</td>");
-            });
-         });
-         tbody.append(row);
-      });
+ employeeContributions.forEach(item => {
+    const employeeName = item.employee_name;
+    const taxKey = item.tax + "-" + (item.code ? item.code : "");
+    if (!consolidatedContributions[employeeName]) {
+        consolidatedContributions[employeeName] = { grossSet: false, netSet: false }; 
+    }
+    if (!consolidatedContributions[employeeName].grossSet) {
+        consolidatedContributions[employeeName].gross = item.gross || 0;
+        consolidatedContributions[employeeName].grossSet = true; 
+      
+    }
+    if (!consolidatedContributions[employeeName].netSet) {
+        consolidatedContributions[employeeName].net = item.net || 0;
+        consolidatedContributions[employeeName].netSet = true; 
+
+    }
+    if (!consolidatedContributions[employeeName][taxKey]) {
+        consolidatedContributions[employeeName][taxKey] = { employee: "0.00", employer: "0.00" };
+    }
+    consolidatedContributions[employeeName][taxKey].employee = parseFloat(item.total_amount).toFixed(2) || "0.00";
+
+});
+const tbody = table.find("tbody");
+let serialNumber = 1;
+
+Object.keys(consolidatedContributions).forEach(employeeName => {
+    const contributions = consolidatedContributions[employeeName];
+    const row = $("<tr>");
+    row.append("<td>" + serialNumber++ + "</td>");
+    row.append("<td class='style-column'>" + employeeName + "</td>");
+    row.append("<td>$" + (isNaN(parseFloat(contributions.gross)) ? '0.00' : parseFloat(contributions.gross).toFixed(2)) + "</td>");
+    row.append("<td>$" + (isNaN(parseFloat(contributions.net)) ? '0.00' : parseFloat(contributions.net).toFixed(2)) + "</td>");
+    Object.keys(taxTypeMap).forEach(taxType => {
+        const taxes = taxTypeMap[taxType];
+        taxes.forEach(taxKey => {
+            const taxData = contributions[taxKey] || { employee: "0.00", employer: "0.00" };
+            row.append("<td>$" + taxData.employee + "</td>");
+            row.append("<td>$" + taxData.employer + "</td>");
+        });
+    });
+
+    tbody.append(row);
+});
+
       const tfoot = table.find("tfoot");
       let totalGross = 0;
       let totalNet = 0;

@@ -88,7 +88,7 @@
             right: 'month,agendaWeek,agendaDay',
          },
          defaultDate: currentDate,
-         editable: true,
+         editable: false,
          eventLimit: true, 
          events: eventData
       });

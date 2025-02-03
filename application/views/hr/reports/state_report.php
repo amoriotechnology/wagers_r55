@@ -93,6 +93,14 @@
    </section>
 </div>
 
+<style type="text/css">
+.style-column {
+    max-width: 200px;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+}
+</style>
 
 <script type="text/javascript">
 var federalincomeDataTable;
@@ -136,7 +144,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             { "data": "living_state_tax" },
             { "data": "time_sheet_id" },
             { "data": "month" },
-            { "data": "cheque_date" },
+            { "data": "cheque_date" , "className": "style-column" },
             { "data": "amount" },
             { "data": "weekly" },
             { "data": "employer_tax" },

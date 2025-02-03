@@ -109,7 +109,7 @@
                           
                             <div class="col-sm-4">
                                 <label class=" col-form-label"><?= 'Bank Address' ?><i class="text-danger"></i></label>
-                                <textarea class="form-control" name="Bank_Address" id="Bank_Address" required placeholder="Enter your address"></textarea>
+                                <textarea class="form-control" name="Bank_Address" id="Bank_Address" placeholder="Enter your address"></textarea>
                             </div>
                         
                             <div class="col-sm-4">

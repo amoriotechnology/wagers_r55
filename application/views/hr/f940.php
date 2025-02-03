@@ -39,10 +39,17 @@
    <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
-      <title>940 Form</title>
+      <link
+         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+         rel="stylesheet"
+         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+         crossorigin="anonymous"
+         />
+      <link rel="stylesheet" href="<?php echo base_url()  ?>assets/css/f942.css">
+      <title>Document</title>
    </head>
-   <body bgcolor="#A0A0A0" vlink="blue" link="blue"
+   <body>
+     <body bgcolor="#A0A0A0" vlink="blue" link="blue"   >
          <div id="download"  >
             <div class="container-fluid"  id="one">
                <div class="row">
@@ -56,17 +63,17 @@
                          $one1 = $one[0];
                          $one2 = $one[1];
                      
-                         $two3 = $two[0]; 
-                         $two4 = $two[1]; 
-                         $two5 = $two[2];
-                         $two6 = $two[3];
-                         $two7 = $two[4]; 
-                         $two8 = $two[5]; 
-                         $two9 = $two[6]; 
+                         $two3 = $two[0]; // Corrected from $two[2]
+                         $two4 = $two[1]; // Corrected from $two[3]
+                         $two5 = $two[2]; // Corrected from $two[4]
+                         $two6 = $two[3]; // Corrected from $two[5]
+                         $two7 = $two[4]; // Corrected from $two[6]
+                         $two8 = $two[5]; // Corrected from $two[7]
+                         $two9 = $two[6]; // Corrected from $two[8]
                      
                      } else {
-                         $one = '00'; 
-                         $two = '0000000'; 
+                         $one = '00'; // Example 
+                         $two = '0000000'; // Example 
                      }
                      ?>
                   <div class="two-digit d-flex gap-3">
@@ -159,11 +166,12 @@
                   <div class="typed">
                      <input type="checkbox">
                   </div>
+                  <?php  $split_code = str_split($state_code); ?>
                   <div class="a1">
-                     <input type="text">
+                     <input type="text" value="<?php echo isset($split_code[0]) ? $split_code[0] : ''; ?>">
                   </div>
                   <div class="a2">
-                     <input type="text">
+                     <input type="text" value="<?php echo isset($split_code[1]) ? $split_code[1] : ''; ?>">
                   </div>
                   <div class="b1">
                      <input type="checkbox">
@@ -185,7 +193,8 @@
                   </div>
                   <div class="p2-4e">
                      <input type="checkbox">
-                  </div>          
+                  </div>
+
                   <?php
                      $total_grosspay = $get_paytotal[0]['total_grosspay'];
                      $parts = explode('.', number_format($total_grosspay, 2, '.', ''));
@@ -195,11 +204,11 @@
                      $cent_value=$decimalPart;
                   ?>
                   <div class="total-emp-payment">
-                     <input type="text" value="$<?php echo $integerPart ; ?> "  style="margin-left: -80px;width: 104px;text-align:right;"/>
-                     <input type="text" value="<?php echo $decimalPart ; ?>" style="margin-left: -65px;width: 104px; text-align:right;" />
+                     <input type="text" value="$<?php echo $integerPart ; ?> "  style="margin-left: -80px;width: 104px;text-align:right;"     />
+                     <input type="text" value="<?php echo $decimalPart ; ?>"     />
 
-                    </div>
-                   
+                  </div>
+
                   <?php
                      $exemptFutatax = 0.00;
                      $parts = explode('.', number_format($exemptFutatax, 2, '.', ''));
@@ -208,19 +217,24 @@
                   ?>
 
                   <div class="row5">
-                     <input type="text" value="$<?php echo $futaTax ; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
-                     <input type="text" value="<?php echo $futadecimalPart ; ?> " style="margin-left: -65px;width: 104px; text-align:right;" />
+                     <input type="text" value="$<?php echo $futaTax ; ?> " style="margin-left: -89px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $futadecimalPart ; ?> " style="margin-left: -76px;width: 104px; text-align:right;" />
                   </div>
  
                   <?php
-                     $aboveAmount = $amountabove;
-                     $parts = explode('.', number_format($aboveAmount, 2, '.', ''));
+                     $parts = explode('.', number_format($amt, 2, '.', ''));
+                     $integerPart = $parts[0];
+                     $decimalPart = isset($parts[1]) ? $parts[1] : '00'; 
+                  ?>
+
+                  <?php
+                     $parts = explode('.', number_format($amountabove, 2, '.', ''));
                      $aboveamount1 = isset($parts[0]) ? $parts[0] : '00'; 
                      $aboveamountdecimalPart = isset($parts[1]) ? $parts[1] : '00'; 
                   ?>
                   <div class="total-payment">
-                     <input type="text" value="$<?php echo $aboveamount1; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
-                     <input type="text" value="<?php echo $aboveamountdecimalPart ; ?>" style="margin-left: -65px;width: 104px; text-align:right;" />
+                     <input type="text" value="$<?php echo $aboveamount1; ?> "  style="margin-left: -80px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $aboveamountdecimalPart ; ?>" style="margin-left: -81px;width: 104px; text-align:right;" />
                   </div>
 
                   <?php
@@ -229,8 +243,8 @@
                   ?>
 
                   <div class="subtotal-text">
-                     <input type="text" value="$<?php echo $sub1; ?>" style="margin-left: -89px;width: 104px;text-align:right;"/>
-                     <input type="text" value="<?php echo $subdecimalPart; ?>" style="margin-left: -65px;width: 104px;text-align:right;" />
+                     <input type="text" value="$<?php echo $sub1; ?>" style="margin-left: -86px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $subdecimalPart; ?>" style="margin-left: -76px;width: 104px;text-align:right;" />
                   </div>
 
                   <?php
@@ -239,8 +253,8 @@
                   ?>
 
                   <div class="total-taxable-text">
-                     <input type="text" value="$<?php echo $totaltaxableFutaWagers1 ; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
-                     <input type="text" value="<?php echo $totaltaxableFutaWagersdecimalPart ; ?>" style="margin-left: -65px;width: 104px; text-align:right;" />
+                     <input type="text" value="$<?php echo $totaltaxableFutaWagers1 ; ?> "  style="margin-left: -81px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $totaltaxableFutaWagersdecimalPart ; ?>" style="margin-left: -82px;width: 104px; text-align:right;" />
                   </div>
 
                   <?php
@@ -249,8 +263,8 @@
                   ?>
 
                   <div class="row8">
-                     <input type="text" value="$<?php echo $futaBefore1 ; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
-                     <input type="text" value="<?php echo $futaBeforedecimalPart ; ?>" style="margin-left: -65px;width: 104px; text-align:right;" />
+                     <input type="text" value="$<?php echo $futaBefore1 ; ?> "  style="margin-left: -79px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $futaBeforedecimalPart ; ?>" style="margin-left: -84px;width: 104px; text-align:right;" />
                   </div>
 
                   <?php
@@ -259,8 +273,8 @@
                   ?>
 
                   <div class="row9">
-                     <input type="text" value="$<?php echo $excludedStateUnemploymentTax1 ; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
-                     <input type="text" value="<?php echo $excludedStateUnemploymentTaxdecimalPart ; ?>" style="margin-left: -65px;width: 104px; text-align:right;" />
+                     <input type="text" value="$<?php echo $excludedStateUnemploymentTax1 ; ?> "  style="margin-left: -78px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $excludedStateUnemploymentTaxdecimalPart ; ?>" style="margin-left: -86px;width: 104px; text-align:right;" />
                   </div>
                   <div class="row10">
                      <input type="text" value="" />
@@ -268,14 +282,13 @@
                   <div class="row11">
                      <input type="text" value="" />
                   </div>
-
-                  <?php
+                 <?php
                      $futaTaxAfterAdjustments = number_format($futaBeforeAdjustments + $excludedStateUnemploymentTax, 2, '.', '');
                      list($futaTaxAfterAdjustments1, $futaTaxAfterAdjustmentsdecimalPart) = explode('.', $futaTaxAfterAdjustments) + ['00', '00'];
                   ?>
                   <div class="row12">
-                     <input type="text" value="$<?php echo $futaTaxAfterAdjustments1 ; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
-                     <input type="text" value="<?php echo $futaTaxAfterAdjustmentsdecimalPart ; ?>" style="margin-left: -65px;width: 104px; text-align:right;" />
+                     <input type="text" value="$<?php echo $futaTaxAfterAdjustments1 ; ?> "  style="margin-left: -79px;width: 104px;text-align:right;"/>
+                     <input type="text" value="<?php echo $futaTaxAfterAdjustmentsdecimalPart ; ?>" style="margin-left: -86px;width: 104px; text-align:right;" />
                   </div>
                   <div class="row13">
                      <input type="text" value="" />
@@ -299,21 +312,22 @@
                <div class="row">
                   <img src="<?php echo base_url()  ?>assets/images/f940_02.jpg" width="100%" />
                
+               
                   <div class="trade-name">
-                     <input type="text" value="<?php echo $company_name; ?>">
+                     <input type="text" value="<?php echo $company_name; ?>" style="margin-top:4px;">
                   </div>
+ 
                   <div class="ein">
-                     <input type="text" value="<?php echo $Federal_Pin_Number;  ?>" />
+                     <input type="text" value="<?php echo $Federal_Pin_Number;  ?>" style="margin-top:4px;"/>
                   </div>
-                  
                   <?php
                      $quater1 = number_format($sumQuaterWiseUnemployment['Q1'], 2, '.', '');
                      list($quaterwise1, $quater1decimalPart) = explode('.', $quater1) + ['00', '00'];
                   ?>
 
                   <div class="row16a">
-                     <input type="text" value="$<?php echo $quaterwise1; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
-                     <input type="text" value="<?php echo $quater1decimalPart ; ?>" style="margin-left: -59px;width: 104px; text-align:right;" />
+                     <input type="text" value="$<?php echo $quaterwise1; ?> "  style="margin-top: 4px;margin-left: -7px;width: 38px;text-align:right;"/>
+                     <input type="text" value="<?php echo $quater1decimalPart ; ?>" style="margin-left: -161px; text-align:right;" />
                   </div>
 
                   <?php
@@ -321,27 +335,37 @@
                      list($quaterwise2, $quater2decimalPart) = explode('.', $quater2) + ['00', '00'];
                   ?>
                   <div class="row16b">
-                     <input type="text" value="$<?php echo $quaterwise2; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
-                     <input type="text" value="<?php echo $quater2decimalPart ; ?>" style="margin-left: -59px;width: 104px; text-align:right;" />
+                     <input type="text" value="$<?php echo $quaterwise2; ?> "  style="margin-top: 4px;margin-left: -7px;width: 38px;text-align:right;"/>
+                     <input type="text" value="<?php echo $quater2decimalPart ; ?>" style="margin-left: -161px; text-align:right;" />
                   </div>
                   <?php
                      $quater3 = number_format($sumQuaterWiseUnemployment['Q3'], 2, '.', '');
-                     list($quaterwise3, $quater3decimalPart) = explode('.', $quater3) + ['00', '00'];
+                     list($quaterwise3, $quater4decimalPart) = explode('.', $quater3) + ['00', '00'];
                   ?>
                   <div class="row16c">
-                     <input type="text" value="$<?php echo $quaterwise3; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
-                     <input type="text" value="<?php echo $quater3decimalPart ; ?>" style="margin-left: -59px;width: 104px; text-align:right;" />
+                     <input type="text" value="$<?php echo $quaterwise3; ?> "  style="margin-top: 4px;margin-left: -7px;width: 38px;text-align:right;"/>
+                     <input type="text" value="<?php echo $quater4decimalPart ; ?>" style="margin-left: -161px; text-align:right;" />
                   </div>
                   <?php
                      $quater4 = number_format($sumQuaterWiseUnemployment['Q4'], 2, '.', '');
-                     list($quaterwise3, $quater4decimalPart) = explode('.', $quater4) + ['00', '00'];
+                     list($quaterwise4, $quater4decimalPart) = explode('.', $quater4) + ['00', '00'];
                   ?>
                   <div class="row16d">
-                     <input type="text" value="$<?php echo $quaterwise3; ?> "  style="margin-left: -89px;width: 104px;text-align:right;"/>
-                     <input type="text" value="<?php echo $quater3decimalPart ; ?>" style="margin-left: -59px;width: 104px; text-align:right;" />
+                     <input type="text" value="$<?php echo $quaterwise4; ?>"  style="margin-top: 4px;margin-left: -11px;width: 38px;text-align:right;"/>
+                     <input type="text" value="<?php echo "00" ; ?>" style="margin-left: -159px; text-align:right;" />
                   </div>
-                  <div class="row17">
-                     <input type="text" value="" />
+                 <div class="row17">
+                     <input type="text" style="margin-top: 4px;margin-left: 13px;width: 38px;text-align:right;" value="$<?php
+                        $Quater1 = $sumQuaterWiseUnemployment['Q1'];
+                        $Quater2 = $sumQuaterWiseUnemployment['Q2'];
+                        $Quater3 = $sumQuaterWiseUnemployment['Q3'];
+                        $Quater4 = $sumQuaterWiseUnemployment['Q4'];
+                         $total = ($Quater1 + $Quater2 + $Quater3 + $Quater4);
+                         $quater5 = number_format($total, 2, '.', '');
+                         list($quaterwise5, $quater5decimalPart) = explode('.', $quater5) + ['00', '00'];
+                         echo $quaterwise5;
+                     ?>" />
+                     <input type="text" value="<?php echo $quater5decimalPart; ?>" style="margin-left: -156px;text-align:right;" />
                   </div>
                   <div class="row17a">
                      <input type="text" value="" />
@@ -369,16 +393,16 @@
                      <input type="text" value="" />
                   </div>
                   <div class="printname">
-                     <input type="text" value="<?php echo $company_name; ?>" />
+                     <input type="text" value="<?php echo $company_name; ?>" style="margin-top:4px;"/>
                   </div>
                   <div class="printitle">
-                     <input type="text" value="Admin" />
+                     <input type="text" value="Admin" style="margin-top:4px;"/>
                   </div>
                   <div class="date">
-                     <input type="text" style="letter-spacing: 3px;" value="<?php echo date('m d Y'); ?>" />
+                     <input type="text" value="<?php echo date('m/d/Y'); ?>" style="margin-top:4px;"/>
                   </div>
                   <div class="dayphone">
-                     <input type="text" value="<?php echo $mobile; ?>" />
+                     <input type="text" value="<?php echo $mobile; ?>" style="margin-top:4px;"/>
                   </div>
                   <div class="pre-name">
                      <input type="text" value="" />
@@ -418,27 +442,30 @@
             <!-- third-page -->
             <div class="container-fluid"  id="three">
                <div class="row">
-                  <img src="<?php echo base_url()  ?>assets/images/f940_03.jpg" width="100%" />
-                  
+                  <img src="<?php echo base_url()  ?>assets/images/f940_03.jpg" width="100%"/>
+               
                   <div class="row1-ein">
-                     <input type="text" value="<?php echo $Federal_Pin_Number; ?>" />
+                     <input type="text" value="<?php echo $Federal_Pin_Number; ?>" style="position: absolute;top: -17px;"/>
                   </div>
 
                   <div class="dollar">
-                      
-                     <input type="text" value="$<?php echo $dollar_value;  ?>" />
+                       <input type="text" value="$<?php echo $futaTaxAfterAdjustments1 ; ?> "  />
+                    
+                 
                   </div>
+
                   <div class="cent">
-                     <input type="text" value="<?php echo $cent_value;  ?>" />
+                       <input type="text" value="<?php echo $futaTaxAfterAdjustmentsdecimalPart ; ?>" />
+                    
                   </div>
                   <div class="busniess-name">
-                     <input type="text" value="" />
+                     <input type="text" value="<?php echo $company_name; ?>" style="position: absolute;margin-top: -19px;"/>
                   </div>
                   <div class="b-address">
-                     <input type="text" value="" />
+                     <input type="text" value="<?php echo $get_address[0]; ?>" style="position: absolute;margin-top: -19px;"/>
                   </div>
                   <div class="city-state-code">
-                     <input type="text" value="" />
+                     <input type="text" value="<?php echo $get_address[1] .' '. $get_address[2] .' '. $get_address[3]; ?>" style="position: absolute;margin-top: -19px;"/>
                   </div>
                </div>
             </div>
@@ -449,12 +476,6 @@
                </div>
             </div>
          </div>
-
-<?php 
-   $modaldata['bootstrap_modals'] = array('generatedownload');
-   $this->load->view('include/bootstrap_modal', $modaldata);
-?> 
-
 <style>
 input {
   border: 0;
@@ -462,7 +483,7 @@ input {
   font-size: medium;
 }
 .ein-number {
-  width: 30px;
+  width: 20px;
   height: 20px;
 }
 .ein-number-2 {
@@ -511,8 +532,8 @@ input {
 /* address-text */
 .Address-text {
   position: absolute;
-  top: 180px;
-  left: 107px;
+  top: 177px;
+  left: 105px;
 }
 .Address-text input {
   height: 20px;
@@ -532,7 +553,7 @@ input {
 .state-text {
   position: absolute;
   top: 225px;
-  left: 359px;
+  left: 355px;
 }
 .state-text input {
   height: 20px;
@@ -580,23 +601,23 @@ input {
 }
 .typea{
   position: absolute;
-  top: 124px;
-  left: 553px;
+  top: 121px;
+  left: 543px;
 }
 .typeb{
   position: absolute;
-  top: 124px;
-  left: 553px;
+  top: 145px;
+  left: 543px;
 }
 .typec{
   position: absolute;
-  top: 124px;
-  left: 553px;
+  top: 167px;
+  left: 543px;
 }
 .typed{
   position: absolute;
-  top: 124px;
-  left: 553px;
+  top: 190px;
+  left: 543px;
 }
 .a1 input ,.a2 input{
   height: 20px;
@@ -615,54 +636,54 @@ input {
 }
 .b1{
   position: absolute;
-  top: 386px;
-  left: 590px;
+  top: 378px;
+  left: 579px;
 }
 .b2{
   position: absolute;
-  top: 410px;
-  left: 590px;
+  top: 402px;
+  left: 579px;
 }
 .p2-4a{
   position: absolute;
-  top: 512px;
-  left: 206px;
+  top: 501px;
+  left: 202px;
 }
 .p2-4b{
   position: absolute;
-  top: 527px;
-  left: 206px;
+  top: 517px;
+  left: 202px;
 }
 .p2-4c{
   position: absolute;
-  top: 512px;
-  left: 206px;
+  top: 501px;
+  left: 395px;
 }
 .p2-4d{
   position: absolute;
-  top: 527px;
-  left: 402px;
+  top: 517px;
+  left: 395px;
 }
 .p2-4e{
   position: absolute;
-  top: 512px;
-  left: 561px;
+  top: 501px;
+  left: 551px;
 }
 
 /* total-emp-payment */
 .total-emp-payment {
   position: absolute;
-  top: 461px;
+  top: 456px;
   left: 677px;
 }
 .total-emp-payment input {
   height: 20px;
-  /*width: 80px;*/
+  width: 80px;
 }
 /* row5 */
 .row5 {
   position: absolute;
-  top: 486px;
+  top: 476px;
   left: 498px
 }
 .row5 input {
@@ -673,8 +694,8 @@ input {
 /* total-payment */
 .total-payment {
   position: absolute;
-  top: 554px;
-  left: 502px;
+  top: 546px;
+  left: 491px;
 }
 .total-payment input {
   height: 20px;
@@ -683,8 +704,8 @@ input {
 /* subtotal-text */
 .subtotal-text {
   position: absolute;
-  top: 577px;
-  left: 682px;
+  top: 570px;
+  left: 675px;
 }
 .subtotal-text input {
   height: 20px;
@@ -693,8 +714,8 @@ input {
 /* total-taxable-text */
 .total-taxable-text {
   position: absolute;
-  top: 608px;
-  left: 682px;;
+  top: 598px;
+  left: 676px;;
 }
 .total-taxable-text input {
   height: 20px;
@@ -703,8 +724,8 @@ input {
 /* row-8 */
 .row8 {
   position: absolute;
-  top: 640px;
-  left: 682px;;
+  top: 631px;
+  left: 675px;;
 }
 .row8 input {
   height: 20px;
@@ -713,8 +734,8 @@ input {
 /* row-9 */
 .row9 {
   position: absolute;
-  top: 694px;
-  left: 682px;;
+  top: 684px;
+  left: 675px;;
 }
 .row9 input {
   height: 20px;
@@ -724,7 +745,7 @@ input {
 .row10 {
   position: absolute;
   top: 723px;
-  left: 682px;;
+  left: 682px;
 }
 .row10 input {
   height: 20px;
@@ -743,8 +764,8 @@ input {
 /* row-12 */
 .row12 {
   position: absolute;
-  top: 809px;
-  left: 682px;;
+  top: 794px;
+  left: 675px;
 }
 .row12 input {
   height: 20px;
@@ -770,7 +791,7 @@ input {
   height: 20px;
   width: 52px;
 }
-
+/* row-15 */
 .row15 {
   position: absolute;
   top: 905px;
@@ -782,26 +803,27 @@ input {
 }
 .row15a {
   position: absolute;
-  top: 946px;
-  left: 517px;;
+  top: 928px;
+  left: 508px;;
 }
 .row15b {
   position: absolute;
-  top: 946px;
-  left: 639px;
+  top: 928px;
+  left: 627px;
 
 }
 
-
+/* second-page */
+/* ein */
 .trade-name {
   position: absolute;
-  top: 71px;
-  left: 50px;
+  top: 68px;
+  left: 83px;
 }
 .ein {
   position: absolute;
-  top: 75px;
-  left: 545px;
+  top: 73px;
+  left: 534px;
 }
 .ein input {
   height: 20px;
@@ -810,28 +832,28 @@ input {
 /* row16a */
 .row16a {
   position: absolute;
-  top: 157px;
-  left: 536px;
+  top: 153px;
+  left: 532px;
 }
 .row16b {
-   position: absolute;
-   top: 188px;
-   left: 536px;
+  position: absolute;
+  top: 183px;
+  left: 532px;
 }
 .row16c {
   position: absolute;
-  top: 218px;
-   left: 536px;
+  top: 213px;
+   left: 532px;
 }
 .row16d {
   position: absolute;
-  top: 250px;
-   left: 536px;
+  top: 243px;
+   left: 532px;
 }
 .row17 {
   position: absolute;
   top: 274px;
-   left: 536px;
+   left: 506px;
 }
 .row17a {
   position: absolute;
@@ -845,12 +867,12 @@ input {
 }
 .p6-a{
   position: absolute;
-  top: 371px;
+  top: 364px;
   left: 74px;
 }
 .p6-b{
   position: absolute;
-  top: 425px;
+  top: 416px;
   left: 74px;
 }
 .p6-c input {
@@ -872,31 +894,30 @@ input {
 }
 .printname {
   position: absolute;
-  top: 538px;
-  left: 504px;
+  top: 527px;
+  left: 489px;
 
 }
 .printitle {
   position: absolute;
-  top: 568px;
-  left: 504px;
+  top: 561px;
+  left: 490px;
 }
 .date {
   position: absolute;
-  top: 613px;
-  left: 160px;
-  letter-spacing: 4px;
+  top: 599px;
+  left: 155px;
 }
 .dayphone {
   position: absolute;
-  top: 600px;
-  left: 559px;
+  top: 588px;
+  left: 544px;
 
 }
 .pre-check{
   position: absolute;
-  top: 662px;
-  left: 726px;
+  top: 649px;
+  left: 713px;
 }
 .pre-name {
   position: absolute;
@@ -958,18 +979,18 @@ input {
 /* third page */
 .row1-ein {
   position: absolute;
-  bottom: 285px;
-  left: 88px;
+  bottom: 301px;
+  left: 84px;
 }
 .dollar {
   position: absolute;
-  bottom: 298px;
-  left: 608px;
+  bottom: 311px;
+  left: 598px;
 }
 .cent {
   position: absolute;
-  bottom: 298px;
-  left: 714px;
+  bottom: 311px;
+  left: 703px;
 }
 .busniess-name {
   position: absolute;
@@ -987,14 +1008,23 @@ input {
   left: 290px;
 }
 
-</style> 
 
+
+  </style>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+
+
+ 
 </body>
 </html>
-
 <script>
 $(document).ready(function() {
-   downloadPagesAsPDF();
+  downloadPagesAsPDF();
 });
 
 async function downloadPagesAsPDF() {

@@ -417,7 +417,7 @@
     ?>
     <span id="th_7" class="t s1_7">4 </span>
     <span id="ti_7" class="t s2_7"><?php echo $State_Tax_ID_Number; ?></span>
-    <span id="tj_7" class="t s3_7">TEST </span>
+    <span id="tj_7" class="t s3_7">STON </span>
     <span id="tk_7" class="t s2_7">000000 </span>
     <span id="tl_7" class="t s2_7"> <?php  echo date('d-m-Y'); ?> </span>
     <span id="tm_7" class="t s2_7">1 </span>
@@ -1043,7 +1043,7 @@
 <span id="ta_8" class="t s0_8">1 </span><span id="tb_8" class="t s0_8">1 </span>
 <span id="tc_8" class="t s0_8">2 </span><span id="td_8" class="t s0_8">2 </span>
 <span id="te_8" class="t s0_8">3 </span><span id="tf_8" class="t s0_8">3 </span>
-<span id="tg_8" class="t s0_8">4 </span><span id="th_8" class="t s1_8"><?php echo $State_Tax_ID_Number; ?></span><span id="ti_8" class="t s1_8">TEST </span><span id="tj_8" class="t s1_8">000000 </span><span id="tk_8" class="t s1_8"><?php  echo date('d-m-Y'); ?></span><span id="tl_8" class="t s1_8">2 </span><span id="tm_8" class="t s1_8">2 </span><span id="tn_8" class="t s1_8">NJWR30 </span><span id="to_8" class="t s0_8">4 </span>
+<span id="tg_8" class="t s0_8">4 </span><span id="th_8" class="t s1_8"><?php echo $State_Tax_ID_Number; ?></span><span id="ti_8" class="t s1_8">STON </span><span id="tj_8" class="t s1_8">000000 </span><span id="tk_8" class="t s1_8"><?php  echo date('d-m-Y'); ?></span><span id="tl_8" class="t s1_8">2 </span><span id="tm_8" class="t s1_8">2 </span><span id="tn_8" class="t s1_8">NJWR30 </span><span id="to_8" class="t s0_8">4 </span>
 <span id="tp_8" class="t s0_8">5 </span><span id="tq_8" class="t s0_8">5 </span>
 <span id="tr_8" class="t s0_8">6 </span><span id="ts_8" class="t s1_8"><?php echo $company_name; ?> </span><span id="tt_8" class="t s0_8">6 </span>
 <span id="tu_8" class="t s0_8">7 </span><span id="tv_8" class="t s1_8"><?php echo $get_address[0]; ?> </span><span id="tw_8" class="t s1_8">X- </span><span id="tx_8" class="t s1_8">999999 </span><span id="ty_8" class="t s0_8">7 </span>
@@ -1099,7 +1099,7 @@
 <span id="t3z_8" class="t s0_8">57 </span><span id="t40_8" class="t s0_8">57 </span>
 <span id="t41_8" class="t s0_8">58 </span><span id="t42_8" class="t s0_8">58 </span>
 <span id="t43_8" class="t s0_8">59 </span><span id="t44_8" class="t s0_8">59 </span>
-<span id="t45_8" class="t s0_8">60 </span><span id="t46_8" class="t s1_8"><?php echo $overall_amount[0]['count'] ?></span><span id="t47_8" class="t s1_8"><?php echo $overall_amount[0]['overall_amount'] ?> </span><span id="t48_8" class="t s3_8">. </span><span id="t49_8" class="t s1_8">82 </span><span id="t4a_8" class="t s1_8">1 </span><span id="t4b_8" class="t s0_8">60 </span>
+<span id="t45_8" class="t s0_8">60 </span><span id="t46_8" class="t s1_8"><?php echo $overall_amount[0]['emp_count'] ?></span><span id="t47_8" class="t s1_8"><?php  echo number_format($overall_amount[0]['OverallTotal'],2);  ?> </span><span id="t48_8" class="t s3_8"> </span><span id="t49_8" class="t s1_8"> </span><span id="t4a_8" class="t s1_8">1 </span><span id="t4b_8" class="t s0_8">60 </span>
 <span id="t4c_8" class="t s0_8">61 </span><span id="t4d_8" class="t s0_8">61 </span>
 <span id="t4e_8" class="t s0_8">62 </span><span id="t4f_8" class="t s1_8">I </span><span id="t4g_8" class="t s1_8">CERTIFY THE INFORMATION IN THIS REPORT IS TRUE AND CORRECT. </span><span id="t4h_8" class="t s0_8">62 </span>
 <span id="t4i_8" class="t s0_8">63 </span><span id="t4j_8" class="t s0_8">63 </span>

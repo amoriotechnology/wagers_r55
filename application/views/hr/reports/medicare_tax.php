@@ -84,6 +84,16 @@
       </div>
    </section>
 </div>
+
+<style type="text/css">
+.style-column {
+    max-width: 200px;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+}
+</style>
+
 <script type="text/javascript">
 var federalincomeDataTable;
 $(document).ready(function() {
@@ -118,11 +128,11 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
         },
          "columns": [
          { "data": "table_id" },
-         { "data": "first_name" },
-         { "data": "employee_tax" },
+         { "data": "first_name" , "className": "style-column" },
+         { "data": "employee_tax" , "className": "style-column" },
          { "data": "timesheet_id" },
          { "data": "month" },
-         { "data": "cheque_date" },
+         { "data": "cheque_date" , "className": "style-column" },
          { "data": "m_mtax" },
          { "data": "tm_mtax" },
          ],

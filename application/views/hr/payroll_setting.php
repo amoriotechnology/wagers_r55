@@ -1,5 +1,3 @@
-<!-- Add new tax start -->
-
 <div class="content-wrapper">
 
     <section class="content-header">
@@ -18,7 +16,7 @@
 
             <ol class="breadcrumb">
 
-                <li><a href="#"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
+                <li><a href="#"><i class="pe-7s-home"></i>                                                           <?php echo display('home') ?></a></li>
 
                 <li><a href="#">Payroll</a></li>
 
@@ -34,27 +32,25 @@
 
     <section class="content">
 
-         <!-- Alert Message -->
-
         <?php
 
             $message = $this->session->userdata('message');
 
             if (isset($message)) {
 
-        ?>
+            ?>
 
         <div class="alert alert-info alert-dismissable">
 
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 
-            <?php echo $message ?>                    
+            <?php echo $message ?>
 
         </div>
 
-        <?php 
+        <?php
 
-            $this->session->unset_userdata('message');
+                $this->session->unset_userdata('message');
 
             }
 
@@ -62,19 +58,19 @@
 
             if (isset($error_message)) {
 
-        ?>
+            ?>
 
         <div class="alert alert-danger alert-dismissable">
 
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 
-            <?php echo $error_message ?>                    
+            <?php echo $error_message ?>
 
         </div>
 
-        <?php 
+        <?php
 
-            $this->session->unset_userdata('error_message');
+                $this->session->unset_userdata('error_message');
 
             }
 
@@ -82,7 +78,7 @@
 
 
 
-       
+
 
 
 
@@ -94,7 +90,7 @@
 
 
 
-        <div class="panel panel-default thumbnail"> 
+        <div class="panel panel-default thumbnail">
 
 
 
@@ -114,7 +110,7 @@
 
                              <th><?php echo display('rate') ?></th>
 
-                            
+
 
                            <th><?php echo display('action') ?></th>
 
@@ -124,13 +120,13 @@
 
                     <tbody>
 
-                        <?php if (!empty($taxs)) { ?>
+                        <?php if (! empty($taxs)) {?>
 
                             <?php $sl = 1; ?>
 
-                            <?php foreach ($taxs as $que) { ?>
+                            <?php foreach ($taxs as $que) {?>
 
-                                <tr class="<?php echo ($sl & 1)?"odd gradeX":"even gradeC" ?>">
+                                <tr class="<?php echo($sl & 1) ? "odd gradeX" : "even gradeC" ?>">
 
                                     <td><?php echo $sl; ?></td>
 
@@ -140,23 +136,23 @@
 
                                     <td><?php echo html_escape($que->rate); ?> %</td>
 
-                                    
+
 
                                     <td class="center">
 
-                                
+
 
                                         <a href="<?php echo base_url("Caccounts/update_taxsetup_form/$que->tax_setup_id") ?>" class="btn btn-xs btn-success"><i class="fa fa-pencil"></i></a>
 
-                                       
 
-                                    
 
-                                   
 
-                                        <a href="<?php echo base_url("Caccounts/delete_income_tax/$que->tax_setup_id") ?>" class="btn btn-xs btn-danger" onclick="return confirm('<?php echo display('are_you_sure') ?>') "><i class="fa fa-trash"></i></a> 
 
-                                        
+
+
+                                        <a href="<?php echo base_url("Caccounts/delete_income_tax/$que->tax_setup_id") ?>" class="btn btn-xs btn-danger" onclick="return confirm('<?php echo display('are_you_sure') ?>') "><i class="fa fa-trash"></i></a>
+
+
 
                                     </td>
 
@@ -164,9 +160,9 @@
 
                                 <?php $sl++; ?>
 
-                            <?php } ?> 
+                            <?php }?>
 
-                        <?php } ?> 
+                        <?php }?>
 
                     </tbody>
 
@@ -182,7 +178,7 @@
 
 
 
-    
+
 
     </section>
 

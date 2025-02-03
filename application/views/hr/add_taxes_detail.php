@@ -50,6 +50,7 @@
                         <input type="hidden" name="tax_name" value="Federal Income tax"/>
                         <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
                         <input type ="hidden" id="adminId" value="<?php echo $_GET['admin_id'];  ?>" name="adminId" />
+                        <input type ="hidden" id="year" value="<?php echo $_GET['year'];  ?>" name="year" />
                         <input type="hidden" class="txt_csrfname" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
 
                         <table class="table table-bordered table-hover" id="POITable" border="0">

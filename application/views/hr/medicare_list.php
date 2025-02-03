@@ -10,7 +10,7 @@
 <!-- Add new tax start -->
 
 <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>assets/css/toastr.min.css" />
-<script src="<?php echo base_url()?>assets/js/toastr.min.js" /></script>
+<script src="<?php echo base_url()?>assets/js/toastr.min.js"></script>
 <div class="content-wrapper">
 
     <section class="content-header" style="height:70px;">
@@ -142,6 +142,7 @@ tbody tr td:first-child:before
 
 <input type="hidden" name="url" value="<?php echo  $this->uri->segment(2);  ?>"/>
 <input type="hidden" name="tax_name" value="Medicare"/>
+<input type ="hidden"  id="year" value="<?php echo $_GET['year'];  ?>" name="year" />
 <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
 <input type ="hidden" id="adminId" value="<?php echo $_GET['admin_id'];  ?>" name="adminId" />
 <input type="hidden" class="txt_csrfname" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">

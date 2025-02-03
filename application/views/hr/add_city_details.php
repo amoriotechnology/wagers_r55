@@ -1,5 +1,5 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>assets/css/toastr.min.css" />
-<script src="<?php echo base_url()?>assets/js/toastr.min.js" /></script>
+<script src="<?php echo base_url()?>assets/js/toastr.min.js"></script>
 
 <?php error_reporting(1); ?>
 <div class="content-wrapper">
@@ -64,6 +64,7 @@
                <?php echo form_open('Caccounts/create_citytax_setup?type=citytax') ?>
                <input type="hidden" class="txt_csrfname" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                <input type="hidden" name="tax_name" value="<?php echo $_GET['tax'];  ?>"/>
+               <input type="hidden" id="year" name="year" value="<?php echo $_GET['year'];  ?>"/>
                <input type="hidden" class="tax_types" name="taxtypes" value="<?php echo $_GET['taxtype'];  ?>"/>
                <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
                <input type ="hidden" id="adminId" value="<?php echo $_GET['admin_id'];  ?>" name="adminId" />
@@ -150,15 +151,18 @@ var csrfName = $('.txt_csrfname').attr('name');
 var csrfHash = $('.txt_csrfname').val();
 
 $('.getDataRow').on('click', function() {
+   alert("clicked");
    var rowId = $(this).closest('tr').find('#row_id').val();
    var taxType = $('.tax_types').val();
+   var year = $('#year').val();
    var confirmDelete = confirm("Are you sure you want to delete this?");
    if (confirmDelete) {
       $.ajax({
          url:"<?php echo base_url(); ?>Caccounts/delete_row",
          type: 'POST',
-         data: {[csrfName]: csrfHash,rowId:rowId, taxType: taxType ? taxType : ""},
+         data: {[csrfName]: csrfHash,rowId:rowId, taxType: taxType ? taxType : "",year: year ? year : ""},
          success: function(data){
+            console.log(data);
             toastr.success("Successfully Deleted", "Success", { 
                closeButton: false,
                timeOut: 1000

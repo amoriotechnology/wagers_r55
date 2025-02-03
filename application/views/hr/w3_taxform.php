@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 <title></title>
@@ -237,15 +237,8 @@ $address = isset($get_cominfo[0]['address']) ? $get_cominfo[0]['address'] : '';
  
  
 <?php
-    // $overalltotal_amount = isset($get_payslip_info[0]['overalltotal_amount'] + $get_sc_info[0]['salebalanceamount']) ? number_format($get_payslip_info[0]['overalltotal_amount'] + $get_sc_info[0]['salebalanceamount'] , 2) : '0.00';
- // Check if both $get_payslip_info and $get_sc_info are set and not empty
-// if(isset($get_payslip_info[0]['overalltotal_amount']) && isset($get_sc_info[0]['salebalanceamount'])) {
-//     // Calculate overalltotal_amount as the sum of overalltotal_amount and salebalanceamount
-//     $overalltotal_amount = number_format($get_payslip_info[0]['overalltotal_amount'] + $get_sc_info[0]['salebalanceamount'], 2);
-// } else {
-    // Set overalltotal_amount to 0.00 if either $get_payslip_info or $get_sc_info is not set or empty
-     $overalltotal_amount = number_format($get_payslip_info[0]['overalltotal_amount'], 2);
-// }
+  $overalltotal_amount = number_format($get_payslip_info[0]['overalltotal_amount'], 2);
+
  ?>
 <p style="position:absolute;top:163px;left:415px;white-space:nowrap" class="ft22"><b>1&#160;</b>                  Wages, tips, other compensation <br> <span style="color: black;font-size: large;">$<?php echo htmlspecialchars($overalltotal_amount, ENT_QUOTES, 'UTF-8'); ?> </p>
 <?php
@@ -347,7 +340,7 @@ $email = isset($employeer[0]['email']) ? $employeer[0]['email'] : '';
 <p style="position:absolute;top:632px;left:54px;white-space:nowrap" class="ft23">Form</p>
 <p style="position:absolute;top:615px;left:86px;white-space:nowrap" class="ft25"><b>W-3</b></p>
 <p style="position:absolute;top:623px;left:151px;white-space:nowrap" class="ft26"><b>Transmittal of Wage and Tax Statements</b></p>
-<p style="position:absolute;top:620px;left:572px;white-space:nowrap" class="ft27"><?php echo date('Y'); ?></p>
+<p style="position:absolute;top:620px;left:572px;white-space:nowrap" class="ft27"><?php echo $year; ?></p>
 <p style="position:absolute;top:622px;left:754px;white-space:nowrap" class="ft28">Department of the Treasury&#160;</p>
 <p style="position:absolute;top:632px;left:764px;white-space:nowrap" class="ft28">Internal Revenue Service</p>
 <p style="position:absolute;top:650px;left:54px;white-space:nowrap" class="ft218"><b>Send this entire page with the entire Copy A page of Form(s) W-2 to the Social Security Administration (SSA). &#160;<br/>Photocopies are not acceptable. Do not send Form W-3 if you filed electronically with the SSA.&#160;<br/>Do not&#160;</b>send any payment (cash, checks, money orders, etc.) with Forms W-2 and W-3.</p>
@@ -413,7 +406,7 @@ $this->load->view('include/bootstrap_modal', $modaldata);
 ?>
 <script>
 $(document).ready(function(){
-   downloadPagesAsPDF();
+  downloadPagesAsPDF();
 });
 async function downloadPagesAsPDF() {
     const element1 = document.getElementById('page1-div');

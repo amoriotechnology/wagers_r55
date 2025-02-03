@@ -63,10 +63,10 @@ class Chrm extends CI_Controller {
         $data['emp_name']               = $this->Hrm_model->employee_data_get(decodeBase64UrlParameter($_GET['id']));
         $employee_tax_data              = [];
         foreach ($data['state_summary_employee'] as $employee_tax) {
-            $employee_tax_data[$employee_tax['time_sheet_id']][$employee_tax['tax_type'] . '_employee'] = $employee_tax['amount'];
+            $employee_tax_data[$employee_tax['timesheet_id']][$employee_tax['tax_type'] . '_employee'] = $employee_tax['total_amount'];
         }
         foreach ($data['state_summary_employer'] as $employer_tax) {
-            $employee_tax_data[$employer_tax['time_sheet_id']][$employer_tax['tax_type'] . '_employer'] = $employer_tax['amount'];
+            $employee_tax_data[$employer_tax['timesheet_id']][$employer_tax['tax_type'] . '_employer'] = $employer_tax['total_amount'];
         }
         $data['employee_tax_data'] = $employee_tax_data;
         $content                   = $this->parser->parse('hr/reports/state_summary', $data, true);
@@ -212,18 +212,15 @@ class Chrm extends CI_Controller {
         echo json_encode($response);
     }
     public function state_tax_search_summary() {
-        $CI = get_instance();
-        $CI->load->model('Web_settings');
+        $this->load->model('Web_settings');
         $this->load->model('Hrm_model');
         $emp_name   = $this->input->post('employee_name');
         $tax_choice = $this->input->post('tax_choice');
         $tax_type   = $this->input->post('taxType');
-
         $selectState            = $this->input->post('selectState');
         $date                   = $this->input->post('daterangepicker-field');
         $id                     = decodeBase64UrlParameter($this->input->post('company_id'));
         $state_summary_employer = $this->Hrm_model->state_summary_employer($id, $emp_name, $tax_choice, $selectState, $date, $tax_type);
-     
         $state_summary_employee = $this->Hrm_model->state_summary_employee($id, $emp_name, $tax_choice, $selectState, $date, $tax_type);
         $employer_contributions = [
             'state_tax'        => [],
@@ -233,6 +230,8 @@ class Chrm extends CI_Controller {
             'state_tax'        => [],
             'living_state_tax' => [],
         ];
+      
+        if($state_summary_employer){
         foreach ($state_summary_employer as $row) {
             $employee_name                       = $row['first_name'] . ' ' . $row['middle_name'] . ' ' . $row['last_name'];
             $tax_type                            = $row['tax_type'];
@@ -246,29 +245,31 @@ class Chrm extends CI_Controller {
                 'tax'           => $tax,
                 'taxType'       => $tax_type,
                 'code'          => $code,
-                'gross'         => $gross,
-                'net'           => $net,
+                'gross'         => $row['gross'],
+                'net'           => $row['net'],
                 'total_amount'  => $total_amount,
             ];
         }
+    }
+       if($state_summary_employee){
         foreach ($state_summary_employee as $row) {
             $employee_name                       = $row['first_name'] . ' ' . $row['middle_name'] . ' ' . $row['last_name'];
             $tax_type                            = $row['tax_type'];
             $tax                                 = $row['tax'];
             $code                                = $row['code'];
             $total_amount                        = $row['total_amount'];
-            $net                                 = $row['net'];
-            $gross                               = ($row['gross']);
+          
             $employee_contributions[$tax_type][] = [
                 'employee_name' => $employee_name,
                 'tax'           => $tax,
                 'code'          => $code,
                 'taxType'       => $tax_type,
-                'gross'         => $gross,
-                'net'           => $net,
+                'gross'         => 0,
+                'net'           => 0,
                 'total_amount'  => $total_amount,
             ];
         }
+    }
         foreach ($employer_contributions as $tax_type => &$contributions) {
             foreach ($contributions as &$contribution) {
                 $employee_name = $contribution['employee_name'];
@@ -278,17 +279,9 @@ class Chrm extends CI_Controller {
                 $sum_net       = 0;
                 foreach ($state_summary_employer as $row) {
                     if ($row['first_name'] . ' ' . $row['middle_name'] . ' ' . $row['last_name'] === $employee_name && $row['tax_type'] === $tax_type && $row['tax'] === $tax) {
-                        $final_amount = '';
-                        if (trim($row['tax']) == 'Income tax' && $row['weekly'] > 0) {
-                            $final_amount = $row['weekly'];
-                        } elseif (trim($row['tax']) == 'Income tax' && $row['biweekly'] > 0) {
-                            $final_amount = $row['biweekly'];
-                        } elseif (trim($row['tax']) == 'Income tax' && $row['monthly'] > 0) {
-                            $final_amount = $row['monthly'];
-                        } else {
+                     
                             $final_amount = $row['total_amount'];
-                        }
-                        $sum_gross += ($row['gross']);
+                          $sum_gross += ($row['gross']);
                         $sum_net += $row['net'];
                         $sum += $final_amount;
                     }
@@ -303,27 +296,16 @@ class Chrm extends CI_Controller {
                 $employee_name = $contribution['employee_name'];
                 $tax           = $contribution['tax'];
                 $sum           = 0;
-                $sum_gross     = 0;
-                $sum_net       = 0;
+   
                 foreach ($state_summary_employee as $row) {
                     if ($row['first_name'] . ' ' . $row['middle_name'] . ' ' . $row['last_name'] === $employee_name && $row['tax_type'] === $tax_type && $row['tax'] === $tax) {
-                        $final_amount = '';
-                        if (trim($row['tax']) == 'Income tax' && $row['weekly'] > 0) {
-                            $final_amount = $row['weekly'];
-                        } elseif (trim($row['tax']) == 'Income tax' && $row['biweekly'] > 0) {
-                            $final_amount = $row['biweekly'];
-                        } elseif (trim($row['tax']) == 'Income tax' && $row['monthly'] > 0) {
-                            $final_amount = $row['monthly'];
-                        } else {
-                            $final_amount = $row['total_amount'];
-                        }$sum_gross += ($row['gross']);
-                        $sum_net += $row['net'];
+                        $final_amount = $row['total_amount'];
+                      
                         $sum += $final_amount;
                     }
                 }
                 $contribution['total_amount'] = $sum;
-                $contribution['gross']        = $sum_gross;
-                $contribution['net']          = $sum_net;
+     
             }
         }
         $responseData = [
@@ -575,12 +557,13 @@ class Chrm extends CI_Controller {
     public function federal_summary() {
         $setting_detail                 = $this->Web_settings->retrieve_setting_editdata();
         $data['setting_detail']         = $setting_detail;
-        $data['fed_tax']                = $this->Hrm_model->social_tax_sumary();
+        $data['fed_tax']                = $this->Hrm_model->social_tax_sumary(decodeBase64UrlParameter($_GET['id']), '', '');
         $data['fed_tax_emplr']          = $this->Hrm_model->social_tax_employer(decodeBase64UrlParameter($_GET['id']), '', '');
         $data['state_tax_list']         = $this->Hrm_model->stateTaxlist(decodeBase64UrlParameter($_GET['id']));
         $data['state_summary_employee'] = $this->Hrm_model->state_summary_employee(decodeBase64UrlParameter($_GET['id']));
         $data['state_list']             = $this->db->select('*')->from('state_and_tax')->order_by('state', 'ASC')->where('created_by', $this->session->userdata('user_id'))->where('Status', 2)->group_by('id')->get()->result_array();
         $mergedArray                    = array();
+        if($data['fed_tax'] ){
         foreach ($data['fed_tax'] as $item1) {
             $mergedItem = $item1;
             foreach ($data['fed_tax_emplr'] as $item2) {
@@ -595,6 +578,7 @@ class Chrm extends CI_Controller {
                 }
             }
         }
+    }
         $data['mergedArray']   = $mergedArray;
         $data['employee_data'] = $this->Hrm_model->employee_data_get(decodeBase64UrlParameter($_GET['id']));
         $content               = $this->parser->parse('hr/reports/federal_summary', $data, true);
@@ -602,6 +586,7 @@ class Chrm extends CI_Controller {
     }
 // Fetch data in Federal Overall Summary - Report  - Madhu
     public function overallSocialtaxIndexData() {
+
         $encodedId          = isset($_GET["id"]) ? $_GET["id"] : null;
         $decodedId          = decodeBase64UrlParameter($encodedId);
         $limit              = $this->input->post("length");
@@ -613,9 +598,10 @@ class Chrm extends CI_Controller {
         $emp_name           = $this->input->post('employee_name');
         $items              = $this->Hrm_model->getPaginatedSocialTaxSummary($limit, $start, $orderField, $orderDirection, $search, $date, $emp_name, $decodedId);
         $totalItems         = $this->Hrm_model->getSocialOveralltax($search, $date, $emp_name, $decodedId);
-        $fed_tax            = $this->Hrm_model->social_tax_sumary($date, $emp_name);
+        $fed_tax            = $this->Hrm_model->social_tax_sumary(decodeBase64UrlParameter($encodedId),$date, $emp_name);
+
         $fed_tax_emplr      = $this->Hrm_model->social_tax_employer(decodeBase64UrlParameter($encodedId), $date, $emp_name);
-        $data['employe']    = $this->Hrm_model->so_tax_report_employee($emp_name, $date);
+        $data['employe']    = $this->Hrm_model->so_tax_report_employee(decodeBase64UrlParameter($encodedId),$emp_name, $date);
         $aggregated_employe = [];
         if ($data['employe']) {
             foreach ($data['employe'] as $row) {
@@ -642,9 +628,12 @@ class Chrm extends CI_Controller {
             }
         }
         $mergedArray = [];
+        if($fed_tax){
         foreach ($fed_tax as $item1) {
             $mergedArray[$item1['employee_id']] = $item1;
         }
+    }
+     if($fed_tax_emplr){
         foreach ($fed_tax_emplr as $item2) {
             if (isset($mergedArray[$item2['employee_id']])) {
                 foreach ($item2 as $key => $value) {
@@ -654,6 +643,7 @@ class Chrm extends CI_Controller {
                 }
             }
         }
+    }
         foreach ($mergedArray as $employee_id => &$data) {
             if (isset($aggregated_employe[$employee_id])) {
                 $data['gross'] = $aggregated_employe[$employee_id]['gross'];
@@ -662,13 +652,14 @@ class Chrm extends CI_Controller {
         }
         $responseData = [];
         $i            = $start + 1;
+  if($fed_tax_emplr){
         foreach ($items as $item) {
             $employeeId = $item["employee_id"];
             $mergedItem = $mergedArray[$employeeId] ?? [];
             $row        = [
-                'table_id'                => $i,
+                'id'                => $i,
                 "first_name"              => $item["first_name"] . ' ' . $item["middle_name"] . ' ' . $item["last_name"],
-                "employee_tax"            => $item["employee_tax"],
+                // "employee_tax"            => $item["employee_tax"],
                 'gross'                   => number_format($mergedItem['gross'] ?? 0, 2),
                 'net'                     => number_format($mergedItem['net'] ?? 0, 2),
                 'f_employee'              => number_format($mergedItem['f_ftax_sum'] ?? 0, 2),
@@ -683,6 +674,7 @@ class Chrm extends CI_Controller {
             $responseData[] = $row;
             $i++;
         }
+    }
         $response = [
             "draw"            => $this->input->post("draw"),
             "recordsTotal"    => $totalItems,
@@ -692,13 +684,12 @@ class Chrm extends CI_Controller {
         echo json_encode($response);
     }
     public function report($tax_name = '') {
-        $CI = &get_instance();
-        $CI->load->model('Web_settings');
+
         $this->load->model('Hrm_model');
         $tax_name = urldecode($tax_name);
 
         $data['employee_data']  = $this->Hrm_model->employee_data_get(decodeBase64UrlParameter($_GET['id']));
-        $setting_detail         = $CI->Web_settings->retrieve_setting_editdata();
+        $setting_detail         = $this->Web_settings->retrieve_setting_editdata();
         $data['setting_detail'] = $setting_detail;
         $date                   = $this->input->post('daterangepicker-field');
         $employee_name          = $this->input->post('employee_name');
@@ -741,12 +732,14 @@ class Chrm extends CI_Controller {
     }
     //Overall Summary - Report
     public function social_taxsearch() {
+
         $emp_name               = trim($this->input->post('employee_name'));
         $date                   = $this->input->post('daterangepicker-field');
+        $id                     = decodeBase64UrlParameter($this->input->post('company_id'));
         $setting_detail         = $this->Web_settings->retrieve_setting_editdata();
         $data['setting_detail'] = $setting_detail;
-        $data['employe']        = $this->Hrm_model->so_tax_report_employee($emp_name, $date, $status);
-        $data['employer']       = $this->Hrm_model->so_tax_report_employer($emp_name, $date, $status);
+        $data['employe']        = $this->Hrm_model->so_tax_report_employee($id,$emp_name, $date);
+        $data['employer']       = $this->Hrm_model->so_tax_report_employer($id,$emp_name, $date);
         if ($data['employe']) {
             $aggregated         = [];
             $aggregated_employe = [];
@@ -844,29 +837,38 @@ class Chrm extends CI_Controller {
 
     public function wr30_form() {
         $id                     = decodeBase64UrlParameter($_GET['id']);
+        $year                   = $_GET['year'];
         $data['get_cominfo']    = $this->Hrm_model->get_company_info($id);
-        $data['info_for_wr']    = $this->Hrm_model->info_for_wrf($id);
-        $data['overall_amount'] = $this->Hrm_model->total_amt_wr30($id);
+        $data['info_for_wr']    = $this->Hrm_model->info_for_wrf($id, $year);
+        $data['overall_amount'] = $this->Hrm_model->total_amt_wr30($id, $year);
         $content                = $this->parser->parse("hr/wr30_form.php", $data, true);
         $this->template->full_admin_html_view($content);
     }
-    public function form944Form() {
-        $id                       = decodeBase64UrlParameter($_GET['id']);
-        $data['get_cominfo']      = $this->Hrm_model->get_company_info($id);
-        $data['get_payslip_info'] = $this->Hrm_model->get_payslip_info($id);
-        $currency_details         = $this->Web_settings->retrieve_setting_editdata($id);
-        $data['currency']         = $currency_details[0]['currency'];
-        $content                  = $this->parser->parse('hr/f944', $data, true);
-        $this->template->full_admin_html_view($content);
+     public function form944Form() {
+            $id = decodeBase64UrlParameter($_GET['id']);
+            $year = $_GET['year'];
+            $data['get_cdata'] = $this->Hrm_model->get_employer_federaltax($id);
+            $data['get_cominfo'] = $this->Hrm_model->get_company_info($id);
+            $data['get_userlist'] = $this->db->select('*')->from('users')->where('user_id',$this->session->userdata('user_id'))->get()->result_array();
+            $data['get_payslip_info'] = $this->Hrm_model->get_payslip_info($id,$year);
+            $currency_details = $this->Web_settings->retrieve_setting_editdata();
+            $curn_info_default = $this->db->select('*')->from('currency_tbl')->where('icon',$currency_details[0]['currency'])->get()->result_array();
+            $data['currency'] = $currency_details[0]['currency'];
+            $content = $this->parser->parse('hr/f944', $data, true);
+            $this->template->full_admin_html_view($content);
     }
-    public function formnj927($quarter = null) {
+    public function formnj927() {
+         $current_url_path = $_SERVER['REQUEST_URI'];
+        $parts = explode('/', $current_url_path);
+        $quarter = explode('?', $parts[5])[0];
         $company_id                                = decodeBase64UrlParameter($_GET['id']);
-        $data['info_for_nj']                       = $this->Hrm_model->info_for_nj($company_id, $quarter);
+        $year                                      = $_GET['year'];
+        $data['info_for_nj']                       = $this->Hrm_model->info_for_nj($company_id, $quarter,$year);
         $data['quarter']                           = $quarter;
-        $data['info_info_for_salescommssion_data'] = $this->Hrm_model->info_info_for_salescommssion_data($company_id, $quarter);
-        $data['month']                             = $this->Hrm_model->fetchQuarterlyData($company_id, $quarter);
+        $data['info_info_for_salescommssion_data'] = $this->Hrm_model->info_info_for_salescommssion_data($company_id, $quarter, $year);
+        $data['month']                             = $this->Hrm_model->fetchQuarterlyData($company_id, $quarter, $year);
         $data['get_cominfo']                       = $this->Hrm_model->get_company_info($company_id);
-        $data['quarterData']                       = $this->Hrm_model->getQuarterlyMonthData($company_id, $quarter);
+        $data['quarterData']                       = $this->Hrm_model->getQuarterlyMonthData($company_id, $quarter, $year);
         $content                                   = $this->parser->parse("hr/formnj927", $data, true);
         $this->template->full_admin_html_view($content);
     }
@@ -886,26 +888,35 @@ class Chrm extends CI_Controller {
         $data['get_userlist']    = $this->db->select('*')->from('users')->where('user_id', $company_id)->get()->result_array();
         $data['tif']             = $this->Hrm_model->get_taxinfomation($company_id, $selectedValue);
         $data['get_941_sc_info'] = $this->Hrm_model->get_941_sc_info($company_id, $selectedValue);
-        $data['gt']              = $this->db->select('COUNT(DISTINCT templ_name) AS count_rows')
-            ->from('timesheet_info')->where('quarter', $selectedValue)->where('create_by', $company_id)->where('payroll_type !=', 'Sales Partner')->get()->row()->count_rows;
-        $content = $this->parser->parse('hr/f941', $data, true);
+        $data['gt'] = $this->db->select('COUNT(DISTINCT templ_name) AS count_rows')
+        ->from('timesheet_info')->where('quarter', $selectedValue)->where('create_by', $company_id)->where('payroll_type !=', 'Sales Partner')->get()->row()->count_rows;
+        $view_data = array(
+            'title' => '941 Form',
+            'tamount' => $data['tamount'],
+            'get_cdata' => $data['get_cdata'], 
+            'get_cominfo' => $data['get_cominfo'],
+            'tif' => $data['tif'],
+            'get_userlist' => $data['get_userlist'], 
+            'gt' => $data['gt'], 
+            'get_941_sc_info' => $data['get_941_sc_info'],
+            'selectedValue' => $selectedValue ,
+        );
+
+        $content = $this->parser->parse('hr/f941', $view_data, true);
         $this->template->full_admin_html_view($content);
-    }
+}
     public function form940Form() {
         $id                        = decodeBase64UrlParameter($_GET['id']);
+        $year                      = $_GET['year'];
         $data['get_cominfo']       = $this->Hrm_model->get_company_info($id);
         $data['get_cdata']         = $this->Hrm_model->get_employer_federaltax($id);
         $data['get_sc_info']       = $this->Hrm_model->get_sc_info($id);
-        $data['get_paytotal']      = $this->Hrm_model->get_paytotal($id);
+        $data['get_paytotal']      = $this->Hrm_model->get_paytotal($id,$year);
         $data['get_userlist']      = $this->db->select('*')->from('users')->where('user_id', $id)->get()->result_array();
-
-        $data['amountabove'] = $this->Hrm_model->getAboveAmount($id);
-
-        $data['sumQuaterWiseUnemployment'] = $this->Hrm_model->sumQuaterwiseunemploymentamount($id);
-
-        // print_r($data['sumQuaterWiseUnemployment']['Q4']); die;
-
-        $data['amountGreaterThan'] = $this->Hrm_model->f940_excess_emp($id);
+        $data['state_code']        = $this->Hrm_model->get_state_code($id);
+        $data['amountabove'] = $this->Hrm_model->getAboveAmount($id,$year);
+        $data['sumQuaterWiseUnemployment'] = $this->Hrm_model->sumQuaterwiseunemploymentamount($id,$year);
+        $data['amountGreaterThan'] = $this->Hrm_model->f940_excess_emp($id,$year);
 
         $totalAmount               = 0;
         if ($data['amountGreaterThan']) {
@@ -928,20 +939,21 @@ class Chrm extends CI_Controller {
     }
     public function w2Form($id) {
         $company_id        = decodeBase64UrlParameter($_GET['id']);
+        $year              = $_GET['year'];
         $currency_details  = $this->Web_settings->retrieve_setting_editdata();
         $employee_details  = $this->Hrm_model->employeeDetailsdata($id);
         $data['get_cdata'] = $this->Hrm_model->get_employer_federaltax($id);
         $get_cominfo       = $this->Hrm_model->get_company_info($company_id);
-        $fed_tax           = $this->Hrm_model->getoveralltaxdata($id);
-        $get_payslip_info  = $this->Hrm_model->w2get_payslip_info($id);
+        $fed_tax           = $this->Hrm_model->getoveralltaxdata($id,$year);
+        $get_payslip_info  = $this->Hrm_model->w2get_payslip_info($id,$year);
         $state_taxtype     = $this->Hrm_model->tax_statecode_info($id);
-        $other_tx1         = $this->Hrm_model->getother_tax($id);
-        $state_tax         = $this->Hrm_model->w2total_state_tax($id);
-        $state_taxworking  = $this->Hrm_model->w2totalstatetaxworking($id);
-        $county_tax        = $this->Hrm_model->getcounty_tax($id);
-        $local_tax         = $this->Hrm_model->w2total_local_tax($id);
-        $livinglocaldata   = $this->Hrm_model->w2total_livinglocaldata($id);
-        $gettaxother_info  = $this->Hrm_model->gettaxother_info($id);
+        $other_tx1         = $this->Hrm_model->getother_tax($id,$year);
+        $state_tax         = $this->Hrm_model->w2total_state_tax($id,$year);
+        $state_taxworking  = $this->Hrm_model->w2totalstatetaxworking($id,$year);
+        $county_tax        = $this->Hrm_model->getcounty_tax($id,$year);
+        $local_tax         = $this->Hrm_model->w2total_local_tax($id,$year);
+        $livinglocaldata   = $this->Hrm_model->w2total_livinglocaldata($id,$year);
+        $gettaxother_info  = $this->Hrm_model->gettaxother_info($id,$year);
         $company_details   = $this->db->select('*')->from('company_information')->where('company_id', $company_id)->get()->result_array();
         $data              = array(
             'getlocation'      => $get_cominfo,
@@ -950,6 +962,7 @@ class Chrm extends CI_Controller {
             'other_tx'         => $other_tx1,
             'countyTax'        => $county_tax,
             'stateTax'         => $state_tax,
+            'year'             => $year,
             'e_details'        => $employee_details,
             'stateworkingtax'  => $state_taxworking,
             'localTax'         => $local_tax,
@@ -962,21 +975,23 @@ class Chrm extends CI_Controller {
         $content = $this->parser->parse('hr/w2_taxform', $data, true);
         $this->template->full_admin_html_view($content);
     }
-    public function formw3Form() {$id = decodeBase64UrlParameter($_GET['id']);
+    public function formw3Form() {
+        $id = decodeBase64UrlParameter($_GET['id']);
+        $year = $_GET['year'];
         $get_cominfo                   = $this->Hrm_model->get_company_info($id);
-        $get_payslip_info              = $this->Hrm_model->get_payslip_info($id);
+        $get_payslip_info              = $this->Hrm_model->get_payslip_info($id,$year);
         $get_sc_info                   = $this->Hrm_model->get_sc_info($id);
-        $sum_of_amount                 = $this->Hrm_model->sum_of_tax_amount($id);
+        $sum_of_amount                 = $this->Hrm_model->sum_of_tax_amount($id,$year);
         $total_local_tax               = $this->Hrm_model->total_local_tax($id);
         $employeer_details             = $this->Hrm_model->employeerDetailsdata($id);
         $get_employer_federaltax       = $this->Hrm_model->get_employer_federaltax($id);
         $get_total_customersData       = $this->Hrm_model->get_total_customersData($id);
         $data                          = array(
-
             'get_cominfo'             => $get_cominfo,
             'get_payslip_info'        => $get_payslip_info,
             'employeer'               => $employeer_details,
             'total_state_tax'         => $sum_of_amount,
+            'year'                    => $year,
             'total_local_tax'         => $total_local_tax,
             'get_employer_federaltax' => $get_employer_federaltax,
             'get_total_customersData' => $get_total_customersData,
@@ -986,6 +1001,113 @@ class Chrm extends CI_Controller {
         $this->template->full_admin_html_view($content);}
 
     //============================Forms===================================//
+    //============================Setting===================================//
+     // Federal Tax - Madhu
+    public function add_taxes_detail() {
+        $user_id                = $this->input->get('id');
+        $company_id             = $this->input->get('admin_id');
+        $decodedId              = decodeBase64UrlParameter($user_id);
+        $setting_detail         = $this->Web_settings->retrieve_setting_editdata($decodedId);
+        $data['setting_detail'] = $setting_detail;
+        $tax                    = $this->input->post('tax');
+        $year                   = $this->input->get('year');
+        $data['taxinfo']        = $this->Hrm_model->allFederaltaxes('Federal Income tax', $decodedId , $year);
+        $data['title']          = display('add_taxes_detail');
+        $content                = $this->parser->parse('hr/add_taxes_detail', $data, true);
+        $this->template->full_admin_html_view($content);
+    }
+    // Social Security Tax - Madhu
+    public function socialsecurity_detail() {
+        $user_id                = $this->input->get('id');
+        $company_id             = $this->input->get('admin_id');
+        $decodedId              = decodeBase64UrlParameter($user_id);
+        $year                   = $this->input->get('year');
+        $setting_detail         = $this->Web_settings->retrieve_setting_editdata($decodedId);
+        $data['setting_detail'] = $setting_detail;
+        $data['taxinfo']        = $this->Hrm_model->allFederaltaxes('Social Security', $decodedId, $year);
+        $data['title']          = display('add_taxes_detail');
+        $content                = $this->parser->parse('hr/social_security_list', $data, true);
+        $this->template->full_admin_html_view($content);
+    }
+    // Medicare Tax - Surya - 21/01/2025
+    public function medicare_detail() {
+        $user_id                = $this->input->get('id');
+        $company_id             = $this->input->get('admin_id');
+        $year                   = $this->input->get('year');
+        $decodedId              = decodeBase64UrlParameter($user_id);
+        $setting_detail         = $this->Web_settings->retrieve_setting_editdata($decodedId);
+        $data['setting_detail'] = $setting_detail;
+        $data['taxinfo']        = $this->Hrm_model->allFederaltaxes('Medicare', $decodedId , $year);
+        $data['title']          = display('add_taxes_detail');
+        $content                = $this->parser->parse('hr/medicare_list', $data, true);
+        $this->template->full_admin_html_view($content);
+    }
+    // Federal Unemployment Tax - Madhu
+    public function federalunemployment_detail() {
+        $user_id                = $this->input->get('id');
+        $company_id             = $this->input->get('admin_id');
+        $year                   = $this->input->get('year');
+        $decodedId              = decodeBase64UrlParameter($user_id);
+        $setting_detail         = $this->Web_settings->retrieve_setting_editdata($decodedId);
+        $data['taxinfo']        = $this->Hrm_model->allFederaltaxes('Federal unemployment', $decodedId, $year);
+        $data['title']          = display('add_taxes_detail');
+        $data['setting_detail'] = $setting_detail;
+        $content                = $this->parser->parse('hr/federalunemployment_list', $data, true);
+        $this->template->full_admin_html_view($content);
+    }
+    public function add_state_taxes_detail($tax = null) {
+        $setting_detail         = $this->Web_settings->retrieve_setting_editdata();
+        $data['setting_detail'] = $setting_detail;
+        $url                    = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $parts                  = parse_url($url);
+        $user_id                = isset($_GET['id']) ? $_GET['id'] : null;
+        $year                   = isset($_GET['year']) ? $_GET['year'] : '';
+        $decodedId              = decodeBase64UrlParameter($user_id);
+        parse_str($parts['query'], $query);
+        // Hourly Data
+        $data['taxinfo'] = $this->db->select("*")->from('state_localtax')->where('tax', $query['tax'])->where('created_by', $decodedId)->where('year', $year)->get()->result_array();
+        // Weekly Data
+        $data['weekly_taxinfo'] = $this->db->select("*")->from('weekly_tax_info')->where('tax',$query['tax'])->where('created_by', $decodedId)->where('year', $year)->get()->result_array();
+        // BiWeekly Data
+      
+        $data['biweekly_taxinfo'] = $this->db->select("*")->from('biweekly_tax_info')->where('tax',$query['tax'])->where('created_by', $decodedId)->where('year', $year)->get()->result_array();
+        // Monthly Data
+        $data['monthly_taxinfo'] = $this->db->select("*")->from('monthly_tax_info')->where('tax', $query['tax'])->where('created_by', $decodedId)->where('year', $year)->get()->result_array();
+        $content                 = $this->parser->parse('hr/add_state_tax_detail', $data, true);
+        $this->template->full_admin_html_view($content);
+    }
+
+    public function add_citydetails($tax = null) {
+        $setting_detail         = $this->Web_settings->retrieve_setting_editdata();
+        $data['setting_detail'] = $setting_detail;
+        $url                    = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $parts                  = parse_url($url);
+        $user_id                = isset($_GET['id']) ? $_GET['id'] : null;
+        $year                   = isset($_GET['year']) ? $_GET['year'] : '';
+        $decodedId              = decodeBase64UrlParameter($user_id);
+        parse_str($parts['query'], $query);
+        $data['citydata'] = $this->db->select("*")->from('city_tax_info')->where('tax', $query['tax'])->where('created_by', $decodedId)->where('year', $year)->get()->result_array();
+        $content                 = $this->parser->parse('hr/add_city_details', $data, true);
+        $this->template->full_admin_html_view($content);
+    }
+
+     public function add_countydetails($tax = null) {
+        $setting_detail         = $this->Web_settings->retrieve_setting_editdata();
+        $data['setting_detail'] = $setting_detail;
+        $url                    = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $parts                  = parse_url($url);
+        $user_id                = isset($_GET['id']) ? $_GET['id'] : null;
+        $year                   = isset($_GET['year']) ? $_GET['year'] : '';
+        $decodedId              = decodeBase64UrlParameter($user_id);
+        parse_str($parts['query'], $query);
+        // county Data
+        $data['countydata'] = $this->db->select("*")->from('county_tax_info')->where('tax',$query['tax'])->where('created_by', $decodedId)->where('year', $year)->get()->result_array();
+
+        $content                 = $this->parser->parse('hr/add_countydetails', $data, true);
+        $this->template->full_admin_html_view($content);
+    }
+    //============================Setting===================================//
+
     public function city_tax_report() {
         $setting_detail                   = $this->Web_settings->retrieve_setting_editdata();
         $data['setting_detail']           = $setting_detail;
@@ -1052,8 +1174,10 @@ class Chrm extends CI_Controller {
         $this->template->full_admin_html_view($content);
     }
      public function state_tax($endDate, $employee_id, $employee_tax, $working_state_tax, $user_id, $this_period, $tax_type, $timesheet_id, $payroll, $payroll_frequency, $action = false) {
-        $state_tax            = $this->Hrm_model->get_state_details('state', 'state_and_tax', 'state', $working_state_tax, $user_id);
-        $state                = $this->Hrm_model->get_state_details('tax', 'state_and_tax', 'state', $state_tax[0]['state'], $user_id);
+        $date = DateTime::createFromFormat('m/d/Y', trim($endDate));
+        $year = $date->format('Y');
+        $state_tax            = $this->Hrm_model->get_state_details('state', 'state_and_tax', 'state', $working_state_tax, $user_id, $year);
+        $state                = $this->Hrm_model->get_state_details('tax', 'state_and_tax', 'state', $state_tax[0]['state'], $user_id, $year);
         $tax_split            = explode(',', $state[0]['tax']);
         $overall_state_tax    = [];
         $this_period_statetax = [];
@@ -1079,13 +1203,15 @@ class Chrm extends CI_Controller {
             } else {
                 $table = 'state_localtax';
             }
-            $tax_data = $this->Hrm_model->get_state_details('*', $table, 'tax', $state_tax[0]['state'] . "-" . $tax, $user_id);
+            $tax_data = $this->Hrm_model->get_state_details('*', $table, 'tax', $state_tax[0]['state'] . "-" . $tax, $user_id, $year);
+    
             foreach ($tax_data as $tx) {
                 $split = explode('-', $tx[$employee_tax]);
                 if (count($split) > 1 && $split[0] != '' && $split[1] != '') {
                     if ($this_period >= $split[0] && $this_period <= $split[1]) {
                         $range               = $split[0] . "-" . $split[1];
-                        $data['working_tax'] = $this->Hrm_model->working_state_tax($tax_data[0]['tax'], $employee_tax, $this_period, $range, $state_tax[0]['state'], $user_id, $payroll, $payroll_frequency);
+                        $data['working_tax'] = $this->Hrm_model->working_state_tax($tax_data[0]['tax'], $employee_tax, $this_period, $range, $state_tax[0]['state'], $user_id, $payroll, $payroll_frequency, $year);
+
                         if (!empty($data['working_tax'])) {
                             foreach ($data['working_tax'] as $contribution) {
                                 $employee = $contribution['employee'];
@@ -1095,8 +1221,9 @@ class Chrm extends CI_Controller {
                                 $employeeTaxExplode    = explode('-', $employeeTax);
                                 $checkFinalAmount      = floatval($this_period - $employeeTaxExplode[0]);
                                 $employee_contribution = floatval(($employee / 100) * $checkFinalAmount + $contribution['details']);
+                             
                                 $employer_contribution = floatval(($employer / 100) * $this_period);
-                                $row                   = $this->db->select('*')->from($table)->where('employee', $employee)->where('tax', $tax_data[0]['tax'])->where($employee_tax, $range)->where('created_by', $user_id)->count_all_results();
+                                $row                   = $this->db->select('*')->from($table)->where('employee', $employee)->where('tax', $tax_data[0]['tax'])->where($employee_tax, $range)->where('year', $year)->where('created_by', $user_id)->count_all_results();
                                 $employee_tax_key      = "'employee_" . $tax_data[0]['tax'] . "'";
                                 $employer_tax_key      = "'employer_" . $tax_data[0]['tax'] . "'";
                                 $search_tax            = explode('-', $tax_data[0]['tax']);
@@ -1110,7 +1237,9 @@ class Chrm extends CI_Controller {
 
                                         $tax_name = trim(substr($contribution['tax'], strpos($contribution['tax'], '-') + 1, strrpos($contribution['tax'], '-') - strpos($contribution['tax'], '-') - 1));
                                         $code     = trim(substr($contribution['tax'], strrpos($contribution['tax'], '-') + 1));
+                                     
                                         if ($employee_contribution) {
+                                   
                                             $tax_history_employee = array(
                                                 'employee_id'   => $employee_id,
                                                 'time_sheet_id' => $timesheet_id,
@@ -1125,6 +1254,8 @@ class Chrm extends CI_Controller {
                                                 'created_by'    => $user_id,
                                             );
                                             $this->db->insert('tax_history', $tax_history_employee);
+                                            echo $this->db->last_query(); echo "<br/>";
+                                          
                                         }
                                         if ($employer_contribution) {
 
@@ -1143,7 +1274,7 @@ class Chrm extends CI_Controller {
                                             );
                                             // var_dump($unemployement, $tax_history_employer );
 
-                                            $this->db->insert('tax_history_employer', $tax_history_employer);
+                                            $this->db->insert('tax_history_employer', $tax_history_employer);  echo $this->db->last_query(); echo "<br/>";
 
                                         }
 
@@ -1168,11 +1299,11 @@ class Chrm extends CI_Controller {
                                             'hrate'        => $employeedata[0]['hrate'],
                                             'create_by'    => $user_id,
                                         );
-                                        $this->db->insert('info_payslip', $info_payslip); 
+                                        $this->db->insert('info_payslip', $info_payslip); echo $this->db->last_query(); echo "<br/>";
                                         $this_period_statetax[$tax_name] = $employee_contribution ? $employee_contribution : 0;
                                     } else {
                                         $amount           = $result ? $result : 0;
-                                        $sum_of_state_tax = $this->Hrm_model->get_cumulative_tax_amount($search_tax[1], $endDate, $employee_id, $tax_type);
+                                        $sum_of_state_tax = $this->Hrm_model->get_cumulative_tax_amount($search_tax[1], $endDate, $employee_id, $tax_type, $year);
                                         $overall_amount   = $sum_of_state_tax ? $sum_of_state_tax : 0;
                                         if ($amount > 0) {
                                             $this_period_statetax[$employee_tax_key] = $amount;
@@ -1188,12 +1319,20 @@ class Chrm extends CI_Controller {
                 }
             }
         }
-     
+          // Deleting duplicates in tax_history_employer table
+          $this->db->query("DELETE th1 FROM tax_history_employer th1  JOIN tax_history_employer th2
+          ON th1.id > th2.id AND th1.time_sheet_id = th2.time_sheet_id AND th1.tax_type = th2.tax_type
+          AND th1.code = th2.code AND th1.tax = th2.tax AND th1.amount = th2.amount;");
+          // Deleting duplicates in tax_history table
+          $this->db->query("DELETE th1 FROM tax_history th1  JOIN tax_history th2
+          ON th1.id > th2.id AND th1.time_sheet_id = th2.time_sheet_id AND th1.tax_type = th2.tax_type
+          AND th1.code = th2.code AND th1.tax = th2.tax AND th1.amount = th2.amount;");
+          
         $data = array(
             'this_perid_state_tax' => $this_period_statetax,
             'overall_state_tax'    => $overall_state_tax,
         );
-        /// die();
+
         return $data;
     }
     
@@ -1573,9 +1712,10 @@ $work_in_minutes = $work_hours * 60 + $work_minutes;
             "living_county_tax"      => $data_employee["living_county_tax"],
             "living_other_tax"       => $data_employee["living_other_tax"],
         ];
+        
+        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $this->session->userdata('userName'), 'Update Employee', '', '', 'Human Resource', 'Employee Update Successfully', 'Update', date('m-d-Y'));
+        
         $result = $this->Hrm_model->update_employee($this->input->post("employee_id", true), $postData);
-
-        // echo $this->db->last_query(); die;
 
         if ($result) {
             $response = array(
@@ -2158,6 +2298,7 @@ $work_in_minutes = $work_hours * 60 + $work_minutes;
         $date               = $this->input->post("payslip_date_search");
         $emp_name           = $this->input->post('employee_name');
         $items              = $this->Hrm_model->getPaginatedpayslip($limit, $start, $orderField, $orderDirection, $search, $date, $emp_name);
+      
         $sc_no_datainfo     = $this->Hrm_model->getPaginatedscpayslip($limit, $start, $orderField, $orderDirection, $search, $date, $emp_name);
         $sc_info_choice_yes = $this->Hrm_model->getPaginatedscchoiceyes($limit, $start, $orderField, $orderDirection, $search, $date, $emp_name);
         array_merge($items, $sc_no_datainfo, $sc_info_choice_yes);
@@ -2314,12 +2455,6 @@ $work_in_minutes = $work_hours * 60 + $work_minutes;
             $hrate           = $hrate;
             $extra_thisrate  = $data['timesheet_data'][0]['extra_amount'];
             $above_extra_sum = $data['timesheet_data'][0]['amount'];
-            // $scAmount = 0;
-            // if($employeedata[0]['choice'] == 'Yes') {
-            // $scAmount        = $salescommision['s_commision_amount'] ?? 0;
-            // }else{
-            // $scAmount        = 0;    
-            // }
             $scAmount = ($employeedata[0]['choice'] == 'Yes') ? ($salescommision['s_commision_amount'] ?? 0) : 0;
             $final           = $this->thisPeriodAmount($payroll_type, $payroll_freq, $data_timesheet['total_hours'], $hrate, $scAmount, $extra_thisrate, $above_extra_sum, $user_id, $company_id);
          
@@ -2332,17 +2467,22 @@ $work_in_minutes = $work_hours * 60 + $work_minutes;
             $working_deduction = 0;
             $living_deduction  = 0;
             foreach ($work_state_tax['this_perid_state_tax'] as $work_key => $workval) {
+             if (strpos($work_key, 'employee_') === false) {
                 $working_deduction += $workval;
+                 }
             }
             $federal_deduction = ($f['tax_value'] + $s['tax_value'] + $m['tax_value']);
             if (trim($employeedata[0]['working_state_tax']) != trim($employeedata[0]['living_state_tax'])) {
                 $living_state_tax = $this->state_tax($data_timesheet['end'], $employeedata[0]['id'], $employeedata[0]['employee_tax'], $employeedata[0]['living_state_tax'], $user_id, $final, 'living_state_tax', $timesheetdata[0]['timesheet_id'], $employeedata[0]['payroll_type'], $payroll_freq, true);
                 foreach ($living_state_tax['this_perid_state_tax'] as $living_key => $livingval) {
+                     if (strpos($work_key, 'employee_') === false) {
                     $living_deduction += $livingval;
+                     }
                 }
             }
 
             $net_amount = ($final - $federal_deduction - $working_deduction - $living_deduction);
+         
             if ($net_amount > 0) {
                 $this->db->set('net_amount', $net_amount)->where('timesheet_id', $data['timesheet_data'][0]['timesheet_id'])->update('info_payslip');
             }
@@ -2352,7 +2492,9 @@ $work_in_minutes = $work_hours * 60 + $work_minutes;
 
 // Country Tax - Madhu
   public function countryTax($tax_type, $employee_tax_column, $final, $templ_name, $tax_history_column, $user_id, $endDate, $timesheet_id) {
-        $tax                = $this->db->select('*')->from('federal_tax')->where('tax', $tax_type)->where('created_by', $user_id)->get()->result_array();
+        $date = DateTime::createFromFormat('m/d/Y', trim($endDate));
+        $year = $date->format('Y');
+        $tax  = $this->db->select('*')->from('federal_tax')->where('tax', $tax_type)->where('created_by', $user_id)->where('year', $year)->get()->result_array();
         $tax_range          = '';
         $ytd                = [];
         $tax_value          = 0;
@@ -2366,7 +2508,9 @@ $work_in_minutes = $work_hours * 60 + $work_minutes;
             }
         }
         $tax_info_method = strtolower(str_replace(' ', '_', $tax_type)) . '_tax_info';
-        $data[$tax_type] = $this->Hrm_model->federal_tax_info($tax_type, $employee_tax_column, $final, $tax_range, $user_id);
+        $date = DateTime::createFromFormat('m/d/Y', trim($endDate));
+        $year = $date->format('Y');
+        $data[$tax_type] = $this->Hrm_model->federal_tax_info($tax_type, $employee_tax_column, $final, $tax_range, $user_id, $year);
         if (isset($data[$tax_type][0]['employee']) && is_numeric($data[$tax_type][0]['employee'])) {
             $tax_employee = $data[$tax_type][0]['employee'];
             $tax_value    = round(($tax_employee / 100) * $final, 3);
@@ -2410,7 +2554,7 @@ $work_in_minutes = $work_hours * 60 + $work_minutes;
                 }
             }
         }
-        $sum_of_country_tax = $this->Hrm_model->sum_of_country_tax($endDate, $templ_name, $timesheet_id, $user_id);
+        $sum_of_country_tax = $this->Hrm_model->sum_of_country_tax($endDate, $templ_name, $timesheet_id, $user_id, $year);
         if (!empty($sum_of_country_tax)) {
             $ytd['ytd_days']                        = $sum_of_country_tax[0]['ytd_days'] ?? 0;
             $ytd['ytd_salary']                      = $sum_of_country_tax[0]['ytd_salary']+ $sum_of_country_tax[0]['sc_amount'] ?? 0;
@@ -2620,108 +2764,8 @@ $work_in_minutes = $work_hours * 60 + $work_minutes;
         $customer_info = $CI->Hrm_model->getemp_data($value);
         echo json_encode($customer_info);
     }
-    public function add_state_taxes_detail($tax = null) {
-        $CI = &get_instance();
-        $CI->load->model('Web_settings');
-        $setting_detail         = $CI->Web_settings->retrieve_setting_editdata();
-        $data['setting_detail'] = $setting_detail;
-        $url                    = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        $parts                  = parse_url($url);
-        $user_id                = isset($_GET['id']) ? $_GET['id'] : null;
-        $decodedId              = decodeBase64UrlParameter($user_id);
-        parse_str($parts['query'], $query);
 
-        // Hourly Data
-        $data['taxinfo'] = $this->db->select("*")->from('state_localtax')->where('tax', $query['tax'])->where('created_by', $decodedId)->get()->result_array();
-        // Weekly Data
-        $data['weekly_taxinfo'] = $this->db->select("*")->from('weekly_tax_info')->where('tax',$query['tax'])->where('created_by', $decodedId)->get()->result_array();
-        // BiWeekly Data
-        $data['biweekly_taxinfo'] = $this->db->select("*")->from('biweekly_tax_info')->where('tax',$query['tax'])->where('created_by', $decodedId)->get()->result_array();
-        // Monthly Data
-        $data['monthly_taxinfo'] = $this->db->select("*")->from('monthly_tax_info')->where('tax', $query['tax'])->where('created_by', $decodedId)->get()->result_array();
-        $data['title']           = display('add_taxes_detail');
-        $content                 = $this->parser->parse('hr/add_state_tax_detail', $data, true);
-        $this->template->full_admin_html_view($content);
-    }
-
-    public function add_citydetails($tax = null) {
-        $setting_detail         = $this->Web_settings->retrieve_setting_editdata();
-        $data['setting_detail'] = $setting_detail;
-        $url                    = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        $parts                  = parse_url($url);
-        $user_id                = isset($_GET['id']) ? $_GET['id'] : null;
-        $decodedId              = decodeBase64UrlParameter($user_id);
-        parse_str($parts['query'], $query);
-        // city Data
-        $data['citydata'] = $this->db->select("*")->from('city_tax_info')->where('tax', $query['tax'])->where('created_by', $decodedId)->get()->result_array();
-
-        $content                 = $this->parser->parse('hr/add_city_details', $data, true);
-        $this->template->full_admin_html_view($content);
-    }
-
-     public function add_countydetails($tax = null) {
-        $setting_detail         = $this->Web_settings->retrieve_setting_editdata();
-        $data['setting_detail'] = $setting_detail;
-        $url                    = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        $parts                  = parse_url($url);
-        $user_id                = isset($_GET['id']) ? $_GET['id'] : null;
-        $decodedId              = decodeBase64UrlParameter($user_id);
-        parse_str($parts['query'], $query);
-        // county Data
-        $data['countydata'] = $this->db->select("*")->from('county_tax_info')->where('tax',$query['tax'])->where('created_by', $decodedId)->get()->result_array();
-
-        $content                 = $this->parser->parse('hr/add_countydetails', $data, true);
-        $this->template->full_admin_html_view($content);
-    }
-    // Federal Tax - Madhu
-    public function add_taxes_detail() {
-        $user_id                = $this->input->get('id');
-        $company_id             = $this->input->get('admin_id');
-        $decodedId              = decodeBase64UrlParameter($user_id);
-        $setting_detail         = $this->Web_settings->retrieve_setting_editdata($decodedId);
-        $data['setting_detail'] = $setting_detail;
-        $tax                    = $this->input->post('tax');
-        $data['taxinfo']        = $this->Hrm_model->allFederaltaxes('Federal Income tax', $decodedId);
-        $data['title']          = display('add_taxes_detail');
-        $content                = $this->parser->parse('hr/add_taxes_detail', $data, true);
-        $this->template->full_admin_html_view($content);
-    }
-    // Social Security Tax - Madhu
-    public function socialsecurity_detail() {
-        $user_id                = $this->input->get('id');
-        $company_id             = $this->input->get('admin_id');
-        $decodedId              = decodeBase64UrlParameter($user_id);
-        $setting_detail         = $this->Web_settings->retrieve_setting_editdata($decodedId);
-        $data['setting_detail'] = $setting_detail;
-        $data['taxinfo']        = $this->Hrm_model->allFederaltaxes('Social Security', $decodedId);
-        $data['title']          = display('add_taxes_detail');
-        $content                = $this->parser->parse('hr/social_security_list', $data, true);
-        $this->template->full_admin_html_view($content);
-    }
-    // Medicare Tax - Madhu
-    public function medicare_detail() {
-        $user_id                = $this->input->get('id');
-        $company_id             = $this->input->get('admin_id');
-        $decodedId              = decodeBase64UrlParameter($user_id);
-        $setting_detail         = $this->Web_settings->retrieve_setting_editdata($decodedId);
-        $data['setting_detail'] = $setting_detail;
-        $data['taxinfo']        = $this->Hrm_model->allFederaltaxes('Medicare', $decodedId);
-        $data['title']          = display('add_taxes_detail');
-        $content                = $this->parser->parse('hr/medicare_list', $data, true);
-        $this->template->full_admin_html_view($content);
-    }
-    // Federal Unemployment Tax - Madhu
-    public function federalunemployment_detail() {
-        $user_id                = $this->input->get('id');
-        $company_id             = $this->input->get('admin_id');
-        $decodedId              = decodeBase64UrlParameter($user_id);
-        $setting_detail         = $this->Web_settings->retrieve_setting_editdata($decodedId);
-        $data['taxinfo']        = $this->Hrm_model->allFederaltaxes('Federal unemployment', $decodedId);
-        $data['title']          = display('add_taxes_detail');
-        $data['setting_detail'] = $setting_detail;
-        $content                = $this->parser->parse('hr/federalunemployment_list', $data, true);
-        $this->template->full_admin_html_view($content);
-    }
+   
     public function add_timesheet() {
         $data['title'] = display('add_timesheet');
         $CI            = &get_instance();

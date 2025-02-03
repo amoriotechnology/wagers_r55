@@ -5,12 +5,12 @@ $active_group  = 'default';
 $query_builder = TRUE;
 $active_record = TRUE;
 
-$db['default'] = array(
+$db['default'] = [
     'dsn'          => '',
     'hostname'     => 'localhost',
-    'username'     => 'root',
-    'password'     => '',
-    'database'     => 'wagers_r55',
+    'username'     => 'amoriotech_stockeai',
+    'password'     => 'Amorio@2022',
+    'database'     => 'amoriotech_stockeai',
     'dbdriver'     => 'mysqli',
     'dbprefix'     => '',
     'pconnect'     => FALSE,
@@ -24,8 +24,8 @@ $db['default'] = array(
     'compress'     => FALSE,
     'autoinit'     => TRUE,
     'stricton'     => FALSE,
-    'failover'     => array(),
+    'failover'     => [],
     'save_queries' => TRUE,
-);
+];
 
 ?>

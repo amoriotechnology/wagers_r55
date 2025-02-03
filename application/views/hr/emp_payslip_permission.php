@@ -1,12 +1,12 @@
 <style>
 .switch-input[disabled] + .switch-label {
     pointer-events: none;
-    background-color: #f2f2f2; 
-    color: #999; 
+    background-color: #f2f2f2;
+    color: #999;
 }
 
 .switch-input[disabled] + .switch-label::after {
-    border-color: #999; 
+    border-color: #999;
 }
 .switch {
   margin-top: 5px;
@@ -124,12 +124,12 @@
   background: #4FB845;
 }
  .btnclr ,th{
-   background-color:<?=$setting_detail[0]['button_color'];?>;
+   background-color:<?php echo $setting_detail[0]['button_color'];?>;
    color: white;
    }
 .table {
-    width: 100%; 
-    table-layout: fixed; 
+    width: 100%;
+    table-layout: fixed;
 }
 
 .table th,
@@ -137,7 +137,7 @@
     width: auto;
     border: 1px solid #ccc;
     padding: 8px;
-   
+
 }
 .table input[type="text"],input[type="time"] {
     text-align:center;
@@ -150,8 +150,8 @@ input {border:0;outline:0;}
     height: 36px;
 }
 .btnclr{
-    background-color:<?=$setting_detail[0]['button_color'];?>;
-    color: <?=$setting_detail[0]['button_color'];?>;
+    background-color:<?php echo $setting_detail[0]['button_color'];?>;
+    color: <?php echo $setting_detail[0]['button_color'];?>;
 
 }
 th,td{
@@ -180,7 +180,7 @@ th,td{
             <h1>Payment Administration</h1>
             <small></small>
             <ol class="breadcrumb">
-                <li><a href="#"><i class="pe-7s-home"></i> <?=display('home')?></a></li>
+                <li><a href="#"><i class="pe-7s-home"></i> <?php echo display('home')?></a></li>
                 <li><a href="#">HRM</a></li>
                 <li class="active" style="color:orange">Payment Administration</li>
             </ol>
@@ -194,20 +194,20 @@ th,td{
             <div class="panel panel-bd lobidrag">
                 <div class="panel-heading" style="height:50px;">
                     <div class="panel-title">
-                        <a style="float:right;color:white;" href="<?php echo base_url('Chrm/manage_timesheet?id=' . $_GET['id'] . '&admin_id=' . $_GET['admin_id']); ?>" class="btnclr btn m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?> </a>
+                        <a style="float:right;color:white;" href="<?php echo base_url('Chrm/manage_timesheet?id=' . $_GET['id'] . '&admin_id=' . $_GET['admin_id']); ?>" class="btnclr btn m-b-5 m-r-2"><i class="ti-align-justify"> </i><?php echo "Manage TimeSheet" ?> </a>
                     </div>
                 </div>
-                <?=form_open_multipart('Chrm/adminApprove', 'id="datavalidate"')?>
+                <?php echo form_open_multipart('Chrm/adminApprove', 'id="datavalidate"')?>
                 <div class="panel-body">
                     <div class="form-group row">
                         <div class="col-sm-6">
                             <label for="customer" class="col-sm-4 col-form-label">Employee Name<i class="text-danger">*</i></label>
                             <div class="col-sm-6">
-                                <input type="hidden" readonly id="tsheet_id" value="<?=$time_sheet_data[0]['timesheet_id'];?>" name="tsheet_id" />
-                                <input type="hidden" readonly id="unique_id" value="<?=$time_sheet_data[0]['unique_id'];?>" name="unique_id" />
+                                <input type="hidden" readonly id="tsheet_id" value="<?php echo $time_sheet_data[0]['timesheet_id'];?>" name="tsheet_id" />
+                                <input type="hidden" readonly id="unique_id" value="<?php echo $time_sheet_data[0]['unique_id'];?>" name="unique_id" />
                                 <select name="templ_name" id="templ_name" class="form-control" tabindex="3" required>
                                     <?php foreach ($employee_name as $pt) {?>
-                                        <option value="<?=$pt['id'];?>" <?=($employee[0]['id'] == $pt['id']) ? 'selected' : '';?> ><?=$pt['first_name'] . " " . $pt['last_name'];?></option>
+                                        <option value="<?php echo $pt['id'];?>" <?php echo ($employee[0]['id'] == $pt['id']) ? 'selected' : '';?> ><?php echo $pt['first_name'] . " " . $pt['last_name'];?></option>
                                     <?php }?>
                                 </select>
                             </div>
@@ -216,7 +216,7 @@ th,td{
                          <div class="col-sm-6">
                             <label for="qdate" class="col-sm-4 col-form-label">Job title</label>
                             <div class="col-sm-6">
-                                <input type="text" name="job_title" id="job_title" readonly placeholder="Job title" value="<?=empty($employee_name[0]['designation']) ? 'Sales Partner' : $employee_name[0]['designation'];?>" class="form-control">
+                                <input type="text" name="job_title" id="job_title" readonly placeholder="Job title" value="<?php echo empty($employee_name[0]['designation']) ? 'Sales Partner' : $employee_name[0]['designation'];?>" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -225,15 +225,15 @@ th,td{
                         <div class="col-sm-6">
                             <label for="dailybreak" class="col-sm-4 col-form-label">Date Range<i class="text-danger">*</i></label>
                             <div class="col-sm-6">
-                                <input id="reportrange" type="text" readonly name="date_range" <?php if ($time_sheet_data[0]['uneditable'] == 1) {echo 'readonly';}?> value="<?=$time_sheet_data[0]['month'];?>" class="form-control"/>
+                                <input id="reportrange" type="text" readonly name="date_range"                                                                                               <?php if ($time_sheet_data[0]['uneditable'] == 1) {echo 'readonly';}?> value="<?php echo $time_sheet_data[0]['month'];?>" class="form-control"/>
                             </div>
                         </div>
 
                         <div class="col-sm-6">
                             <label for="dailybreak" class="col-sm-4 col-form-label">Payroll Frequency <i class="text-danger"></i></label>
                             <div class="col-sm-6">
-                                <input id="payroll_freq" name="payroll_freq" type="text" value="<?=$time_sheet_data[0]['payroll_freq'];?>" readonly class="form-control"/>
-                                <input  type="hidden" id="payroll_type"  value="<?=$employee[0]['payroll_type'];?>" name="payroll_type" />
+                                <input id="payroll_freq" name="payroll_freq" type="text" value="<?php echo $time_sheet_data[0]['payroll_freq'];?>" readonly class="form-control"/>
+                                <input  type="hidden" id="payroll_type"  value="<?php echo $employee[0]['payroll_type'];?>" name="payroll_type" />
                             </div>
                         </div>
                     </div>
@@ -252,198 +252,199 @@ th,td{
                                         <th style='height:25px;' class="col-md-2">End Time (HH:MM)</th>
                                         <th style='height:25px;' class="col-md-5">Hours</th>
                                         <th style='height:25px;' class="col-md-5">Over Time</th>
-                                        <?php if ($time_sheet_data[0]['uneditable'] != '1') { echo "<th style='height:25px;' class='col-md-5'>Action</th>"; } ?>
+                                        <?php if ($time_sheet_data[0]['uneditable'] != '1') {echo "<th style='height:25px;' class='col-md-5'>Action</th>";}?>
 
                                     <?php } elseif ($employee_name[0]['payroll_type'] != 'Hourly') {?>
                                         <th style='height:25px;' class="col-md-2">Date</th>
                                         <th style='height:25px;' class="col-md-1">Day</th>
                                         <th style='height:25px;' class="col-md-1">Present / Absent</th>
                                     <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') {?>
-                                    <?php }?>
+<?php }?>
                                 </tr>
                             </thead>
 
 <?php
-function compareDates($a, $b) {
-    $dateA = DateTime::createFromFormat('d/m/Y', $a['Date']);
-    $dateB = DateTime::createFromFormat('d/m/Y', $b['Date']);
-    if ($dateA === false || $dateB === false) {
-        return 0; 
+    function compareDates($a, $b) {
+        $dateA = DateTime::createFromFormat('d/m/Y', $a['Date']);
+        $dateB = DateTime::createFromFormat('d/m/Y', $b['Date']);
+        if ($dateA === false || $dateB === false) {
+            return 0;
+        }
+        return $dateA <=> $dateB;
     }
-    return $dateA <=> $dateB;
-}
-$timesheetdata = [];
-$split_date    = explode(' - ', $time_sheet_data[0]['month']);
-$start_date    = date('Y-m-d', strtotime($split_date[0]));
-$end_date      = date('Y-m-d', strtotime($split_date[1]));
-$btw_days      = date_diff(date_create($start_date), date_create($end_date));
-$get_days      = (int) ($btw_days->format('%a') + 1);
-$end_week      = $setting_detail[0]['end_week'];
+    $timesheetdata = [];
+    $split_date    = explode(' - ', $time_sheet_data[0]['month']);
+    $start_date    = date('Y-m-d', strtotime($split_date[0]));
+    $end_date      = date('Y-m-d', strtotime($split_date[1]));
+    $btw_days      = date_diff(date_create($start_date), date_create($end_date));
+    $get_days      = (int) ($btw_days->format('%a') + 1);
+    $end_week      = $setting_detail[0]['end_week'];
 
 if ($employee_name[0]['payroll_type'] == 'Hourly') {?>
 
                             <tbody id="tBody">
                             <?php
-if (!empty($time_sheet_data)) {
+                                if (! empty($time_sheet_data)) {
 
-    
-    usort($time_sheet_data, 'compareDates');
-    $printedDates = array();
+                                    usort($time_sheet_data, 'compareDates');
+                                    $printedDates = [];
 
-    foreach ($time_sheet_data as $tsheet) {
-        $timesheetdata[$tsheet['Date']] = ['date' => $tsheet['Date'], 'day' => $tsheet['Day'], 'edit' => $tsheet['uneditable'], 'start' => $tsheet['time_start'], 'end' => $tsheet['time_end'], 'per_hour' => $tsheet['hours_per_day'], 'check' => $tsheet['present'], 'break' => $tsheet['daily_break'], 'over_time' => $tsheet['over_time']];
-        if (!empty($tsheet['hours_per_day']) && !in_array($tsheet['Date'], $printedDates)) {
-            $printedDates[] = $tsheet['Date'];
-        }
-    }
+                                    foreach ($time_sheet_data as $tsheet) {
+                                        $timesheetdata[$tsheet['Date']] = ['date' => $tsheet['Date'], 'day' => $tsheet['Day'], 'edit' => $tsheet['uneditable'], 'start' => $tsheet['time_start'], 'end' => $tsheet['time_end'], 'per_hour' => $tsheet['hours_per_day'], 'check' => $tsheet['present'], 'break' => $tsheet['daily_break'], 'over_time' => $tsheet['over_time']];
+                                        if (! empty($tsheet['hours_per_day']) && ! in_array($tsheet['Date'], $printedDates)) {
+                                            $printedDates[] = $tsheet['Date'];
+                                        }
+                                    }
 
-    $weekly_data = json_decode($time_sheet_data[0]['weekly_hours']);
-    $j           = 0;
-    $data_id     = 0;
-    for ($i = 0; $i < $get_days; $i++) {
-        $date = date('m/d/Y', strtotime($start_date . ' +' . $i . ' day'));
-        ?>
+                                    $weekly_data = json_decode($time_sheet_data[0]['weekly_hours']);
+                                    $j           = 0;
+                                    $data_id     = 0;
+                                    for ($i = 0; $i < $get_days; $i++) {
+                                        $date = date('m/d/Y', strtotime($start_date . ' +' . $i . ' day'));
+                                    ?>
                             <tr>
                                 <?php if ($employee_name[0]['payroll_type'] == 'Hourly') {?>
                                 <td class="date">
-                                    <input type="text" value="<?=$date;?>" name="date[]" readonly>
+                                    <input type="text" value="<?php echo $date;?>" name="date[]" readonly>
                                 </td>
                                 <td class="day">
-                                    <input type="text" value="<?=empty($timesheetdata[$date]['day']) ? date('l', strtotime($date)) : $timesheetdata[$date]['day'];?>" name="day[]" readonly>
+                                    <input type="text" value="<?php echo empty($timesheetdata[$date]['day']) ? date('l', strtotime($date)) : $timesheetdata[$date]['day'];?>" name="day[]" readonly>
                                 </td>
                                 <td style="text-align:center;" class="daily-break">
                                     <select name="dailybreak[]" class="form-control datepicker dailybreak" style="width: 100px;margin: auto; display: block;">
-                                    <option value="<?=$timesheetdata[$date]['break'];?>"><?=$timesheetdata[$date]['break'];?></option>
+                                    <option value="<?php echo $timesheetdata[$date]['break'];?>"><?php echo $timesheetdata[$date]['break'];?></option>
                                         <?php foreach ($dailybreak as $dbd) {?>
-                                            <option value="<?=$dbd['dailybreak_name'];?>"><?=$dbd['dailybreak_name'];?></option>
+                                            <option value="<?php echo $dbd['dailybreak_name'];?>"><?php echo $dbd['dailybreak_name'];?></option>
                                         <?php }?>
                                     </select>
                                 </td>
                                 <td class="start-time">
-                                    <input type="time" <?php if ($timesheetdata[$date]['edit'] == 1) {echo 'readonly';}?> name="start[]" readonly data-id='<?php echo $data_id; ?>' class="hasTimepicker start" value="<?=empty($date) ? 'readonly' : $timesheetdata[$date]['start'];?>">
+                                    <input type="time"                                                       <?php if ($timesheetdata[$date]['edit'] == 1) {echo 'readonly';}?> name="start[]" readonly data-id='<?php echo $data_id; ?>' class="hasTimepicker start" value="<?php echo empty($date) ? 'readonly' : $timesheetdata[$date]['start'];?>">
                                 </td>
                                 <td class="finish-time">
-                                    <input type="time" <?php if ($timesheetdata[$date]['edit'] == 1) {echo 'readonly';}?> name="end[]" readonly data-id='<?php echo $data_id; ?>' class="hasTimepicker end" value="<?=empty($date) ? 'readonly' : $timesheetdata[$date]['end'];?>">
+                                    <input type="time"                                                       <?php if ($timesheetdata[$date]['edit'] == 1) {echo 'readonly';}?> name="end[]" readonly data-id='<?php echo $data_id; ?>' class="hasTimepicker end" value="<?php echo empty($date) ? 'readonly' : $timesheetdata[$date]['end'];?>">
                                 </td>
                                 <td class="hours-worked">
-                                    <input readonly name="sum[]" class="timeSum hourly_tot_<?php echo $data_id; ?>" value="<?=empty($date) ? 'readonly' : $timesheetdata[$date]['per_hour'];?>" type="text">
+                                    <input readonly name="sum[]" class="timeSum hourly_tot_<?php echo $data_id; ?>" value="<?php echo empty($date) ? 'readonly' : $timesheetdata[$date]['per_hour'];?>" type="text">
                                 </td>
 
                                 <td class="overtime">
-                                    <input readonly name="over_time[]" class="overTime_<?php echo $data_id; ?>" value="<?=empty($timesheetdata[$date]['over_time']) ? '0.00' : $timesheetdata[$date]['over_time'];?>" type="text">
+                                    <input readonly name="over_time[]" class="overTime_<?php echo $data_id; ?>" value="<?php echo empty($timesheetdata[$date]['over_time']) ? '0.00' : $timesheetdata[$date]['over_time'];?>" type="text">
                                 </td>
 
-                                <?php if($time_sheet_data[0]['uneditable'] != 1) { ?>
+                                <?php if ($time_sheet_data[0]['uneditable'] != 1) {?>
                                     <td>
                                         <a style="color: white;" class="delete_day btnclr btn m-b-5 m-r-2" >
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
                                     </td>
-                                <?php } ?>
+                                <?php }?>
 
                                 <?php if ($end_week == $timesheetdata[$date]['day']) {
-                                    echo '<tr>
+                                                echo '<tr>
                                         <td colspan="5" class="text-right" style="font-weight:bold;">Weekly Total Hours:</td>
                                         <td> <input type="text" class="weekly_hour" name="hour_weekly_total[]" id="hourly_' . $data_id . '" value="' . $weekly_data[$j] . '"> </td>
                                     </tr>';
-                                    $data_id++;
-                                    $j++;
-                                }?>
+                                                $data_id++;
+                                                $j++;
+                                        }?>
 
                                 <?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') {?>
                                 <td class="date">
-                                    <input type="text" <?php if ($timesheetdata[$date]['edit'] == 1) {echo 'readonly';}?> value="<?=empty($timesheetdata[$date]['date']) ? 'readonly' : $timesheetdata[$date]['date'];?>" name="date[]">
+                                    <input type="text"                                                       <?php if ($timesheetdata[$date]['edit'] == 1) {echo 'readonly';}?> value="<?php echo empty($timesheetdata[$date]['date']) ? 'readonly' : $timesheetdata[$date]['date'];?>" name="date[]">
                                 </td>
                                 <td class="day">
-                                    <input type="text" <?php if ($timesheetdata[$date]['edit'] == 1) {echo 'readonly';}?> value="<?=empty($timesheetdata[$date]['Day']) ? 'readonly' : $timesheetdata[$date]['Day'];?>" name="day[]">
+                                    <input type="text"                                                       <?php if ($timesheetdata[$date]['edit'] == 1) {echo 'readonly';}?> value="<?php echo empty($timesheetdata[$date]['Day']) ? 'readonly' : $timesheetdata[$date]['Day'];?>" name="day[]">
                                 </td>
                                 <td class="hours-worked">
                                     <input name="sum[]" class="timeSum" type="checkbox" style="width: 20px;height: 20px"
-                                    <?=(isset($timesheetdata[$date]['check']) && $timesheetdata[$date]['check'] === "no") ? 'checked' : '';?>
-                                    <?=(!isset($timesheetdata[$date]['check']) || $timesheetdata[$date]['check'] === '') ? 'disabled' : '';?>>
+                                    <?php echo (isset($timesheetdata[$date]['check']) && $timesheetdata[$date]['check'] === "no") ? 'checked' : '';?>
+                                    <?php echo (! isset($timesheetdata[$date]['check']) || $timesheetdata[$date]['check'] === '') ? 'disabled' : '';?>>
                                 </td>
 
                                 <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') {}?>
                             </tr>
-                            <?php } } ?>
+                            <?php
+                                }
+                            }?>
                         </tbody>
                         <?php } else {?>
 
                         <tbody id="tBody">
                             <?php
-                            if (!empty($time_sheet_data)) {
-                                usort($time_sheet_data, 'compareDates');
-                                $printedDates = array();
-                                foreach ($time_sheet_data as $tsheet) {
-                                    $timesheetdata[$tsheet['Date']] = ['date' => $tsheet['Date'], 'day' => $tsheet['Day'], 'edit' => $tsheet['uneditable'], 'start' => $tsheet['time_start'], 'end' => $tsheet['time_end'], 'per_hour' => $tsheet['hours_per_day'], 'check' => $tsheet['present'], 'break' => $tsheet['daily_break']];
-                                    if (empty($tsheet['hours_per_day']) && !in_array($tsheet['Date'], $printedDates)) {
-                                        $printedDates[] = $tsheet['Date'];
+                                if (! empty($time_sheet_data)) {
+                                    usort($time_sheet_data, 'compareDates');
+                                    $printedDates = [];
+                                    foreach ($time_sheet_data as $tsheet) {
+                                        $timesheetdata[$tsheet['Date']] = ['date' => $tsheet['Date'], 'day' => $tsheet['Day'], 'edit' => $tsheet['uneditable'], 'start' => $tsheet['time_start'], 'end' => $tsheet['time_end'], 'per_hour' => $tsheet['hours_per_day'], 'check' => $tsheet['present'], 'break' => $tsheet['daily_break']];
+                                        if (empty($tsheet['hours_per_day']) && ! in_array($tsheet['Date'], $printedDates)) {
+                                            $printedDates[] = $tsheet['Date'];
+                                        }
                                     }
-                                }
-                                $data_id     = 0;
-                                $weekly_data = json_decode($time_sheet_data[0]['weekly_hours']);
-                                for ($j = 0; $j < $get_days; $j++) {
-                                $date = date('m/d/Y', strtotime($start_date . ' +' . $j . ' day'));
-                            ?>
+                                    $data_id     = 0;
+                                    $weekly_data = json_decode($time_sheet_data[0]['weekly_hours']);
+                                    for ($j = 0; $j < $get_days; $j++) {
+                                        $date = date('m/d/Y', strtotime($start_date . ' +' . $j . ' day'));
+                                    ?>
                             <tr>
                                 <?php if ($employee_name[0]['payroll_type'] == 'Hourly') {?>
                                 <td class="date">
-                                    <input type="text" name="date[]" value="<?=$date;?>" readonly>
+                                    <input type="text" name="date[]" value="<?php echo $date;?>" readonly>
                                 </td>
                                 <td class="day">
-                                    <input type="text" value="<?=empty($timesheetdata[$date]['day']) ? '' : $timesheetdata[$date]['day'];?>" name="day[]" readonly>
+                                    <input type="text" value="<?php echo empty($timesheetdata[$date]['day']) ? '' : $timesheetdata[$date]['day'];?>" name="day[]" readonly>
                                 </td>
                                 <td style="text-align:center;" class="daily-break">
                                     <select name="dailybreak[]" class="form-control datepicker dailybreak" style="width: 100px;margin: auto; display: block;">
-                                    <option value="<?=$timesheetdata[$date]['break'];?>"><?=$timesheetdata[$date]['break'];?></option>
+                                    <option value="<?php echo $timesheetdata[$date]['break'];?>"><?php echo $timesheetdata[$date]['break'];?></option>
                                         <?php foreach ($dailybreak as $dbd) {?>
-                                            <option value="<?=$dbd['dailybreak_name'];?>"><?=$dbd['dailybreak_name'];?></option>
+                                            <option value="<?php echo $dbd['dailybreak_name'];?>"><?php echo $dbd['dailybreak_name'];?></option>
                                         <?php }?>
                                     </select>
                                 </td>
                                 <td class="start-time">
-                                    <input <?php if ($timesheetdata[$date]['edit'] == 1) {echo 'readonly';}?> name="start[]" readonly data-id='<?php echo $data_id; ?>' class="hasTimepicker start" value="<?=empty($timesheetdata[$date]['day']) ? 'readonly' : $timesheetdata[$date]['start'];?>" type="time">
+                                    <input                                           <?php if ($timesheetdata[$date]['edit'] == 1) {echo 'readonly';}?> name="start[]" readonly data-id='<?php echo $data_id; ?>' class="hasTimepicker start" value="<?php echo empty($timesheetdata[$date]['day']) ? 'readonly' : $timesheetdata[$date]['start'];?>" type="time">
                                 </td>
                                 <td class="finish-time">
-                                    <input <?php if ($timesheetdata[$date]['edit'] == 1) {echo 'readonly';}?> name="end[]" readonly data-id='<?php echo $data_id; ?>' class="hasTimepicker end" value="<?=empty($timesheetdata[$date]['day']) ? 'readonly' : $timesheetdata[$date]['end'];?>" type="time">
+                                    <input                                           <?php if ($timesheetdata[$date]['edit'] == 1) {echo 'readonly';}?> name="end[]" readonly data-id='<?php echo $data_id; ?>' class="hasTimepicker end" value="<?php echo empty($timesheetdata[$date]['day']) ? 'readonly' : $timesheetdata[$date]['end'];?>" type="time">
                                 </td>
                                 <td class="hours-worked">
-                                    <input readonly name="sum[]" class="timeSum hourly_tot_<?php echo $data_id; ?>" value="<?=empty($timesheetdata[$date]['day']) ? 'readonly' : $timesheetdata[$date]['per_hour'];?>" type="text">
+                                    <input readonly name="sum[]" class="timeSum hourly_tot_<?php echo $data_id; ?>" value="<?php echo empty($timesheetdata[$date]['day']) ? 'readonly' : $timesheetdata[$date]['per_hour'];?>" type="text">
                                 </td>
                                 <td>
                                     <a style='color:white;' class="delete_day btnclr btn  m-b-5 m-r-2"><i class="fa fa-trash" aria-hidden="true"></i> </a>
                                 </td>
                                 <?php if ($end_week == $timesheetdata[$date]['day']) {
-                                    echo '<tr>
+                                                echo '<tr>
                                         <td colspan="5" class="text-right" style="font-weight:bold;">Weekly Total Hours:</td>
                                         <td> <input type="text" class="weekly_hour" name="hour_weekly_total[]" id="hourly_' . $data_id . '" value="' . $weekly_data[$i] . '" readonly> </td>
                                     </tr>';
-                                    $data_id++;
-                                }?>
+                                                $data_id++;
+                                        }?>
 
                                 <?php } elseif ($employee_name[0]['payroll_type'] != 'Hourly') {?>
                                 <td class="date">
-                                    <input type="text" value="<?=empty($date) ? 'readonly' : $date;?>" name="date[]" readonly>
+                                    <input type="text" value="<?php echo empty($date) ? 'readonly' : $date;?>" name="date[]" readonly>
                                 </td>
                                 <td class="day">
-                                    <input type="text" value="<?=empty($timesheetdata[$date]['day']) ? '' : $timesheetdata[$date]['day'];?>" name="day[]" readonly>
+                                    <input type="text" value="<?php echo empty($timesheetdata[$date]['day']) ? '' : $timesheetdata[$date]['day'];?>" name="day[]" readonly>
                                 </td>
                                 <td class="hours-worked">
                                     <label class="switch" style="width:100px;">
-                                        <input type="checkbox" class="timeSum present checkbox switch-input" id="blockcheck_<?=$i;?>" name="present[]" <?=(isset($timesheetdata[$date]['check']) && $timesheetdata[$date]['check'] === 'present') ? 'checked="checked"' : '';?> data-present="<?=$timesheetdata[$date]['check'] ?? '';?>" disabled>
+                                        <input type="checkbox" class="timeSum present checkbox switch-input" id="blockcheck_<?php echo $i;?>" name="present[]" <?php echo (isset($timesheetdata[$date]['check']) && $timesheetdata[$date]['check'] === 'present') ? 'checked="checked"' : '';?> data-present="<?php echo $timesheetdata[$date]['check'] ?? '';?>" disabled>
                                         <span contenteditable="false" class="switch-label" data-on="Present" data-off="Absent"></span>
                                         <span class="switch-handle"></span>
                                     </label>
-                                    <input readonly type="hidden" name="block[]" id="block_<?=$i++;?>" value="<?=(isset($timesheetdata[$date]['check']) && $timesheetdata[$date]['check'] === 'absent') ? 'absent' : 'present';?>" />
+                                    <input readonly type="hidden" name="block[]" id="block_<?php echo $i++;?>" value="<?php echo (isset($timesheetdata[$date]['check']) && $timesheetdata[$date]['check'] === 'absent') ? 'absent' : 'present';?>" />
                                 </td>
 
                                 <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') {?>
-                                <?php }?>
+<?php }?>
 
                             </tr>
                             <?php
-}
-}?>
+                                }
+                            }?>
                         </tbody>
                         <?php }?>
 
@@ -456,49 +457,46 @@ if (!empty($time_sheet_data)) {
                   <?php if ($employee_name[0]['payroll_type'] == 'Hourly') {?>
                         <td colspan="5" class="text-right" style="font-weight:bold;">Total Hours :</td>
                       <td style="text-align: center;"> <input  type="text"   readonly value="<?php echo $time_sheet_data[0]['total_hours']; ?>" name="total_net" id="total_net" /> </td>
-  
+
 
  <?php
-function convertToDecimalHours($time) {
-    list($hours, $minutes) = explode(':', $time);
-    return $hours + ($minutes / 60);
-}
-    $working_hour = 0;
-    if ($employee_name[0]['payroll_freq'] == 'Weekly') {
-        $working_hour = $extratime_info[0]['work_hour'];
-    } elseif ($employee_name[0]['payroll_freq'] == 'Bi-Weekly') {
-        $working_hour = ($extratime_info[0]['work_hour'] + $extratime_info[0]['work_hour']);
-    }
-    $total_hours_numeric = convertToDecimalHours($time_sheet_data[0]['total_hours']);
-    $work_hour_numeric   = convertToDecimalHours($working_hour);
+     function convertToDecimalHours($time) {
+         list($hours, $minutes) = explode(':', $time);
+         return $hours + ($minutes / 60);
+     }
+         $working_hour = 0;
+         if ($employee_name[0]['payroll_freq'] == 'Weekly') {
+             $working_hour = $extratime_info[0]['work_hour'];
+         } elseif ($employee_name[0]['payroll_freq'] == 'Bi-Weekly') {
+             $working_hour = ($extratime_info[0]['work_hour'] + $extratime_info[0]['work_hour']);
+         }
+         $total_hours_numeric = convertToDecimalHours($time_sheet_data[0]['total_hours']);
+         $work_hour_numeric   = convertToDecimalHours($working_hour);
 
-    if ($total_hours_numeric > $work_hour_numeric) {?>
+     if ($total_hours_numeric > $work_hour_numeric) {?>
     <input  type="hidden"   readonly id="above_extra_beforehours"
      value="<?php
-$mins      = $time_sheet_data[0]['total_hours'] - $working_hour;
-        $get_value = $time_sheet_data[0]['total_hours'] - $mins;
-        $get_value = sprintf('%d:00', $get_value);
-        echo $get_value
-        ;?>"
+                $mins      = $time_sheet_data[0]['total_hours'] - $working_hour;
+                        $get_value = $time_sheet_data[0]['total_hours'] - $mins;
+                        $get_value = sprintf('%d:00', $get_value);
+                    echo $get_value
+                    ; ?>"
          <?php
-        $hrate = $employee_name[0]['hrate'];
-        list($hours, $minutes) = explode(':', $get_value);
+             $hrate                 = $employee_name[0]['hrate'];
+                     list($hours, $minutes) = explode(':', $get_value);
 
+                     $total_hours = (int) $hours + ((int) $minutes / 60);
 
-        $total_hours = (int) $hours + ((int) $minutes / 60);
+                     $total_cost = $total_hours * $hrate;
 
-
-        $total_cost = $total_hours * $hrate;
-
-
-        $total_cost = round($total_cost, 2);
-//For YTD
-        $total                 = $time_sheet_data[0]['total_hours'];
-        list($hours, $minutes) = explode(':', $total);
-        $total_hours_ytd       = $hours + ($minutes / 60);
-        $total_cost_ytd        = $total_hours_ytd * $hrate;
-        $total_cost_ytd        = round($total_cost_ytd, 2);
-        ?>
+                     $total_cost = round($total_cost, 2);
+             //For YTD
+                     $total                 = $time_sheet_data[0]['total_hours'];
+                     list($hours, $minutes) = explode(':', $total);
+                     $total_hours_ytd       = $hours + ($minutes / 60);
+                     $total_cost_ytd        = $total_hours_ytd * $hrate;
+                     $total_cost_ytd        = round($total_cost_ytd, 2);
+                 ?>
      name="above_extra_beforehours" />
 
         <input type="hidden" id="above_extra_rate" name="above_extra_rate" value="<?php echo $employee_name[0]['hrate']; ?>" />
@@ -507,41 +505,41 @@ $mins      = $time_sheet_data[0]['total_hours'] - $working_hour;
         <input type="hidden" id="above_extra_ytd" name="above_extra_ytd" value="<?php echo $total_cost; ?>" />
         <?php } else {
 
-        $hrate                 = $employee_name[0]['hrate'];
-        list($hours, $minutes) = explode(':', $get_value);
-        $total_hours           = (int) $hours + ((int) $minutes / 60);
-        $total_cost            = $total_hours * $hrate;
-        $total_cost            = round($total_cost, 2);
+                    $hrate                 = $employee_name[0]['hrate'];
+                    list($hours, $minutes) = explode(':', $get_value);
+                    $total_hours           = (int) $hours + ((int) $minutes / 60);
+                    $total_cost            = $total_hours * $hrate;
+                    $total_cost            = round($total_cost, 2);
 
-        $total                 = $time_sheet_data[0]['total_hours'];
-        list($hours, $minutes) = explode(':', $total);
-        $total_hours_ytd       = $hours + ($minutes / 60);
-        $total_cost_ytd        = $total_hours_ytd * $hrate;
-        $total_cost_ytd        = round($total_cost_ytd, 2);
-        ?>
+                    $total                 = $time_sheet_data[0]['total_hours'];
+                    list($hours, $minutes) = explode(':', $total);
+                    $total_hours_ytd       = $hours + ($minutes / 60);
+                    $total_cost_ytd        = $total_hours_ytd * $hrate;
+                    $total_cost_ytd        = round($total_cost_ytd, 2);
+                ?>
                     <input type="hidden" readonly id="above_extra_beforehours"
                     value="<?php echo $time_sheet_data[0]['total_hours'];
-        ?>" name="above_extra_beforehours" />
+                                   ?>" name="above_extra_beforehours" />
                     <input type="hidden" id="above_extra_rate" name="above_extra_rate" value="<?php echo $employee_name[0]['hrate']; ?>" />
                     <input type="hidden" id="above_extra_sum" name="above_extra_sum" value="<?php echo $total_cost_ytd; ?>" />
                     <input type="hidden" id="above_this_hours" name="above_this_hours" value="<?php echo $time_sheet_data[0]['total_hours']; ?>" />
                     <input type="hidden" id="above_extra_ytd" name="above_extra_ytd" value="<?php echo $total_cost_ytd; ?>" />
 
                   <?php
-}?>
-                                <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') {?>
+                  }?>
+<?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') {?>
                                 <td colspan="2" class="text-right" style="font-weight:bold;">No of Days:</td>
                                   <td style="text-align: center;"> <input  type="text"   readonly id="total_net" value="<?php echo $time_sheet_data[0]['total_hours']; ?>" name="total_net" id="total_net"/>    </td>
                               <?php if ($total_hours_numeric > $work_hour_numeric) {?>
                 <input  type="hidden"   readonly id="above_extra_beforehours"
                  value="<?php
-      
-        echo $time_sheet_data[0]['total_hours'] ?? '';
 
-    $mins      = $time_sheet_data[0]['total_hours'] - $extratime_info[0]['work_hour'];
-    $get_value = $time_sheet_data[0]['total_hours'];
-    echo $get_value
-    ; ?>"
+                                echo $time_sheet_data[0]['total_hours'] ?? '';
+
+                                $mins      = $time_sheet_data[0]['total_hours'] - $extratime_info[0]['work_hour'];
+                                $get_value = $time_sheet_data[0]['total_hours'];
+                            echo $get_value
+                            ; ?>"
                  name="above_extra_beforehours" />
 
                     <input type="hidden" id="above_extra_rate" name="above_extra_rate" value="<?php echo $employee_name[0]['hrate']; ?>" />
@@ -552,46 +550,46 @@ $mins      = $time_sheet_data[0]['total_hours'] - $working_hour;
 
                     <?php } else {?>
                     <input type="hidden" readonly id="above_extra_beforehours"
-                    value="<?php echo $time_sheet_data[0]['total_hours'];?>" name="above_extra_beforehours" />
+                    value="<?php echo $time_sheet_data[0]['total_hours']; ?>" name="above_extra_beforehours" />
                     <input type="hidden" id="above_extra_rate" name="above_extra_rate" value="<?php echo $employee_name[0]['hrate']; ?>" />
                     <input type="hidden" id="above_extra_sum" name="above_extra_sum" value="<?php echo $time_sheet_data[0]['total_hours'] * $employee_name[0]['hrate']; ?>" />
-                    <input type="hidden" id="extra_this_hour" name="extra_this_hour" value="<?php echo !empty($get_value) ? $get_value : 0; ?>" />
+                    <input type="hidden" id="extra_this_hour" name="extra_this_hour" value="<?php echo ! empty($get_value) ? $get_value : 0; ?>" />
                     <input type="hidden" id="above_this_hours" name="above_this_hours" value="<?php echo $time_sheet_data[0]['total_hours']; ?>" />
                     <input type="hidden" id="above_extra_ytd" name="above_extra_ytd" value="<?php echo $time_sheet_data[0]['total_hours'] * $employee_name[0]['hrate']; ?>" />
                     <?php }?>
 
                     <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') {?>
-                   <?php }?>
+<?php }?>
                                  </tr>
                                  <br>
                               <?php if ($employee_name[0]['payroll_type'] == 'Hourly') {
-    $hourly_rate = $employee_name[0]['hrate'] * $extratime_info[0]['extra_workamount'];
-    if ($total_hours_numeric > $work_hour_numeric) {
-        list($hours, $minutes) = explode(':', $overtime);
-        $total_hours_decimal   = (int) $hours + ((int) $minutes / 60);
-        $total_cost            = $total_hours_decimal * $hourly_rate;
-        $total_cost            = round($total_cost, 2);
+                                      $hourly_rate = $employee_name[0]['hrate'] * $extratime_info[0]['extra_workamount'];
+                                      if ($total_hours_numeric > $work_hour_numeric) {
+                                          list($hours, $minutes) = explode(':', $overtime);
+                                          $total_hours_decimal   = (int) $hours + ((int) $minutes / 60);
+                                          $total_cost            = $total_hours_decimal * $hourly_rate;
+                                          $total_cost            = round($total_cost, 2);
 
-        ?>
-                                 <input type="hidden" id="extra_hour" name="extra_hour" value="<?php echo ($total_hours_numeric > $work_hour_numeric) ? ($overtime) : '0'; ?>" />
+                                      ?>
+                                 <input type="hidden" id="extra_hour" name="extra_hour" value="<?php echo($total_hours_numeric > $work_hour_numeric) ? ($overtime) : '0'; ?>" />
                                  <input type="hidden" id="extra_rate" name="extra_rate" value="<?php echo $employee_name[0]['hrate'] * $extratime_info[0]['extra_workamount']; ?>" />
                                  <input type="hidden" id="extra_thisrate" name="extra_thisrate" value="<?php echo $total_cost; ?>" />
                                  <input type="hidden" id="extra_this_hour" name="extra_this_hour" value="<?php echo $overtime; ?>" />
                                  <input type="hidden" id="extra_ytd" name="extra_ytd" value="<?php echo $total_cost; ?>"   />
                                  <?php
-} else {
-        list($hours, $minutes) = explode(':', $overtime);
-        $total_hours_ytd       = (int) $hours + ((int) $minutes / 60);
-        $total_c               = $total_hours_ytd * $employee_name[0]['hrate'];
-        $total_c               = round($total_c, 2);
-        ?>
-                                 <input type="hidden" id="extra_hour" name="extra_hour" value="<?php echo ($total_hours_numeric > $work_hour_numeric) ? ($overtime) : '0'; ?>" />
+                                     } else {
+                                             list($hours, $minutes) = explode(':', $overtime);
+                                             $total_hours_ytd       = (int) $hours + ((int) $minutes / 60);
+                                             $total_c               = $total_hours_ytd * $employee_name[0]['hrate'];
+                                             $total_c               = round($total_c, 2);
+                                         ?>
+                                 <input type="hidden" id="extra_hour" name="extra_hour" value="<?php echo($total_hours_numeric > $work_hour_numeric) ? ($overtime) : '0'; ?>" />
                                  <input type="hidden" id="extra_rate" name="extra_rate" value="<?php echo $employee_name[0]['hrate'] * $extratime_info[0]['extra_workamount']; ?>" />
 
-                                 <input type="hidden" id="extra_thisrate" name="extra_thisrate" value="<?php echo ($total_c); ?>" />
+                                 <input type="hidden" id="extra_thisrate" name="extra_thisrate" value="<?php echo($total_c); ?>" />
                                 <?php
-}
-}?>
+                                    }
+                                }?>
                                 </tfoot>
 
                 </table>
@@ -610,10 +608,10 @@ $mins      = $time_sheet_data[0]['total_hours'] - $working_hour;
                                     </div>
 
                                     <div class="col-sm-4">
-                                        <select name="administrator_person" id="administrator_person" class="form-control" required data-placeholder="<?=display('select_one');?>">
+                                        <select name="administrator_person" id="administrator_person" class="form-control" required data-placeholder="<?php echo display('select_one');?>">
                                                 <option value="">Select Administrator Name</option>
                                             <?php foreach ($administrator as $adv) {?>
-                                                <option value="<?=$adv['adm_id'];?>" <?=($time_sheet_data[0]['admin_name'] == $adv['adm_id']) ? 'selected' : '';?> ><?=$adv['adm_name'];?></option>
+                                                <option value="<?php echo $adv['adm_id'];?>" <?php echo ($time_sheet_data[0]['admin_name'] == $adv['adm_id']) ? 'selected' : '';?> ><?php echo $adv['adm_name'];?></option>
                                             <?php }?>
                                         </select>
                                     </div>
@@ -633,9 +631,9 @@ $mins      = $time_sheet_data[0]['total_hours'] - $working_hour;
                                 <div class="col-sm-6">
                                     <select id="selector" name="payment_method" onchange="yesnoCheck(this);" class="form-control" required>
                                         <option value="">Select Payment Method</option>
-                                        <option value="Cheque" <?=($time_sheet_data[0]['payment_method'] == "Cheque") ? 'Selected' : '';?>>Cheque/Check </option>
-                                        <option value="Bank" <?=($time_sheet_data[0]['payment_method'] == "Bank") ? 'Selected' : '';?>>Bank</option>
-                                        <option value="Cash" <?=($time_sheet_data[0]['payment_method'] == "Cash") ? 'Selected' : '';?>>Cash</option>
+                                        <option value="Cheque" <?php echo ($time_sheet_data[0]['payment_method'] == "Cheque") ? 'Selected' : '';?>>Cheque/Check </option>
+                                        <option value="Bank" <?php echo ($time_sheet_data[0]['payment_method'] == "Bank") ? 'Selected' : '';?>>Bank</option>
+                                        <option value="Cash" <?php echo ($time_sheet_data[0]['payment_method'] == "Cash") ? 'Selected' : '';?>>Cash</option>
                                     </select>
                                 </div>
                             </div>
@@ -668,7 +666,7 @@ $mins      = $time_sheet_data[0]['total_hours'] - $working_hour;
                                 </div>
 
                                 <div class="col-sm-6">
-                                    <input type="text" id="bank_name" name="bank_name" value="<?=$time_sheet_data[0]['bank_name'];?>"  class="form-control" requried /><br />
+                                    <input type="text" id="bank_name" name="bank_name" value="<?php echo $time_sheet_data[0]['bank_name'];?>"  class="form-control" requried /><br />
                                 </div>
 
                                 <div class="col-sm-6">
@@ -676,7 +674,7 @@ $mins      = $time_sheet_data[0]['total_hours'] - $working_hour;
                                 </div>
 
                                 <div class="col-sm-6">
-                                    <input type="text" id="payment_refno" name="payment_refno" value="<?=$time_sheet_data[0]['payment_ref_no'];?>"  class="form-control"  requried/><br />
+                                    <input type="text" id="payment_refno" name="payment_refno" value="<?php echo $time_sheet_data[0]['payment_ref_no'];?>"  class="form-control"  requried/><br />
                                 </div>
                             </div>
                         </div>
@@ -703,7 +701,7 @@ $mins      = $time_sheet_data[0]['total_hours'] - $working_hour;
                                     <label for="aadhar">Date<i class="text-danger">*</i></label>
                                 </div>
                                 <div class="col-sm-6">
-                                    <input type="text" id="datepicker" name="cash_date" value="<?=$time_sheet_data[0]['cheque_date'];?>"  class="form-control" requried /><br />
+                                    <input type="text" id="datepicker" name="cash_date" value="<?php echo $time_sheet_data[0]['cheque_date'];?>"  class="form-control" requried readonly/><br />
                                 </div>
                             </div>
                         </div>
@@ -717,11 +715,11 @@ $mins      = $time_sheet_data[0]['total_hours'] - $working_hour;
                     $buttonStyle = 'float:right; color:white; background-color: #38469f;';
                     $mouseEvents = $time_sheet_data[0]['uneditable'] == 1 ? 'onmouseover="showToast()" onmouseleave="hideToast()"' : '';
                 ?>
-                <input type="submit" style="<?=$buttonStyle?>" value="Generate pay slip" class="btn btn-info m-b-5 m-r-2" <?=$isDisabled?> <?=$mouseEvents?> />
+                <input type="submit" style="<?php echo $buttonStyle?>" value="Generate pay slip" class="btn btn-info m-b-5 m-r-2" <?php echo $isDisabled?> <?php echo $mouseEvents?> />
 
                 </div>
             </div>
-                <?=form_close()?>
+                <?php echo form_close()?>
                     </div>
                 </div>
             </div>
@@ -729,9 +727,9 @@ $mins      = $time_sheet_data[0]['total_hours'] - $working_hour;
     </section>
 </div>
 
-<?php 
-   $modaldata['bootstrap_modals'] = array('daily_break');
-   $this->load->view('include/bootstrap_modal', $modaldata);
+<?php
+    $modaldata['bootstrap_modals'] = ['daily_break'];
+    $this->load->view('include/bootstrap_modal', $modaldata);
 ?>
 
 <script>
@@ -780,20 +778,20 @@ $(document).ready(function(){
 
 
 <?php
-$modaldata['bootstrap_modals'] = array('add_administrator');
-$this->load->view('include/bootstrap_modal', $modaldata);
+    $modaldata['bootstrap_modals'] = ['add_administrator'];
+    $this->load->view('include/bootstrap_modal', $modaldata);
 ?>
 
 
-<script src="<?=base_url('assets/js/moment.min.js');?>"></script>
+<script src="<?php echo base_url('assets/js/moment.min.js');?>"></script>
 
 <script>
 
 var data = {
     value:$('#customer_name').val()
 };
-var csrfName = '<?=$this->security->get_csrf_token_name();?>';
-var csrfHash = '<?=$this->security->get_csrf_hash();?>';
+var csrfName = '<?php echo $this->security->get_csrf_token_name();?>';
+var csrfHash = '<?php echo $this->security->get_csrf_hash();?>';
 
 $('body').on('input select change','#reportrange',function(){
     var date = $(this).val();
@@ -817,7 +815,7 @@ function getTimesheet(start, end) {
     let newDate;
     const monStartWeekDays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 
-    var end_week = "<?php echo (!empty($setting_detail[0]['end_week'])) ? $setting_detail[0]['end_week'] : 'Sunday'; ?>";
+    var end_week = "<?php echo(! empty($setting_detail[0]['end_week'])) ? $setting_detail[0]['end_week'] : 'Sunday'; ?>";
     var total_pres = 0;
     var data_id = 0;
     var tbody = '';
@@ -838,7 +836,7 @@ function getTimesheet(start, end) {
                 <td style="text-align:center;" class="daily-break_${i}">
                     <select disabled name="dailybreak[]" class="form-control datepicker dailybreak" style="width: 100px;margin: auto; display: block;">
                         <?php foreach ($dailybreak as $dbd) {?>
-                            <option value="<?=$dbd['dailybreak_name'];?>"><?=$dbd['dailybreak_name'];?></option>
+                            <option value="<?php echo $dbd['dailybreak_name'];?>"><?php echo $dbd['dailybreak_name'];?></option>
                         <?php }?>
                     </select>
                 </td>
@@ -887,7 +885,7 @@ $(document).on('select change', '#templ_name', function () {
         type:'POST',
         data: data,
         dataType:"json",
-        url:'<?=base_url();?>Chrm/getemployee_data',
+        url:'<?php echo base_url();?>Chrm/getemployee_data',
         success: function(result, statut) {
             $('#job_title').val(result[0]['designation']);
         }
@@ -938,7 +936,7 @@ function handleTimeCalculation(row) {
     let valuestart = moment(begin, "HH:mm");
     let valuestop = moment(end, "HH:mm");
     let timeDiff = moment.duration(valuestop.diff(valuestart));
-    var dailyBreakValue = parseInt(row.find('.dailybreak').val()) || 0; 
+    var dailyBreakValue = parseInt(row.find('.dailybreak').val()) || 0;
     var totalMinutes = timeDiff.asMinutes() - dailyBreakValue;
     var hours = Math.floor(totalMinutes / 60);
     var minutes = totalMinutes % 60;
@@ -986,7 +984,7 @@ function handleTimeCalculation(row) {
         total_netM += tableMinutes;
     });
 
-    var overtimeMinutes = Math.max(0, totalMinutes - 480); 
+    var overtimeMinutes = Math.max(0, totalMinutes - 480);
     var overtimeHours = Math.floor(overtimeMinutes / 60);
     var overtimeMinutesRemaining = overtimeMinutes % 60;
     var overtimeFormatted = overtimeHours.toString().padStart(2, '0') + ':' + overtimeMinutesRemaining.toString().padStart(2, '0');
@@ -1034,7 +1032,7 @@ $(document).on('change', '.weekly_hour', function () {
         var time = $(this).val().trim();
         if (time && time.includes(':')) {
             var [hours, minutes] = time.split(':').map(function (val) {
-                return parseInt(val, 10); 
+                return parseInt(val, 10);
             });
             tableHours += hours;
             tableMinutes += minutes;
@@ -1103,9 +1101,9 @@ function hideToast() {
 $("#datavalidate").validate({
     rules: {
       cheque_no: "required",
-      cheque_date: "required",  
-      administrator_person: "required",  
-      payment_method: "required",  
+      cheque_date: "required",
+      administrator_person: "required",
+      payment_method: "required",
       bank_name: "required",
       payment_refno: "required",
       cash_date: "required"

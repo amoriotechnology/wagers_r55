@@ -237,7 +237,7 @@ class Cweb_setting extends CI_Controller {
          'end' => $end,
          'created_by' => $user_id,
          'unique_id' => $admin_id,
-         'source' => 'WAGERS',
+         'source' => 'Calander',
          'schedule_status' => 1,
          'bell_notification' => 1
        );
@@ -1041,7 +1041,8 @@ class Cweb_setting extends CI_Controller {
             $row     = [
                 "id"            => $i,
                 "source"        => $item['source'],
-                "end"           => $item['end'],
+                "due_date"      => !empty($item['due_date']) ? $item['due_date'] : '',
+                "end"           => date('m-d-Y', strtotime($item['end'])),
                 "schedule_status" => $status,
                 "create_date" => date('m-d-Y', strtotime($item['create_date'])),
                 "action" => "<a href='" . base_url('Cweb_setting/calender_view?id=' . $encodedId . '&admin_id=' . $encodedAdmin) . "' class='btnclr btn btn-success btn-sm' target = '_blank' title='Redirect Calendar'> <i class='fa fa-external-link'></i> </a>",
@@ -1102,6 +1103,7 @@ class Cweb_setting extends CI_Controller {
             'start'             => $reminderDate,
             'end'               => $reminderDate,
             'schedule_status'   => 1,
+            'due_date'          => $this->input->post('due_dates'),
             'source'            => $this->input->post('select_source'),
             'email_id'          => $this->input->post('select_email'),
             'bell_notification' => 1,

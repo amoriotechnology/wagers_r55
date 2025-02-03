@@ -258,6 +258,8 @@ public function company_insert_branch()
         $this->insert_url_data('url_st', $insert_id, $uid, 'user_name_st', 'password_st', 'pin_number_st');
         $this->insert_url_data('url_lctx', $insert_id, $uid, 'user_name_lctx', 'password_lctx', 'pin_number_lctx');
         $this->insert_url_data('url_sstx', $insert_id, $uid, 'user_name_sstx', 'password_sstx', 'pin_number_sstx');
+        
+        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $this->session->userdata('userName'), 'Add Company', '', '', 'Manage Company', 'Company Added Successfully', 'Add', date('m-d-Y'));
 
         $response = [
             'status'  => 1,
@@ -339,6 +341,8 @@ public function company_update_branch()
         $this->update_url_data('url_st', $insert_id, $uid, 'user_name_st', 'password_st', 'pin_number_st');
         $this->update_url_data('url_lctx', $insert_id, $uid, 'user_name_lctx', 'password_lctx', 'pin_number_lctx');
         $this->update_url_data('url_sstx', $insert_id, $uid, 'user_name_sstx', 'password_sstx', 'pin_number_sstx');
+        
+        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $this->session->userdata('userName'), 'Update Company', '', '', 'Manage Company', 'Company Update Successfully', 'Update', date('m-d-Y'));
         
         $response = array(
             'status' => 1,
@@ -597,6 +601,8 @@ $row1=$query->result_array();
             'date_of_birth' => $this->input->post('dob'),
             'create_by' => $user_id
         ];
+        
+        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $this->session->userdata('userName'), 'Add User', '', '', 'Manage Users', 'User Added Successfully', 'Add', date('m-d-Y'));
 
         $userInsertSuccess = $this->db->insert('users', $userData);
 
@@ -772,6 +778,8 @@ $row1=$query->result_array();
 
         $this->db->where('unique_id', $editId);
         $loginUpdateSuccess = $this->db->update('user_login', $loginData);
+        
+        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $this->session->userdata('userName'), 'Update User', '', '', 'Manage Users', 'User Update Successfully', 'Update', date('m-d-Y'));
 
         if ($userUpdateSuccess && $loginUpdateSuccess) {
             $response = array('status' => 1, 'msg' => 'User updated successfully.');

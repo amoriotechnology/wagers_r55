@@ -77,6 +77,7 @@
                                              <tr style="height:25px;">
                                                 <th class='btnclr' style="width: 170px;">S.No</th>
                                                 <th class='btnclr' class="text-center">Source</th>
+                                                <th class='btnclr' class="text-center">Due Date</th>
                                                 <th class='btnclr' class="text-center">Schedule Date</th>
                                                 <th class='btnclr' class="text-center">Status</th>
                                                 <th class='btnclr' class="text-center">Created Date</th>
@@ -131,6 +132,7 @@ $(document).ready(function() {
       "columns": [
            { "data": "id" },
            { "data": "source", "className": "style-column"},
+           { "data": "due_date" , "className": "style-column"},
            { "data": "end" , "className": "style-column"},
            { "data": "schedule_status" },
            { "data": "create_date" },
@@ -138,7 +140,7 @@ $(document).ready(function() {
       ],
       "order": [[0, "desc"]],
       "columnDefs": [
-         { "orderable": false, "targets": [0, 5] }
+         { "orderable": false, "targets": [0, 6] }
       ],
       "pageLength": 10,
       "colReorder": true,

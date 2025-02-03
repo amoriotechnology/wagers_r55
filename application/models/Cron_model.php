@@ -31,7 +31,7 @@ class Cron_model extends CI_Model {
     
     public function get_email_scheduled(){
         $todayDate = date('Y-m-d');
-        $this->db->select('id, title, description, start, end, invoice_no, email_id');
+        $this->db->select('id, title, description, start, end, email_id');
         $this->db->from('schedule_list');
         $this->db->where('source', 'EMAIL');
         $this->db->where('start', $todayDate);

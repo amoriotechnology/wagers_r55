@@ -1,6 +1,14 @@
 <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/calanderstyle.css">
 <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>assets/css/toastr.min.css" />
 <script src="<?php echo base_url()?>assets/js/toastr.min.js" /></script>
+<style type="text/css">
+.style-column {
+    max-width: 200px;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+}
+</style>
 <div class="content-wrapper">
    <section class="content-header" style="height: 60px;">
       <div class="header-icon">
@@ -138,9 +146,9 @@ $(document).ready(function() {
         },
          "columns": [
          { "data": "id" },
-         { "data": "first_name" },
-         { "data": "job_title" },
-         { "data": "payroll_type" },
+         { "data": "first_name" , "className": "style-column" },
+         { "data": "job_title" , "className": "style-column" },
+         { "data": "payroll_type" , "className": "style-column" },
          { "data": "month" },
          { "data": "total_hours" },
          { "data": "uneditable" },

@@ -990,101 +990,117 @@ if(in_array(BOOTSTRAP_MODALS['add_states'],$bootstrap_modals)){ ?>
 </div>
 <?php } if(in_array(BOOTSTRAP_MODALS['allForms'],$bootstrap_modals)){ ?>
 <div class="modal fade modal-success" id="allForms" role="dialog">
-   <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content" style="text-align:center;">
-        <div class="modal-header btnclr" >
-            <a href="#" class="close" data-dismiss="modal">&times;</a>
-            <h3 class="modal-title">Forms</h3>
-        </div>
-         <div class="modal-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <select class="btnclr btn" id="timesheetSelect">
-                      <option value="">W2 Form - Select Employee</option>
-                    <?php
-                        $addedIds = [];
-                        foreach ($timesheet_data_emp as $time) {
-                            if (!empty($time['id']) && !empty($time['first_name']) && !empty($time['last_name']) && !isset($addedIds[$time['id']])) {
-                                echo '<option style="color:white;" value="' . htmlspecialchars($time['id']) . '?id=' . htmlspecialchars($company_id) . '">'
-                                    . htmlspecialchars($time['first_name']) . ' ' . htmlspecialchars($time['last_name'])
-                                    . '</option>';
-                                $addedIds[$time['id']] = true; 
-                            }
-                        }
-                    ?>
-
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <a class="btnclr btn" href="<?php echo base_url('chrm/formw3Form?id='.$_GET['id']) ?>">W3 Form</a>
-                </div>
-                <div class="col-md-4">
-                    <a class="btnclr btn" href="<?php echo base_url('chrm/form940Form?id='.$_GET['id']) ?>">Form 940</a>
-                </div>
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="text-align:center;">
+            <div class="modal-header btnclr">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h3 class="modal-title">Forms</h3>
             </div>
-            <div class="row mt-4">
-                <div class="col-md-4">
-                    <select class="btnclr btn" id="form941">
-                      <option style="color:white;" selected>Form 941 - Select a Quarter</option>
-                      <option style="color:white;" value="Q1?id=<?= $_GET['id'] ?>">Q1</option>
-                      <option style="color:white;" value="Q2?id=<?= $_GET['id'] ?>">Q2</option>
-                      <option style="color:white;" value="Q3?id=<?= $_GET['id'] ?>">Q3</option>
-                      <option style="color:white;" value="Q4?id=<?= $_GET['id'] ?>">Q4</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <a class="btnclr btn" href="<?php echo base_url('chrm/form944Form?id=' . $_GET['id']); ?>">Form 944</a>
-                </div>
-                <div class="col-md-4">
-                    <select class="btnclr btn" id="timesheetSelect3">
-                        <option>NJ927 Form</option>
-                        <option style="color:white;"  value="Q1?id=<?= $_GET['id'] ?>">Q1</option>
-                        <option style="color:white;"  value="Q2?id=<?= $_GET['id'] ?>">Q2</option>
-                        <option style="color:white;"  value="Q3?id=<?= $_GET['id'] ?>">Q3</option>
-                        <option style="color:white;"  value="Q4?id=<?= $_GET['id'] ?>">Q4</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row mt-4">
-                <div class="col-md-4">
-                    <select class="btnclr btn" id="UC_2a_form">
-                        <option style="color:white;" selected>UC-2A Form - Select a Quarter</option>
-                        <option style="color:white;" value="Q1?id=<?= $_GET['id'] ?>">Q1</option>
-                        <option style="color:white;" value="Q2?id=<?= $_GET['id'] ?>">Q2</option>
-                        <option style="color:white;" value="Q3?id=<?= $_GET['id'] ?>">Q3</option>
-                        <option style="color:white;" value="Q4?id=<?= $_GET['id'] ?>">Q4</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <a class="btnclr btn" href="<?php echo base_url('chrm/wr30_form?id=' . $_GET['id']); ?>">WR30 Form</a>
-                </div>
-                <div class="col-md-4">
-                    <select class="btnclr btn" id="timesheetSelecttwo">
-                        <option>F1099-NEC-Select Employee</option>
-                        <?php
-                            $addedIds = [];
-                            foreach ($merged_data_salespartner as $sales) {
-                                if (!in_array($sales['id'], $addedIds)) {
-                                    echo '<option style="color:white;" value="' . htmlspecialchars($sales['id']) . '?id=' . htmlspecialchars($company_id) . '">' . 
-                                         htmlspecialchars($sales['first_name']) . ' ' . 
-                                         htmlspecialchars($sales['middle_name']) . ' ' . 
-                                         htmlspecialchars($sales['last_name']) . 
-                                         '</option>';
-                                    $addedIds[] = $sales['id'];
+            <div class="modal-body">
+                <div class="row">
+                    <!-- W2 Form - Select Employee -->
+                    <div class="col-md-4">
+                        <select class="forms btnclr btn" id="timesheetSelect">
+                            <option value="">W2 Form - Select Employee</option>
+                            <?php
+                                $addedIds = [];
+                                foreach ($timesheet_data_emp as $time) {
+                                    if (!empty($time['id']) && !empty($time['first_name']) && !empty($time['last_name']) && !isset($addedIds[$time['id']])) {
+                                        echo '<option style="color:white;" value="' . htmlspecialchars($time['id']) . '?id=' . htmlspecialchars($company_id) . '">'
+                                            . htmlspecialchars($time['first_name']) . '<br>' . htmlspecialchars($time['last_name'])
+                                            . '</option>';
+                                        $addedIds[$time['id']] = true; 
+                                    }
                                 }
-                            }
-                        ?>
-                    </select>
+                            ?>
+                        </select>
+                    </div>
+                    
+                    <!-- W3 Form Link -->
+                    <div class="col-md-4">
+                        <input type="hidden" id="datepicker_input" name="datepicker_input"/>
+                        <a class="forms btnclr btn" href="<?php echo base_url('chrm/formw3Form?id='.$_GET['id']) ?>" id="w3FormLink">W3 Form</a>
+                    </div>
+
+                    <!-- Form 940 Link -->
+                    <div class="col-md-4">
+                        <a class="forms btnclr btn" href="<?php echo base_url('chrm/form940Form?id='.$_GET['id']) ?>" id="form940Link">Form 940</a>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <!-- Form 941 - Select Quarter -->
+                    <div class="col-md-4">
+                        <select class="forms btnclr btn" id="form941">
+                            <option style="color:white;" selected>Form 941 - Select a Quarter</option>
+                            <option style="color:white;" value="Q1?id=<?= $_GET['id'] ?>">Q1</option>
+                            <option style="color:white;" value="Q2?id=<?= $_GET['id'] ?>">Q2</option>
+                            <option style="color:white;" value="Q3?id=<?= $_GET['id'] ?>">Q3</option>
+                            <option style="color:white;" value="Q4?id=<?= $_GET['id'] ?>">Q4</option>
+                        </select>
+                    </div>
+
+                    <!-- Form 944 Link -->
+                    <div class="col-md-4">
+                        <a class="forms btnclr btn" href="<?php echo base_url('chrm/form944Form?id=' . $_GET['id']); ?>" id="form944Link">Form 944</a>
+                    </div>
+
+                    <!-- NJ927 Form - Select Quarter -->
+                    <div class="col-md-4">
+                        <select class="forms btnclr btn" id="timesheetSelect3">
+                            <option>NJ927 Form</option>
+                            <option style="color:white;" value="Q1?id=<?= $_GET['id'] ?>">Q1</option>
+                            <option style="color:white;" value="Q2?id=<?= $_GET['id'] ?>">Q2</option>
+                            <option style="color:white;" value="Q3?id=<?= $_GET['id'] ?>">Q3</option>
+                            <option style="color:white;" value="Q4?id=<?= $_GET['id'] ?>">Q4</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <!-- UC-2A Form - Select Quarter -->
+                    <div class="col-md-4">
+                        <select class="forms btnclr btn" id="UC_2a_form">
+                            <option style="color:white;" selected>UC-2A Form - Select a Quarter</option>
+                            <option style="color:white;" value="Q1?id=<?= $_GET['id'] ?>">Q1</option>
+                            <option style="color:white;" value="Q2?id=<?= $_GET['id'] ?>">Q2</option>
+                            <option style="color:white;" value="Q3?id=<?= $_GET['id'] ?>">Q3</option>
+                            <option style="color:white;" value="Q4?id=<?= $_GET['id'] ?>">Q4</option>
+                        </select>
+                    </div>
+
+                    <!-- WR30 Form Link -->
+                    <div class="col-md-4">
+                        <a class="forms btnclr btn" href="<?php echo base_url('chrm/wr30_form?id=' . $_GET['id']); ?>" id="wr30FormLink">WR30 Form</a>
+                    </div>
+
+                    <!-- F1099-NEC Select Employee -->
+                    <div class="col-md-4">
+                        <select class="forms btnclr btn" id="timesheetSelecttwo">
+                            <option>F1099-NEC-Select Employee</option>
+                            <?php
+                                $addedIds = [];
+                                foreach ($merged_data_salespartner as $sales) {
+                                    if (!in_array($sales['id'], $addedIds)) {
+                                        echo '<option style="color:white;" value="' . htmlspecialchars($sales['id']) . '?id=' . htmlspecialchars($company_id) . '">' . 
+                                             htmlspecialchars($sales['first_name']) . ' ' . 
+                                             htmlspecialchars($sales['middle_name']) . ' ' . 
+                                             htmlspecialchars($sales['last_name']) . 
+                                             '</option>';
+                                        $addedIds[] = $sales['id'];
+                                    }
+                                }
+                            ?>
+                        </select>
+                    </div>
                 </div>
             </div>
-         </div>
-         <div class="modal-footer">
-            <a href="#" class="btnclr btn btn-danger" data-dismiss="modal">Close</a>
-         </div>
-         <?php echo form_close() ?>
-      </div>
-   </div>
+            <div class="modal-footer">
+                <a href="#" class="btnclr btn btn-danger" data-dismiss="modal">Close</a>
+            </div>
+            <?php echo form_close() ?>
+        </div>
+    </div>
 </div>
+
 
 <?php } if(in_array(BOOTSTRAP_MODALS['reminders'], $bootstrap_modals)) { ?>
 
@@ -1109,13 +1125,14 @@ if(in_array(BOOTSTRAP_MODALS['add_states'],$bootstrap_modals)){ ?>
                         <tr>
                             <th>Period</th>
                             <th>Date</th>
+                            <th>Due Date</th>
                             <th>Source</th>
                         </tr>
                    </thead>
                    <tbody>
                         <tr>
                             <td>
-                                <select class="when form-control" name="title" style="width: -webkit-fill-available;">
+                                <select class="when form-control" name="title" id="period" onchange="selectPeriodDate()" style="width: -webkit-fill-available;">
                                     <option value="">Select Period</option>
                                     <option value="Quater 1">Quater 1</option>
                                     <option value="Quater 2">Quater 2</option>
@@ -1123,6 +1140,9 @@ if(in_array(BOOTSTRAP_MODALS['add_states'],$bootstrap_modals)){ ?>
                                     <option value="Quater 4">Quater 4</option>
                                     <option value="Year">Year</option>
                                 </select>
+                            </td>
+                            <td>
+                                <input type="text" width="20%" name="due_dates" id="due_dates" class="form-control" readonly placeholder="Due Date">
                             </td>
                             <td>
                                 <select class="when form-control" name="select_date" style="width: -webkit-fill-available;">
@@ -1140,7 +1160,6 @@ if(in_array(BOOTSTRAP_MODALS['add_states'],$bootstrap_modals)){ ?>
                                     <option value="WAGERS">WAGERS</option>
                                     <option value="CALENDER">CALENDER</option>
                                 </select>
-
                                 <br>
                                 <select class="form-control select_email" name="select_email" style="width: -webkit-fill-available; display: none;">
                                     <option value="">Select Email</option>
@@ -1229,7 +1248,7 @@ if(in_array(BOOTSTRAP_MODALS['add_states'],$bootstrap_modals)){ ?>
                         <tr>
                             <th>Period</th>
                             <th>Tax Due Date</th>
-                            <th>Source</th>
+                            <th>Schedule Date</th>
                         </tr>
                    </thead>
                    <tbody>
@@ -2122,10 +2141,12 @@ function reminderModals() {
 
             if (response && response.length > 0) {
                 response.forEach(function(item) {
+                    var formattedDatestart = changedateFormat(item.start);
+                    var formattedDatedue_date = changedateFormat(item.due_date);
                     var row = `<tr>
                         <td>${item.title}</td>
-                        <td>${item.start}</td>
-                        <td>${item.source}</td>
+                        <td>${formattedDatedue_date}</td>
+                        <td>${formattedDatestart}</td>
                         <input type='hidden' class='schedule_id' name='schedule_id' value='${item.id}' />
                         <input type='hidden' class='user_id' name='user_id' value='${item.created_by}' />
                     </tr>`;
@@ -2175,6 +2196,36 @@ $(document).ready(function() {
         });
     });
 });
+
+// Select Period To change quater wise due date
+function selectPeriodDate() {
+   var selectPeriod = $('#period').val();
+   console.log("Selected Period: ", selectPeriod);
+   var selectedDate = '';
+   var currentYear = new Date().getFullYear();
+   if (selectPeriod == 'Quater 1') {
+     selectedDate = '01-05-' + currentYear;  // May 1st for Quarter 1
+   } else if (selectPeriod == 'Quater 2') {
+     selectedDate = '07-31-' + currentYear;// July 31st for Quarter 2
+   } else if (selectPeriod == 'Quater 3') {
+      selectedDate = '08-31-' + currentYear; // August 31st for Quarter 3
+   } else if (selectPeriod == 'Quater 4') {
+     selectedDate = '01-31-' + currentYear; // January 31st for Quarter 4 (next year)
+   } else if (selectPeriod == 'Year') {
+     selectedDate = '01-31-' + currentYear;  // December 31st for the year
+   }
+   $('#due_dates').val(selectedDate);
+}
+
+// Date Format Change Function 
+function changedateFormat(dateString) 
+{
+    var date = new Date(dateString);
+    var month = String(date.getMonth() + 1).padStart(2, '0');
+    var day = String(date.getDate()).padStart(2, '0');
+    var year = date.getFullYear();
+    return `${month}-${day}-${year}`;
+}
 
 // Validation in Add Reminder
 
@@ -2238,6 +2289,43 @@ $("#calanderaddreminder").validate({
         });
     }
 });
+$(document).ready(function() {
+    $('.forms').on('click', function () {
+        var datepickerValue = $('#datepicker_input').val(); 
+        var companyId = '<?php echo $company_id; ?>'; 
+        if (datepickerValue) {
+             function updateUrlWithYear(url, id) {
+                 if (url.indexOf('id=') === -1) {
+                    url = url + '/' + id; 
+                }
+        if (url.indexOf('year=') === -1) {
+                    if (url.indexOf('?') === -1) {
+                        url = url + '?year=' + datepickerValue; 
+                    } else {
+                        url = url + '&year=' + datepickerValue; 
+                    }
+                }
+                return url;
+            }
+        $('#w3FormLink, #form940Link, #form944Link, #wr30FormLink').each(function() {
+                var selectedId = $('#timesheetSelect').val() || $('#timesheetSelect3').val() || $('#UC_2a_form').val(); // Adjust the logic to get the correct ID
+                if (selectedId) {
+                    $(this).attr('href', function(_, oldValue) {
+                        return updateUrlWithYear(oldValue, selectedId);
+                    });
+                }
+            });
+        $('#form941 option, #timesheetSelect3 option, #timesheetSelect option, #UC_2a_form option').each(function() {
+                var currentValue = $(this).val();
+            if (currentValue.indexOf('year=') === -1) {
+                    var updatedValue = currentValue + '&year=' + datepickerValue;
+                    $(this).val(updatedValue);
+                }
+            });
+        }
+    });
+});
+
 
 </script>
 

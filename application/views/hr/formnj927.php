@@ -3,14 +3,24 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+
   <body bgcolor="#A0A0A0" vlink="blue" link="blue"   >
 <div id="download"  >
+
+ 
+
 <div class="a4-size"  id="one"  >
       <div class="f927-img1"  >
+
         <img src="<?php echo base_url()  ?>assets/images/f927_1.jpg"  width="100%"   />
-     </div>
+
+     
+     
+      </div>
       <div class="fein">
-        <input type="text"  value="<?php echo $get_cominfo[0]["Federal_Pin_Number"];?>"  />
+      
+        <input type="text"  value="<?php echo $get_cominfo[0]["State_Tax_ID_Number"];?>"  />
+   
       </div>
       <div class="business-name">
         <input type="text" value="<?php echo $get_cominfo[0]['company_name'];?>" />
@@ -28,81 +38,119 @@
                   } else {
                        echo 'Unknown';
                   }
-              ?> / <?php echo date('Y'); ?>" />
+              ?> / <?php echo date('Y') ; ?>" />
       </div>
+
       <?php
-if ($quarter == 'Q1') {
-$quarter_end_date = date('m-d-Y', strtotime('last day of March'));
-} elseif ($quarter == 'Q2') {
-$quarter_end_date = date('m-d-Y', strtotime('last day of June'));
-} elseif ($quarter == 'Q3') {
-$quarter_end_date = date('m-d-Y', strtotime('last day of September'));
-} elseif ($quarter == 'Q4') {
-$quarter_end_date = date('m-d-Y', strtotime('last day of December'));
-} else {
-$quarter_end_date = 'Unknown';
-}
-?>
+    
+        if ($quarter == 'Q1') {
+        $year = date('Y') ;
+        $quarter_end_date = date('m-d-'.$year, strtotime('last day of March'));
+        } elseif ($quarter == 'Q2') {
+        $year = date('Y') ;
+        $quarter_end_date = date('m-d-'.$year, strtotime('last day of June'));
+        } elseif ($quarter == 'Q3') {
+        $year = date('Y') ;
+        $quarter_end_date = date('m-d-'.$year, strtotime('last day of September'));
+        } elseif ($quarter == 'Q4') {
+        $year = date('Y') ;
+        $quarter_end_date = date('m-d-'.$year, strtotime('last day of December')); 
+        } else {
+        $quarter_end_date = 'Unknown';
+        }
+      ?>
+
       <div class="quater-ending-date">
         <input type="text" value="<?php echo $quarter_end_date; ?>" />
       </div>
       <div class="Date-fleid">
         <input type="text" value="" />
       </div>
+
+
       <?php
+// Define an array for quarter end dates
 $quarter_end_dates = [
     'Q1' => 'last day of March',
     'Q2' => 'last day of June',
     'Q3' => 'last day of September',
     'Q4' => 'last day of December'
 ];
+
 if (isset($quarter) && array_key_exists($quarter, $quarter_end_dates)) {
     $quarter_end_date = new DateTime($quarter_end_dates[$quarter]);
     $return_due_date = $quarter_end_date->modify('+30 days')->format('m-d-Y');
 } else {
 }
 ?>
+
+
       <div class="return-due">
         <input type="text" value="<?php echo $return_due_date; ?>" />
       </div>
+
+
+ 
       <?php
-if ($quarter == 'Q1') {
+if ($info_for_nj[0]['extra_thisrate'] == 'Q1') {
     $quarter_end_date = date('Y-m-d', strtotime('last day of March'));
     $return_due_date = date('Y-m-d', strtotime('+45 days', strtotime($quarter_end_date)));
-} elseif ($quarter == 'Q2') {
+} elseif ($info_for_nj[0]['extra_thisrate'] == 'Q2') {
     $quarter_end_date = date('Y-m-d', strtotime('last day of June'));
     $return_due_date = date('Y-m-d', strtotime('+45 days', strtotime($quarter_end_date)));
-} elseif ($quarter == 'Q3') {
+} elseif ($info_for_nj[0]['extra_thisrate'] == 'Q3') {
     $quarter_end_date = date('Y-m-d', strtotime('last day of September'));
     $return_due_date = date('Y-m-d', strtotime('+45 days', strtotime($quarter_end_date)));
-} elseif ($quarter == 'Q4') {
+} elseif ($info_for_nj[0]['extra_thisrate'] == 'Q4') {
     $quarter_end_date = date('Y-m-d', strtotime('last day of December'));
     $return_due_date = date('Y-m-d', strtotime('+45 days', strtotime($quarter_end_date)));
 } else {
     $quarter_end_date = 'Unknown';
     $return_due_date = 'Unknown';
 }
-$total_overall = 0;
+?>
+
+   
+
+
+
+<div class="git-mon1">
+   
+        <input type="text" value="$<?php echo round($quarterData[0]['amount'],2); ?>" />
+</div>
+
+ 
+
+      <div class="git-mon2">
+ <input type="text" value="$<?php echo round($quarterData[1]['amount'],2); ?>" />
+    </div>
+
+ 
+      <div class="git-mon3">
+   <input type="text" value="$<?php echo round($quarterData[2]['amount'],2); ?>" />
+
+      </div>
+
+<?php
+ $total_overall = 0;
 
 foreach ($info_for_nj as $amount) {
     $total_overall += $amount['OverallTotal'];
 }
 ?>
-<div class="git-mon1">
-        <input type="text" value="$<?php echo round($quarterData[0]['amount'],2); ?>" />
-</div>
-      <div class="git-mon2">
- <input type="text" value="$<?php echo round($quarterData[1]['amount'],2); ?>" />
-    </div>
-      <div class="git-mon3">
-   <input type="text" value="$<?php echo round($quarterData[2]['amount'],2); ?>" />
-      </div>
+
       <div class="e1">
-        <input type="text" value="$<?php echo  round( $total_overall , 2 );   ?>" />
+      <input type="text" value="$<?php echo  round( $total_overall , 2 );   ?>"/>
       </div>
+
+
       <div class="e2">
         <input type="text" value="$<?php echo round($quarterData[0]['amount']+$quarterData[1]['amount']+$quarterData[2]['amount']  ,2); ?>" />
       </div>
+
+
+
+
       <div class="e3">
         <input type="text" value="$0" />
       </div>
@@ -121,82 +169,109 @@ foreach ($info_for_nj as $amount) {
       <div class="e6">
         <input type="text" value="$0" />
       </div>
-      <div class="e7">
+ <div class="e7">
      <?php
-if ($quarter == 'Q1') {
+if ($quarter == 'Q1' && $quarterData[0]['amount']  != 0) {
     echo '<input type="text" value="' . $month['month_1_total_count'] . '" />';
-} elseif ($quarter == 'Q2') {
+} elseif ($quarter == 'Q2'  && $quarterData[1]['amount']  != 0) {
     echo '<input type="text" value="' . $month['month_1_total_count'] . '" />';
-} elseif ($quarter == 'Q3') {
-    echo '<input type="text" value="' . $month['month_1_total_count'] . '" />';
-} else {
+} elseif ($quarter == 'Q3' && $quarterData[2]['amount']  != 0) {
     echo '<input type="text" value="' . $month['month_1_total_count'] . '" />';
 }
 ?>
       </div>
       <div class="e7b">
          <?php
-if ($quarter == 'Q1') {
+if ($quarter == 'Q1'  && $quarterData[0]['amount'] != 0) {
     echo '<input type="text" value="' . $month['month_2_total_count'] . '" />';
-} elseif ($quarter == 'Q2') {
+} elseif ($quarter == 'Q2' && $quarterData[1]['amount']  != 0) {
     echo '<input type="text" value="' . $month['month_2_total_count'] . '" />';
-} elseif ($quarter == 'Q3') {
-    echo '<input type="text" value="' . $month['month_2_total_count'] . '" />';
-} else {
+} elseif ($quarter == 'Q3' && $quarterData[2]['amount']  != 0) {
     echo '<input type="text" value="' . $month['month_2_total_count'] . '" />';
 }
 ?>
       </div>
       <div class="e7c">
         <?php
-if ($quarter == 'Q1') {
+if ($quarter == 'Q1'  && $quarterData[0]['amount']  != 0) {
     echo '<input type="text" value="' . $month['month_3_total_count'] . '" />';
-} elseif ($quarter == 'Q2') {
+} elseif ($quarter == 'Q2' && $quarterData[1]['amount']  != 0) {
     echo '<input type="text" value="' . $month['month_3_total_count'] . '" />';
-} elseif ($quarter == 'Q3') {
-    echo '<input type="text" value="' . $month['month_3_total_count'] . '" />';
-} else {
+} elseif ($quarter == 'Q3' && $quarterData[2]['amount']  != 0) {
     echo '<input type="text" value="' . $month['month_3_total_count'] . '" />';
 }
 ?>
+    
     </div>
+
+ 
     </div>
+
+
+
+
+
+
     <div class="page-2"  id="two"  >
       <div class="f927-img2"  >
          <img src="<?php echo base_url()  ?>assets/images/f927_2.jpg"  width="100%"   />
+ 
       </div>
       <div class="e8">
-        <input type="text" value="$<?php echo  round($total_overall ,2);  ?>" />
+            <input type="text" value="$<?php echo  round($total_overall ,2);  ?>" />
+
       </div>
       <div class="e9">
         <input type="text" value="$0" />
       </div>
+     
+
       <div class="e10">
-        <input type="text" value="$<?php echo  round($total_overall  ,2); ?>" />
+          <input type="text" value="$<?php echo  round($total_overall ,2);  ?>" />
       </div>
       <div class="e11">
-        <input type="text" value="$<?php echo  round($total_overall  ,2); ?>" />
+        <input type="text" value="$<?php echo  round($total_overall ,2);  ?>" />
       </div>
       <div class="e12">
-        <input type="text" value="$<?php echo  round($total_overall  ,2); ?>" />
+       <input type="text" value="$<?php echo  round($total_overall ,2);  ?>" />
       </div>
+
+    
     <?php
+    if (!empty($quarterData[0]['amount']) || !empty($quarterData[1]['amount']) || !empty($quarterData[2]['amount'])) {
 if(isset($total_overall)  ) {
+    // Check if both keys exist
     $overallTotal = floatval($total_overall);
     $saleOverallTotal = floatval($info_info_for_salescommssion_data[0]['SaleOverallTotal']);
+    
     if(is_numeric($overallTotal)  ) {
-     $ulandwf = $overallTotal * 0.038250;
+
+        $ulandwf = $overallTotal * 0.038250;
+
+     
         $formattedValue = number_format($ulandwf, 2); 
         echo "$formattedValue";
     } else {
+       // echo "One of the values is not numeric.";
     }
 } else {
+    // echo "OverallTotal or SaleOverallTotal key is not set in the array element.";
+}
 }
 ?>
+
+
+
       <div class="e13">
         <input type="text" value="$<?php echo round($ulandwf,2); ?>" />
       </div>
+
+
+
+
+      
 <?php
+ if (!empty($quarterData[0]['amount']) || !empty($quarterData[1]['amount']) || !empty($quarterData[2]['amount'])) {
 if(isset($total_overall)  ) {
     $overallTotal = floatval($total_overall);
     $saleOverallTotal = floatval($info_info_for_salescommssion_data[0]['SaleOverallTotal']);
@@ -208,11 +283,19 @@ if(isset($total_overall)  ) {
     }
 } else {
 }
+}
 ?>
+ 
       <div class="e14">
         <input type="text" value="$<?php echo round($ulandwf2,2); ?>" />
       </div>
+
+
+
+
+    
 <?php
+ if (!empty($quarterData[0]['amount']) || !empty($quarterData[1]['amount']) || !empty($quarterData[2]['amount'])) {
 if(isset($total_overall)  ) {
     $overallTotal = floatval($total_overall);
     $saleOverallTotal = floatval($info_info_for_salescommssion_data[0]['SaleOverallTotal']);
@@ -224,16 +307,26 @@ if(isset($total_overall)  ) {
     }
 } else {
 }
+}
 ?>
+
+
+ 
+
       <div class="e15">
         <input type="text" value="$<?php echo round($ulandwf3,2); ?>" />
       </div>
+
       <?php
 if (isset($ulandwf) && isset($ulandwf2) && isset($ulandwf3)) {
     $sum = $ulandwf + $ulandwf2 + $ulandwf3;
 } else {
+   // echo "One or more of the variables (ulandwf, ulandwf2, ulandwf3) are not defined.";
 }
 ?> 
+
+
+
       <div class="e16">
         <input type="text" value="$0" />
       </div>
@@ -255,12 +348,19 @@ if (isset($ulandwf) && isset($ulandwf2) && isset($ulandwf3)) {
       <div class="e20a">
         <input type="text" value="$<?php echo round($quarterData[0]['amount']+$quarterData[1]['amount']+$quarterData[2]['amount']  ,2); ?>" />
       </div>
+     
+
+
       <div class="e20b">
         <input type="text" value="$ <?php echo round($sum,2); ?>" />
       </div>
       <div class="e20c">
         <input type="text" value="$ <?php echo round(($quarterData[0]['amount']+$quarterData[1]['amount']+$quarterData[2]['amount'])+$sum,2); ?>" />
       </div>
+
+    
+
+
       <div class="e21a">
         <input type="text" value="$0" />
       </div>
@@ -270,10 +370,19 @@ if (isset($ulandwf) && isset($ulandwf2) && isset($ulandwf3)) {
       <div class="e21c">
         <input type="text" value="$0" />
       </div>
+
       <img src="<?php echo base_url()  ?>assets/images/f927_3.png" style="position:absolute;top:850px;left:105px;"     />
+
+
     </div>
+
+ 
+
   </body>
+
+ 
   <style>
+
     .a4-size,
     .page-2 {
       width: 21cm;
@@ -282,8 +391,10 @@ if (isset($ulandwf) && isset($ulandwf2) && isset($ulandwf3)) {
       margin: 0 auto;
       page-break-after: always;
     }
+
     input {
       border: 0;
+      /* background-color: #f1f4ff; */
       background-color: transparent;
     }
     .f927-img1 {
@@ -457,6 +568,11 @@ if (isset($ulandwf) && isset($ulandwf2) && isset($ulandwf3)) {
       top: 522px;
     left: 650px;
     }
+    /* .e20 {
+      position: absolute;
+       top: 370px;
+      left: 744px;
+    } */
     .e20 {
       position: absolute;
       top: 575px;
@@ -494,11 +610,7 @@ if (isset($ulandwf) && isset($ulandwf2) && isset($ulandwf3)) {
     }
   </style>
 </html>
-</div>
-<?php
-  $modaldata['bootstrap_modals'] = array('generatedownload');
-  $this->load->view('include/bootstrap_modal', $modaldata);
-?>
+
 </div>
 <script>
 $(document).ready(function() {
